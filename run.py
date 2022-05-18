@@ -39,19 +39,23 @@ def get_user_data():
     print('First Name: Bobby\nLast Name: Hunden')
     print('Email: bobby123@yourdomain.com\n')
     
-    f_name = input('Your First Name: ')
-    l_name = input('Your Last Name: ')
-    user_email = input('Your Email: ')
+    f_name = remove(input('Your First Name: ').capitalize())
+    l_name = remove(input('Your Last Name: ').capitalize())
+    user_email = remove(input('Your Email: ').lower())
     
-    print(f'\nThanks {remove(f_name.capitalize())}. Your user details are as follows:')
+    print(f'\nThanks {f_name}. Your user details are as follows:')
     print('------------')
-    print(f'Full Name: {remove(f_name.capitalize())} {remove(l_name.capitalize())}\nEmail: {remove(user_email.lower())}')
+    print(f'Full Name: {f_name} {l_name}\nEmail: {user_email}')
     print('------------\n')
     yes_no_user()
-    validate_user_data(f'{remove(f_name.capitalize())}, {l_name.capitalize()}, {user_email.lower()}')
+    
+    validate_user_data(f'{f_name},{l_name},{user_email}')
+    # user_data = [f_name, l_name, user_email]
+    # print(user_data)
 
 def remove(string):
     return string.replace(' ', '')
+
 
 def validate_user_data(values):
     """
@@ -60,7 +64,7 @@ def validate_user_data(values):
     if height == low or mid or high string values or 
     if width == narrow or standard or wide.
     """
-    print(f'The data you provided converted into a list of strings is:\n{remove(values)}\n')
+    print(f'The user_data you provided converted into a list of strings is:\n{values.split(",")}\n')
 
 
 
@@ -70,7 +74,7 @@ def yes_no_user():
         # print(f'Thanks *** , updating worksheet and proceeding to order_data\n')
         return True
     else:
-        get_user_data()
+        main()
 
 def main():
     """
