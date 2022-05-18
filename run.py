@@ -29,17 +29,20 @@ def get_user_data():
     Get User first name, last name and email from user as a string
     """
     print('Where prompted below, please enter your name and email.')
-    print('This user data should be in a valid syntax, for example:\n')
+    print('This information should be in a valid syntax, with no spaces. For example:\n')
     print('First Name: Bobby\nLast Name: Hunden')
-    print('Email: bobby123@domain.com\n')
+    print('Email: bobby123@yourdomain.com\n')
 
+    f_name = input('Your First Name: ')
+    l_name = input('Your Last Name: ')
+    user_email = input('Your Email: ')
+
+    print(f'\nThanks {f_name}. Your user details are as follows: \n')
+    print(f'Full name: {f_name} {l_name}\nEmail: {user_email}\n')
 
 def main():
     """
     Run all program functions
     """
     user = get_user_data()
-    print(user)
-# main()
-
-get_user_data()
+main()
