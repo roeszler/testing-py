@@ -119,7 +119,7 @@ def validate_user_email(values):
         user_email = remove(input('Your Email: ').lower())
         user_data[2] = user_email
         print(user_data)
-        validate_user_email(values)
+        validate_user_email(user_email)
 
 
 def remove(string):
