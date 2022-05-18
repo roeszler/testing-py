@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+import re # regular extensions import for checking syntax of email
 
 SCOPE = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -11,6 +12,8 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
+
+REGEX = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
 # F_NAME = 
 
@@ -40,32 +43,34 @@ def get_user_data():
     l_name = input('Your Last Name: ')
     user_email = input('Your Email: ')
     
-    print(f'\nThanks {f_name}. Your user details are as follows:')
+    print(f'\nThanks {remove(f_name.capitalize())}. Your user details are as follows:')
     print('------------')
-    print(f'Full Name: {f_name.capitalize()} {l_name.capitalize()}\nEmail: {user_email.lower()}')
+    print(f'Full Name: {remove(f_name.capitalize())} {remove(l_name.capitalize())}\nEmail: {remove(user_email.lower())}')
     print('------------\n')
-    yes_no()
-    validate_data(f'{f_name.capitalize()}, {l_name.capitalize()}, {user_email.lower()}')
+    yes_no_user()
+    validate_user_data(f'{remove(f_name.capitalize())}, {l_name.capitalize()}, {user_email.lower()}')
 
-def validate_data(values):
+def remove(string):
+    return string.replace(' ', '')
+
+def validate_user_data(values):
     """
-    Inside the try, converts all get_size_data inputs into floats.
-    Converts all email string values into lowercase with .lower()
-    Converts all email string values into first letter capital with .capitalize()
+    Inside the try, converts all user_email inputs into floats.
     Raises ValueError if strings cannot be converted into float or
     if height == low or mid or high string values or 
     if width == narrow or standard or wide.
     """
-    print(f'The data you provided converted into a list of strings is:\n{values}')
+    print(f'The data you provided converted into a list of strings is:\n{remove(values)}\n')
 
 
 
-def yes_no():
+def yes_no_user():
     correct = input('Is this information correct? y/n: ').lower()
     if correct.startswith('y'):
-        print(f'Thanks *** , updating worksheet and proceeding to order_data\n')
+        # print(f'Thanks *** , updating worksheet and proceeding to order_data\n')
+        return True
     else:
-        get_user_data() # etc.
+        get_user_data()
 
 def main():
     """
@@ -73,5 +78,3 @@ def main():
     """
     user = get_user_data()
 main()
-
-# validate_data(values)
