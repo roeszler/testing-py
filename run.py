@@ -1,7 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import re # regular extensions import for checking syntax of email
-import os
 
 SCOPE = [
     'https://www.googleapis.com/auth/spreadsheets',
