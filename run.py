@@ -30,15 +30,18 @@ def get_user_data():
     """
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
+    
     print('First Name: Bobby\nLast Name: Hunden')
     print('Email: bobby123@yourdomain.com\n')
-
+    
     f_name = input('Your First Name: ')
     l_name = input('Your Last Name: ')
     user_email = input('Your Email: ')
-
-    print(f'\nThanks {f_name}. Your user details are as follows: \n')
-    print(f'Full name: {f_name} {l_name}\nEmail: {user_email}\n')
+    
+    print(f'\nThanks {f_name}. Your user details are as follows:')
+    print('------------')
+    print(f'Full Name: {f_name.capitalize()} {l_name.capitalize()}\nEmail: {user_email.lower()}')
+    print('------------\n')
 
 def main():
     """
