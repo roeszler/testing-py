@@ -12,6 +12,8 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
+# F_NAME = 
+
 # sales = SHEET.worksheet('orders')
 # data = sales.get_all_values()
 # print(data)
@@ -42,6 +44,28 @@ def get_user_data():
     print('------------')
     print(f'Full Name: {f_name.capitalize()} {l_name.capitalize()}\nEmail: {user_email.lower()}')
     print('------------\n')
+    yes_no()
+    validate_data(f'{f_name.capitalize()}, {l_name.capitalize()}, {user_email.lower()}')
+
+def validate_data(values):
+    """
+    Inside the try, converts all get_size_data inputs into floats.
+    Converts all email string values into lowercase with .lower()
+    Converts all email string values into first letter capital with .capitalize()
+    Raises ValueError if strings cannot be converted into float or
+    if height == low or mid or high string values or 
+    if width == narrow or standard or wide.
+    """
+    print(f'The data you provided converted into a list of strings is:\n{values}')
+
+
+
+def yes_no():
+    correct = input('Is this information correct? y/n: ').lower()
+    if correct.startswith('y'):
+        print(f'Thanks *** , updating worksheet and proceeding to order_data\n')
+    else:
+        get_user_data() # etc.
 
 def main():
     """
@@ -49,3 +73,5 @@ def main():
     """
     user = get_user_data()
 main()
+
+# validate_data(values)
