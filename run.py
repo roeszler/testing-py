@@ -24,24 +24,48 @@ order_data = ['size_eu', 'height', 'width']
 # data = orders.get_all_values()
 # print(data)
 
-# def start_select_option():
-#     """
-#     Start screen prompting user to:
-#     1. Create a new order, or
-#     2. Retrieve an exsisting order with order number
-#     """
+def start():
+    """
+    Start screen prompting user to:
+    1. Create a new order, or
+    2. Retrieve an exsisting order with order number
+    """
+    print('Welcome to the n3orthotics app that allows you to directly')
+    print('order the premiere N3D Printed Insoles for your busy lifestyle')
+    print('See northotics.com/home for more information about or products and services\n')
+    
+    print('Choose 1. : Place a new N3D insole order')
+    print('Select 2. : Retrieve an exsisting N3D order\n')
+    select_option()
 
+
+
+def select_option():
+    correct = input('Your Selection: ')
+    for i in correct:
+        if i == '1':
+            # print('Updating worksheet and proceeding to order_data...\n')
+            # return True
+            main()
+        elif i == '2':
+            print('Taking you to retrieve_order function...\n')
+            # get_user_data()
+            # instruct_user_data()
+            # get_user_data()
+        else:
+            print(f'The number you have provided "{correct}" is not available.\nPlease select again\n')
+            select_option()
 
 def instruct_user_data():
     """
     Insruct User on format of first name, last name and email.
     """
+    print('\nWelcome to the n3orthotics ordering process.')
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
-    
     print('First Name: Bobby\nLast Name: Hunden')
     print('Email: bobby123@yourdomain.com\n')
-    # get_user_data()
+
 
 
 def get_user_data():
@@ -65,12 +89,12 @@ def get_user_data():
     validate_user_l_name(f'{l_name}')
     validate_user_email(f'{user_email}')
 
-    # summary_user_data()
-
-
 
 
 def summary_user_data():
+    """
+    Produces a readable summary of the current user_data list
+    """
     f_name = user_data[0]
     l_name = user_data[1]
     user_email = user_data[2]
@@ -124,9 +148,6 @@ def validate_user_l_name(values):
 
 
 
-
-
-
 def validate_user_email(values):
     """
     Inside the try, checks all user_email input syntax.
@@ -134,7 +155,6 @@ def validate_user_email(values):
     """
     values_string = f'{values.split(",")}'
     # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
-
     try:
         if (re.fullmatch(REGEX_EMAIL, values)):
             print('Email is valid...')
@@ -143,13 +163,13 @@ def validate_user_email(values):
             raise ValueError(
                 f'The email you have provided "{values}" does not seem\nto be in a regular format'
             )
-    except ValueError as e:
-        print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
+    except ValueError as error:
+        print(f'\nInvalid data: {error}. Please check the entry and try again.\n')
         user_email = remove(input('Your Email: ').lower())
         user_data[2] = user_email
         validate_user_email(user_email)
         # print(user_data)
-        
+
 
 
 def remove(string):
@@ -161,16 +181,18 @@ def remove(string):
 
 def get_latest_row_entry():
     """
-    
+    Prints a list to the termainal of the row last updated
+    between colums A to F in the worksheet
     """
     orders = SHEET.worksheet('orders').get_values('A:F')
-    email = orders[-1]
-    print(email)
+    latest = orders[-1]
+    print(latest)
+
 
 
 def yes_no_user():
     """
-    
+    Prompt for user to confirm or input correct user_data
     """
     summary_user_data()
     correct = input('\nIs this information correct? y/n: ').lower()
@@ -180,14 +202,19 @@ def yes_no_user():
     else:
         get_user_data()
 
+
+
 def main():
     """
     Run all program functions
     """
     instruct_user_data()
     user = get_user_data()
-main()
+# main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
 # validate_user_names(values='stuart Roes3ler')
+# yes_no_user()
+# select_option()
+start()
