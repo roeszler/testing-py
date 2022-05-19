@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 import re # regular extensions import for checking syntax of email
+import os
 
 SCOPE = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -18,6 +19,7 @@ REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width']
+export_data = []
 
 # orders = SHEET.worksheet('orders')
 # data = orders.get_all_values()
@@ -29,13 +31,13 @@ def start():
     1. Create a new order, or
     2. Retrieve an exsisting order with order number
     """
-    print('\nWelcome to the n3orthotics.')
+    print('\nWelcome to n3orthotics.')
     print('This app allows you to directly order the premiere N3D Printed Insoles')
     print('Please visit northotics.com/home for more information\n')
     
     print('Choose 1. : Place a new N3D insole order')
     print('Select 2. : Retrieve an exsisting N3D order\n')
-    select_option()
+    # select_option()
 
 
 
@@ -44,8 +46,8 @@ def select_option():
     for i in correct:
         if i == '1':
             # print('Updating worksheet and proceeding to order_data...\n')
-            # return True
-            main()
+            return True
+            # main()
         elif i == '2':
             print('Taking you to retrieve_order function...\n')
             # get_user_data()
@@ -59,10 +61,10 @@ def instruct_user_data():
     """
     Insruct User on format of first name, last name and email.
     """
-    print('\nWelcome to the n3orthotics ordering process.')
+    print('\nPlace an n3orthotics order:')
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
-    print('First Name: Bobby\nLast Name: Hunden')
+    print('First Name: Bob\nLast Name: Hunden')
     print('Email: bobby123@yourdomain.com\n')
 
 
@@ -98,10 +100,24 @@ def summary_user_data():
     l_name = user_data[1]
     user_email = user_data[2]
 
-    print(f'\nThanks {f_name}. Your user details are as follows:')
-    print('------------')
-    print(f'Full Name: {f_name} {l_name}\nEmail: {user_email}')
-    print('------------')
+    # print(f'\nThanks {f_name}. Your user details are as follows:')
+    # print('------------')
+    print(f'\nFull Name : {f_name} {l_name}\nEmail : {user_email}')
+    # print('------------')
+
+
+def summary_order_data():
+    f_name = user_data[0]
+    size_eu = order_data[0]
+    height = order_data[1]
+    width = order_data[2]
+
+    print(f'\nThanks {f_name}. Your order details are as follows:')
+    # print('------------')
+    summary_user_data()
+    print(f'Shoe Size : EU {size_eu}\nArch Height : {height}\nInsole Width : {width}\n')
+    # print('------------')
+
 
 
 def validate_user_f_name(values):
@@ -196,8 +212,10 @@ def yes_no_user():
     summary_user_data()
     correct = input('\nIs this information correct? y/n: ').lower()
     if correct.startswith('y'):
-        print('Updating worksheet and proceeding to order_data...\n')
-        return True
+        f_name = user_data[0]
+        print(f'\nThanks {f_name}. Now lets customise your N3 Othoses order...')
+        # return True
+        get_order_data()
     else:
         get_user_data()
 
@@ -215,17 +233,17 @@ def get_size_data():
     """
     EU shoe size between EU19 and EU50 converted to a float() for order_data
     """
-    size_eu = float(input('EU Shoe Size (0.5 increments between 19 and 50): '))
+    size_eu = float(input('\nWhat EU Shoe Size would you like to match with?\n(sized in 0.5 increments between 19 and 50): '))
     size_divisble = size_eu % 0.5
     if size_eu >= 19 and size_eu <= 50:
         if size_divisble != 0:
-            print(f'Incorrect information provided for european shoe sizing: {size_eu}\n')
+            print(f'\nIncorrect information provided for european shoe sizing: {size_eu}\n')
             get_size_data()
         else:
             order_data[0] = size_eu
             print(order_data)
     else:
-        print(f'Unfortunatley {size_eu} is not within the european shoe size range we do.\n')
+        print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.\n')
         get_size_data()
 
 
@@ -233,15 +251,15 @@ def get_height_data():
     """
     Height user input converted into ['Low', 'Med', 'High'] for order_data
     """
-    height = remove(input('Arch Height (L: Low Arch / M: Med Arch / H: High Arch): ').lower())
+    height = remove(input('\nWhat level of support under the inside arch would you like?\n(L: Low Support / M: Medium Support / H: High Support): ').lower())
     if height.startswith('l'):
         order_data[1] = 'Low'
     elif height.startswith('m'):
-        order_data[1] = 'Med'
+        order_data[1] = 'Medium'
     elif height.startswith('h'):
         order_data[1] = 'High'
     else:
-        print(f'Incorrect information provided for arch height: {height}\n')
+        print(f'\nIncorrect information provided for arch height: {height}\n')
         get_height_data()
     print(order_data)
 
@@ -251,7 +269,7 @@ def get_width_data():
     """
     Width user input converted into ['Narrow', 'Standard', 'Wide'] for order_data
     """
-    width = remove(input('Width (N: Narrow / S: Standard / W: Wide): ').lower())
+    width = remove(input('\nWidth of insole to fit the foot &/or shoe\n(N: Narrow / S: Standard / W: Wide): ').lower())
     if width.startswith('n'):
         order_data[2] = 'Narrow'
     elif width.startswith('s'):
@@ -259,23 +277,76 @@ def get_width_data():
     elif width.startswith('w'):
         order_data[2] = 'Wide'
     else:
-        print(f'Incorrect information provided for device width: {width}\n')
+        print(f'\nIncorrect information provided for insole width: {width}\n')
         get_width_data()
     print(order_data)
 
 
+def combine_data_for_export():
+    for i in user_data:
+        order_data.insert(0,i)
+    print(order_data)
+
+# Python program to clear the screen using os.system
+
+# Import os module
+import os
+
+def clear_screen():
+    """
+    Checks if Operating System is Mac and Linux or Windows and 
+    clears the screen
+    """
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        _ = os.system('cls')
+    # print("Screen Cleared")
+
+# def submit_order():
+#     submit = input('\nWould you like to submit this order? y/n: ').lower()
+#     if submit.startswith('n'):
+#         save = input('\nWould you like to save this order? y/n: ').lower()
+#         if save.startswith('n'):
+#             user_data.clear()
+#             order_data.clear()
+#             main()
+#         else:
+#             combine_data_for_export()
+#             summary_order_data()
+#     else:
+#         combine_data_for_export()
+#         user_email = 
+#         order_no = 
+#         print(f'Order submitted. You will recieve an email instructions to {user_email}')
+#         print(f'to arrange payment. Your order number is: {order_no}')
+#         summary_order_data()
 
 
 
-
-
+def save_order():
+    save = input('\nWould you like to save this order? y/n: ').lower()
+    if save.startswith('n'):
+        user_data.clear()
+        order_data.clear()
+        clear_screen()
+        main()
+    else:
+        combine_data_for_export()
+        summary_order_data()
 
 def main():
     """
     Run all program functions
     """
+    start()
+    select_option()
     instruct_user_data()
     user = get_user_data()
+    summary_order_data()
+    combine_data_for_export()
+    # submit_order()
+
 # main()
 
 # get_latest_row_entry()
@@ -285,4 +356,9 @@ def main():
 # select_option()
 # start()
 # get_order_data()
-get_size_data()
+# get_size_data()
+# summary_order_data()
+# submit_order()
+save_order()
+# combine_data_for_export()
+# clear_screen()
