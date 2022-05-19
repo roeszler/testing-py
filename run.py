@@ -17,7 +17,7 @@ SHEET = GSPREAD_CLIENT.open('n3orthotics')
 REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 
 user_data = ['f_name', 'l_name', 'user_email']
-order_data = ['size_eu', 'height', 'width']
+order_data = ['size_eu', 'height', 'width', 'order_no']
 
 # orders = SHEET.worksheet('orders')
 # data = orders.get_all_values()
@@ -300,12 +300,27 @@ def clear_screen():
         _ = os.system('cls')
 
 
+def generate_order_no():
+    order_no = SHEET.worksheet('orders').get_values('G:G')
+    last_index = len(order_no) - 1
+    last_entry = order_no[last_index]
+    last_entry_int = int(last_entry[0])
+    new_order_no = last_entry_int + 1
+    order_data[3] = new_order_no
+    print(order_data)
+
+
+
+
+
+    
 
 def submit_order():
     submit = input('\nWould you like to submit this order? y/n: ').lower()
     if submit.startswith('n'):
         save_order()
     else:
+        generate_order_no()
         combine_data_for_export()
         user_email = order_data[2]
         order_no = SHEET.worksheet('orders').get_values('G:G')
@@ -316,6 +331,22 @@ def submit_order():
         print(f'Order submitted. You will recieve an email instructions to {user_email}')
         print(f'to arrange payment. Your order number is: {recent_order_no[0]}')
         summary_order_data()
+
+# def submit_order():
+#     submit = input('\nWould you like to submit this order? y/n: ').lower()
+#     if submit.startswith('n'):
+#         save_order()
+#     else:
+#         combine_data_for_export()
+#         user_email = order_data[2]
+#         order_no = SHEET.worksheet('orders').get_values('G:G')
+#         last_entry = len(order_no) - 1
+#         recent_order_no = order_no[last_entry]
+#         # print(type(most_recent_order_no))
+#         print(order_no[last_entry])
+#         print(f'Order submitted. You will recieve an email instructions to {user_email}')
+#         print(f'to arrange payment. Your order number is: {recent_order_no[0]}')
+#         summary_order_data()
 
 
 def save_order():
@@ -352,7 +383,8 @@ def main():
 # get_order_data()
 # get_size_data()
 # summary_order_data()
-submit_order()
+# submit_order()
 # save_order()
 # combine_data_for_export()
 # clear_screen()
+generate_order_no()
