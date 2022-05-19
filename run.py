@@ -14,12 +14,10 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
-# REGEX_NAME = r'^[a-zA-Z]$'
 REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width']
-export_data = []
 
 # orders = SHEET.worksheet('orders')
 # data = orders.get_all_values()
@@ -42,6 +40,9 @@ def start():
 
 
 def select_option():
+    """
+    Initial user choice to place a new or retieve an exsisting N3D order
+    """
     correct = input('Your Selection: ')
     for i in correct:
         if i == '1':
@@ -199,7 +200,7 @@ def get_latest_row_entry():
     Prints a list to the termainal of the row last updated
     between colums A to F in the worksheet
     """
-    orders = SHEET.worksheet('orders').get_values('A:F')
+    orders = SHEET.worksheet('orders').get_values('A:G')
     latest = orders[-1]
     print(latest)
 
@@ -287,10 +288,6 @@ def combine_data_for_export():
         order_data.insert(0,i)
     print(order_data)
 
-# Python program to clear the screen using os.system
-
-# Import os module
-import os
 
 def clear_screen():
     """
@@ -301,27 +298,24 @@ def clear_screen():
         _ = os.system('clear')
     else:
         _ = os.system('cls')
-    # print("Screen Cleared")
 
-# def submit_order():
-#     submit = input('\nWould you like to submit this order? y/n: ').lower()
-#     if submit.startswith('n'):
-#         save = input('\nWould you like to save this order? y/n: ').lower()
-#         if save.startswith('n'):
-#             user_data.clear()
-#             order_data.clear()
-#             main()
-#         else:
-#             combine_data_for_export()
-#             summary_order_data()
-#     else:
-#         combine_data_for_export()
-#         user_email = 
-#         order_no = 
-#         print(f'Order submitted. You will recieve an email instructions to {user_email}')
-#         print(f'to arrange payment. Your order number is: {order_no}')
-#         summary_order_data()
 
+
+def submit_order():
+    submit = input('\nWould you like to submit this order? y/n: ').lower()
+    if submit.startswith('n'):
+        save_order()
+    else:
+        combine_data_for_export()
+        user_email = order_data[2]
+        order_no = SHEET.worksheet('orders').get_values('G:G')
+        last_entry = len(order_no) - 1
+        recent_order_no = order_no[last_entry]
+        # print(type(most_recent_order_no))
+        print(order_no[last_entry])
+        print(f'Order submitted. You will recieve an email instructions to {user_email}')
+        print(f'to arrange payment. Your order number is: {recent_order_no[0]}')
+        summary_order_data()
 
 
 def save_order():
@@ -345,7 +339,7 @@ def main():
     user = get_user_data()
     summary_order_data()
     combine_data_for_export()
-    # submit_order()
+    submit_order()
 
 # main()
 
@@ -358,7 +352,7 @@ def main():
 # get_order_data()
 # get_size_data()
 # summary_order_data()
-# submit_order()
-save_order()
+submit_order()
+# save_order()
 # combine_data_for_export()
 # clear_screen()
