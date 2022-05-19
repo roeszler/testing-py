@@ -29,9 +29,9 @@ def start():
     1. Create a new order, or
     2. Retrieve an exsisting order with order number
     """
-    print('Welcome to the n3orthotics app that allows you to directly')
-    print('order the premiere N3D Printed Insoles for your busy lifestyle')
-    print('See northotics.com/home for more information about or products and services\n')
+    print('\nWelcome to the n3orthotics.')
+    print('This app allows you to directly order the premiere N3D Printed Insoles')
+    print('Please visit northotics.com/home for more information\n')
     
     print('Choose 1. : Place a new N3D insole order')
     print('Select 2. : Retrieve an exsisting N3D order\n')
@@ -202,6 +202,72 @@ def yes_no_user():
         get_user_data()
 
 
+def get_order_data():
+    """
+    User input used to order N3D Orthosis. Shoe size, arch height and 
+    device width, with size_eu converted to a .float() 
+    """
+    size_eu = float(input('EU Shoe Size: '))
+    order_data[0] = size_eu
+    print(order_data)
+
+    get_height_data()
+    get_width_data()
+
+
+def get_size_data():
+    size_eu = float(input('EU Shoe Size (0.5 increments between 19 and 50): '))
+    size_divisble = size_eu % 0.5
+    # if size_eu >= 19 & size_eu <= 50:
+    if size_divisble != 0:
+        print(f'Incorrect information provided for european shoe sizing: {size_eu}\n')
+        get_size_data()
+    else:
+        order_data[0] = size_eu
+        print(order_data)
+        
+
+
+def get_height_data():
+    """
+    
+    """
+    height = remove(input('Arch Height (L: Low Arch / M: Med Arch / H: High Arch): ').lower())
+    if height.startswith('l'):
+        order_data[1] = 'Low'
+    elif height.startswith('m'):
+        order_data[1] = 'Med'
+    elif height.startswith('h'):
+        order_data[1] = 'High'
+    else:
+        print(f'Incorrect information provided for arch height: {height}\n')
+        get_height_data()
+    print(order_data)
+
+
+
+def get_width_data():
+    """
+    
+    """
+    width = remove(input('Width (N: Narrow / S: Standard / W: Wide): ').lower())
+    if width.startswith('n'):
+        order_data[2] = 'Narrow'
+    elif width.startswith('s'):
+        order_data[2] = 'Standard'
+    elif width.startswith('w'):
+        order_data[2] = 'Wide'
+    else:
+        print(f'Incorrect information provided for device width: {width}\n')
+        get_width_data()
+    print(order_data)
+
+
+
+
+
+
+
 
 def main():
     """
@@ -216,4 +282,6 @@ def main():
 # validate_user_names(values='stuart Roes3ler')
 # yes_no_user()
 # select_option()
-start()
+# start()
+# get_order_data()
+get_size_data()
