@@ -204,33 +204,34 @@ def yes_no_user():
 
 def get_order_data():
     """
-    User input used to order N3D Orthosis. Shoe size, arch height and 
-    device width, with size_eu converted to a .float() 
+    Collection of User input used to order N3D Orthosis.
     """
-    size_eu = float(input('EU Shoe Size: '))
-    order_data[0] = size_eu
-    print(order_data)
-
+    get_size_data()
     get_height_data()
     get_width_data()
 
 
 def get_size_data():
+    """
+    EU shoe size between EU19 and EU50 converted to a float() for order_data
+    """
     size_eu = float(input('EU Shoe Size (0.5 increments between 19 and 50): '))
     size_divisble = size_eu % 0.5
-    # if size_eu >= 19 & size_eu <= 50:
-    if size_divisble != 0:
-        print(f'Incorrect information provided for european shoe sizing: {size_eu}\n')
-        get_size_data()
+    if size_eu >= 19 and size_eu <= 50:
+        if size_divisble != 0:
+            print(f'Incorrect information provided for european shoe sizing: {size_eu}\n')
+            get_size_data()
+        else:
+            order_data[0] = size_eu
+            print(order_data)
     else:
-        order_data[0] = size_eu
-        print(order_data)
-        
+        print(f'Unfortunatley {size_eu} is not within the european shoe size range we do.\n')
+        get_size_data()
 
 
 def get_height_data():
     """
-    
+    Height user input converted into ['Low', 'Med', 'High'] for order_data
     """
     height = remove(input('Arch Height (L: Low Arch / M: Med Arch / H: High Arch): ').lower())
     if height.startswith('l'):
@@ -248,7 +249,7 @@ def get_height_data():
 
 def get_width_data():
     """
-    
+    Width user input converted into ['Narrow', 'Standard', 'Wide'] for order_data
     """
     width = remove(input('Width (N: Narrow / S: Standard / W: Wide): ').lower())
     if width.startswith('n'):
