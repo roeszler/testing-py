@@ -32,8 +32,8 @@ def start():
     1. Create a new order, or
     2. Retrieve an exsisting order with order number
     """
-    print('\nWelcome to n3orthotics.')
-    print('Use this app to directly access made to order N3D Printed Insoles')
+    print('Welcome to N(3)ORTHOTICS.\n')
+    print('Use this app to directly access made-to-order N3D Printed Insoles')
     print('Please visit northotics.com/home for more information\n')
     
     print('Select 1. : Place a new N3D insole order')
@@ -50,6 +50,8 @@ def select_option():
     for i in correct:
         if i == '1':
             # print('Updating worksheet and proceeding to order_data...\n')
+            # order_data.clear()
+            # export_data.clear()
             return True
             # main()
         elif i == '2':
@@ -65,7 +67,8 @@ def instruct_user_data():
     """
     Insruct User on format of first name, last name and email.
     """
-    print('\nPlace an n3orthotics order:')
+    clear_screen()
+    print('\nPlace a NORTHOTICS.com N3D Printed Insole order:\n')
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
     print('First Name: Bob\nLast Name: Hunden')
@@ -80,15 +83,15 @@ def get_user_data():
     """
     f_name = remove(input('Your First Name: ').capitalize())
     user_data[0] = f_name
-    print(user_data)
+    # print(user_data)
 
     l_name = remove(input('Your Last Name: ').capitalize())
     user_data[1] = l_name
-    print(user_data)
+    # print(user_data)
 
     user_email = remove(input('Your Email: ').lower())
     user_data[2] = user_email
-    print(user_data)
+    # print(user_data)
 
     validate_user_f_name(f'{f_name}')
     validate_user_l_name(f'{l_name}')
@@ -132,7 +135,8 @@ def validate_user_f_name(values):
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
-            print('Name is valid...')
+            # print('Name is valid...')
+            return True
         else:
             raise ValueError(
                 f'The name you have provided "{values}" does not seem\nto be in a regular format'
@@ -154,6 +158,7 @@ def validate_user_l_name(values):
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
             print('Name is valid...')
+            return True
         else:
             raise ValueError(
                 f'The name you have provided "{values}" does not seem\nto be in a regular format'
@@ -216,6 +221,7 @@ def yes_no_user():
     summary_user_data()
     correct = input('\nIs this information correct? y/n: ').lower()
     if correct.startswith('y'):
+        clear_screen()
         f_name = user_data[0]
         print(f'\nThanks {f_name}. Now lets customise your N3 Othoses order...')
         get_order_data()
@@ -225,6 +231,7 @@ def yes_no_user():
         submit_order()
         # return True
     else:
+        clear_screen()
         get_user_data()
 
 
@@ -241,15 +248,18 @@ def get_size_data():
     """
     EU shoe size between EU19 and EU50 converted to a float() for order_data
     """
-    size_eu = float(input('\nWhat EU Shoe Size would you like to match with?\n(sized in 0.5 increments between 19 and 50): '))
+    size_eu = float(remove(input('\nWhat EU Shoe Size would you like to match with?\n(sized in 0.5 increments between 19 and 50): ')))
     size_divisble = size_eu % 0.5
     if size_eu >= 19 and size_eu <= 50:
         if size_divisble != 0:
             print(f'\nIncorrect information provided for european shoe sizing: {size_eu}\n')
             get_size_data()
         else:
+            # print(size_eu) 
+            # print(type(size_eu))          
             order_data[0] = size_eu
-            print(order_data)
+            return size_eu
+            # print(order_data)
             # generate_order_no()
             # submit_order()
             # get_height_data()
@@ -272,7 +282,7 @@ def get_height_data():
     else:
         print(f'\nIncorrect information provided for arch height: {height}\n')
         get_height_data()
-    print(order_data)
+    # print(order_data)
 
 
 
@@ -296,15 +306,19 @@ def get_width_data():
     else:
         print(f'\nIncorrect information provided for insole width: {width}\n')
         get_width_data()
-    print(order_data)
+    # print(order_data)
 
 
 def combine_data_for_export():
+    clear_screen()
+    export_data.clear()
     for i in user_data:
         export_data.append(i)
     for i in order_data:
         export_data.append(i)
-    # print(order_data)
+    # print(export_data)
+    return export_data
+
 
 
 def clear_screen():
@@ -317,6 +331,16 @@ def clear_screen():
     else:
         _ = os.system('cls')
 
+def slice_last_order_no():
+    order_no = SHEET.worksheet('orders').get_values('G:G')
+    last_index = len(order_no) - 1
+    last_entry = order_no[last_index]
+    last_entry_int = last_entry[0]
+    x = slice(6)
+    reset_no = int(last_entry_int[x])
+    reset_no_10K = reset_no * 10000
+    # print(type(reset_no))
+    return reset_no_10K
 
 def generate_order_no():
     """
@@ -328,12 +352,14 @@ def generate_order_no():
     last_entry_int = int(last_entry[0])
     now = datetime.datetime.now()
     order_date = now.strftime('%y%m%d')
-    new_order_no = (int(order_date)*10000) + last_entry_int + 1
+    new_order_no = (int(order_date)*10000) + (last_entry_int - slice_last_order_no() + 1)
+    
     order_data[3] = new_order_no
     # print(type(new_order_no))
     # print(new_order_no)
     # print(type(order_data[3]))
     # print(order_data[3])
+    return new_order_no
 
 
 
@@ -361,12 +387,26 @@ def submit_order():
         clear_screen()
         generate_order_no()
         combine_data_for_export()
+
+        update_sales_worksheet(export_data)
+
         user_email = export_data[2]
         recent_order_no = export_data[6]
-        print(f'\nOrder successfully submitted!!\nYou will shortly recieve an email instructions to {user_email}')
-        print(f'to arrange payment.\n\nYour order number is: {recent_order_no}')
+        print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n {user_email} with the details to arrange secure payment')
+        print(f'\nYour order number is: {recent_order_no}')
         summary_order_data()
         email_print_update_startover()
+
+
+
+def update_sales_worksheet(data):
+    """
+    Update sales google worksheet, add new row with the list data provided
+    """
+    print('Contacting the mothership...')
+    order_worksheet = SHEET.worksheet('orders') # accessing our sales_worksheet from our google sheet
+    order_worksheet.append_row(data) # adds a new row in the google worksheet selected
+    print('Success!! The Northo-bots have made contact!')
 
 
 
@@ -376,8 +416,9 @@ def save_order():
     """
     save = input('\nWould you like to save this order? y/n: ').lower()
     if save.startswith('n'):
-        user_data.clear()
+        # user_data.clear()
         order_data.clear()
+        export_data.clear()
         clear_screen()
         main()
     else:
@@ -400,20 +441,24 @@ def email_print_update_startover():
     user_email = user_data[2]
     for i in startover:
         if i == '1':
+            clear_screen()
             print(f'Emailing order number : {order_no} to {user_email}...\n')
             email_print_update_startover()
             # main()
         elif i == '2':
+            clear_screen()
             print(f'Printing order number : {order_no}...\n')
             email_print_update_startover()
             # get_user_data()
             # instruct_user_data()
             # get_user_data()
         elif i == '3':
-            print('Start a new N3D insole order...')
+            clear_screen()
+            print('Starting a new N3D insole order...')
             yes_no_user()
             # get_order_data()
         elif i == '4':
+            clear_screen()
             print('Taking you to retrieve_order function...\n')
         elif i == '5':
             print('Exiting this n3orthotics session...\n')
@@ -428,16 +473,17 @@ def main():
     """
     Run all program functions
     """
+    clear_screen()
     start()
     select_option()
     instruct_user_data()
-    user = get_user_data()
+    get_user_data()
     summary_order_data()
     # generate_order_no()
     combine_data_for_export()
     submit_order()
 
-# main()
+main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -457,4 +503,5 @@ def main():
 # generate_order_no()
 # generate_date_time()
 # instruct_user_data()
-email_print_update_startover()
+# email_print_update_startover()
+# slice_last_order_no()
