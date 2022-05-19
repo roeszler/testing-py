@@ -19,7 +19,8 @@ REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width', 'order_no']
-order_date = ''
+export_data = []
+# order_date = ''
 
 # orders = SHEET.worksheet('orders')
 # data = orders.get_all_values()
@@ -32,7 +33,7 @@ def start():
     2. Retrieve an exsisting order with order number
     """
     print('\nWelcome to n3orthotics.')
-    print('This app allows you to directly order the premiere N3D Printed Insoles')
+    print('Use this app to directly access made to order N3D Printed Insoles')
     print('Please visit northotics.com/home for more information\n')
     
     print('Select 1. : Place a new N3D insole order')
@@ -217,8 +218,12 @@ def yes_no_user():
     if correct.startswith('y'):
         f_name = user_data[0]
         print(f'\nThanks {f_name}. Now lets customise your N3 Othoses order...')
-        # return True
         get_order_data()
+        generate_order_no()
+        combine_data_for_export()
+        summary_order_data()
+        submit_order()
+        # return True
     else:
         get_user_data()
 
@@ -245,6 +250,9 @@ def get_size_data():
         else:
             order_data[0] = size_eu
             print(order_data)
+            # generate_order_no()
+            # submit_order()
+            # get_height_data()
     else:
         print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.\n')
         get_size_data()
@@ -275,10 +283,16 @@ def get_width_data():
     width = remove(input('\nWidth of insole to fit the foot &/or shoe\n(N: Narrow / S: Standard / W: Wide): ').lower())
     if width.startswith('n'):
         order_data[2] = 'Narrow'
+        # generate_order_no()
+        # submit_order()
     elif width.startswith('s'):
         order_data[2] = 'Standard'
+        # generate_order_no()
+        # submit_order()
     elif width.startswith('w'):
         order_data[2] = 'Wide'
+        # generate_order_no()
+        # submit_order()
     else:
         print(f'\nIncorrect information provided for insole width: {width}\n')
         get_width_data()
@@ -287,7 +301,9 @@ def get_width_data():
 
 def combine_data_for_export():
     for i in user_data:
-        order_data.insert(0,i)
+        export_data.append(i)
+    for i in order_data:
+        export_data.append(i)
     # print(order_data)
 
 
@@ -338,14 +354,15 @@ def submit_order():
     """
     
     """
-    submit = input('\nWould you like to submit this order? y/n: ').lower()
+    submit = input('Would you like to submit this order? y/n: ').lower()
     if submit.startswith('n'):
         save_order()
     else:
+        clear_screen()
         generate_order_no()
         combine_data_for_export()
-        user_email = order_data[2]
-        recent_order_no = order_data[6]
+        user_email = export_data[2]
+        recent_order_no = export_data[6]
         print(f'\nOrder successfully submitted!!\nYou will shortly recieve an email instructions to {user_email}')
         print(f'to arrange payment.\n\nYour order number is: {recent_order_no}')
         summary_order_data()
@@ -366,6 +383,7 @@ def save_order():
     else:
         combine_data_for_export()
         summary_order_data()
+        email_print_update_startover()
 
 
 
@@ -378,7 +396,7 @@ def email_print_update_startover():
     print('Select 5. : Exit this n3orthotics session\n')
 
     startover = input('Your Selection: ')
-    order_no = order_data[6]
+    order_no = order_data[3]
     user_email = user_data[2]
     for i in startover:
         if i == '1':
@@ -392,9 +410,9 @@ def email_print_update_startover():
             # instruct_user_data()
             # get_user_data()
         elif i == '3':
-            print('Start a new N3D insole order...\n')
+            print('Start a new N3D insole order...')
             yes_no_user()
-            get_order_data()
+            # get_order_data()
         elif i == '4':
             print('Taking you to retrieve_order function...\n')
         elif i == '5':
@@ -428,8 +446,8 @@ def main():
 # start()
 # select_option()
 # summary_user_data()
-yes_no_user()
-get_order_data()
+# yes_no_user()
+# get_order_data()
 # get_size_data()
 # summary_order_data()
 # submit_order()
@@ -439,3 +457,4 @@ get_order_data()
 # generate_order_no()
 # generate_date_time()
 # instruct_user_data()
+email_print_update_startover()
