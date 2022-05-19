@@ -326,7 +326,6 @@ def submit_order():
         order_no = SHEET.worksheet('orders').get_values('G:G')
         last_entry = len(order_no) - 1
         recent_order_no = order_no[last_entry]
-        # print(type(most_recent_order_no))
         print(order_no[last_entry])
         print(f'Order submitted. You will recieve an email instructions to {user_email}')
         print(f'to arrange payment. Your order number is: {recent_order_no[0]}')
@@ -369,6 +368,7 @@ def main():
     instruct_user_data()
     user = get_user_data()
     summary_order_data()
+    # generate_order_no()
     combine_data_for_export()
     submit_order()
 
@@ -383,8 +383,8 @@ def main():
 # get_order_data()
 # get_size_data()
 # summary_order_data()
-# submit_order()
+submit_order()
 # save_order()
 # combine_data_for_export()
 # clear_screen()
-generate_order_no()
+# generate_order_no()
