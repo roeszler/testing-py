@@ -383,10 +383,11 @@ def email_print_update_startover():
     for i in startover:
         if i == '1':
             print(f'Emailing order number : {order_no} to {user_email}...\n')
-            return True
+            email_print_update_startover()
             # main()
         elif i == '2':
             print(f'Printing order number : {order_no}...\n')
+            email_print_update_startover()
             # get_user_data()
             # instruct_user_data()
             # get_user_data()
