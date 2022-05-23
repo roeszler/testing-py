@@ -4,6 +4,13 @@ from google.oauth2.service_account import Credentials
 import re # regular extensions import for checking syntax of email
 import os
 import datetime
+from datetime import timezone
+import pytz
+
+# import time
+
+
+
 import smtplib, ssl
 import getpass
 
@@ -22,7 +29,7 @@ SHEET = GSPREAD_CLIENT.open('n3orthotics')
 REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 
 user_data = ['f_name', 'l_name', 'user_email']
-order_data = ['size_eu', 'height', 'width', 'order_no']
+order_data = ['size_eu', 'height', 'width', 'order_no', 'order_date']
 export_data = []
 
 
@@ -365,6 +372,10 @@ def get_width_data():
 
 
 def combine_data_for_export():
+    """
+    Loops through user_data then export_data to create single export_data
+    list in preparation to update_sales_worksheet
+    """
     clear_screen()
     export_data.clear()
     for i in user_data:
@@ -407,35 +418,57 @@ def generate_order_no():
     last_index = len(order_no) - 1
     last_entry = order_no[last_index]
     last_entry_int = int(last_entry[0])
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(timezone.utc)
     order_date = now.strftime('%y%m%d')
     new_order_no = (int(order_date)*10000) + (last_entry_int - slice_last_order_no() + 1)
-    
     order_data[3] = new_order_no
-    # print(type(new_order_no))
-    # print(new_order_no)
-    # print(type(order_data[3]))
-    # print(order_data[3])
+    print(new_order_no)
     return new_order_no
 
 
-
-
 # def generate_date_time():
+#     """
+#     Creates UTC (Coordinated Universal Time) version of date and time
+#     """
 #     now = datetime.datetime.now()
-#     order_date = now.strftime('%y%m%d')
-#     n = int(order_date)
-#     # order_date[0] = order_date
-#     print(f"Order Prefix: {n}")
-#     print(type(n))
-#     print(n)
-#     order_date = n
+#     order_date = now.strftime('%c')
+#     n = order_date.title()
+#     print(f'{n}')
+
+def generate_UTC_time():
+    """
+    Creates Central European Standard Time (CEST) version of date and time
+    in iso 
+    """
+    utc_now = datetime.datetime.now(timezone.utc)
+    # CEST = pytz.timezone('Europe/Stockholm')
+    UTC = pytz.timezone('Etc/GMT+0')
+    # print('{} CEST'.format(utc_now.astimezone(CEST).isoformat()))
+    # print('{} UTC'.format(utc_now.astimezone().isoformat()))
+    # print('the supported timezones by the pytz module:', pytz.all_timezones, '\n')
+    # n = '{}'.format(utc_now.astimezone(CEST).isoformat())
+    n = '{}'.format(utc_now.astimezone(UTC).isoformat())
+    # print(export_data)
+    return n
+
+def update_date_ordered():
+    """
+    Updates the order_date filed within order_data list
+    """
+    n = generate_UTC_time()
+    order_data[4] = n
+    # print(order_data)
+
+
+    
 
     
 
 def submit_order():
     """
-    
+    User choice to deny or confirm order submission. 
+    Confirn compiles list from user_data and oder_data then 
+    exports it to update_sales-worksheet function
     """
     submit = input('Would you like to submit this order? y/n: ').lower()
     if submit.startswith('n'):
@@ -443,14 +476,16 @@ def submit_order():
     else:
         clear_screen()
         generate_order_no()
+        update_date_ordered()
         combine_data_for_export()
-
         update_sales_worksheet(export_data)
 
         user_email = export_data[2]
         recent_order_no = export_data[6]
+        submitted_time = export_data[7]
         print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
-        print(f'\nYour order number is: {recent_order_no}')
+        print(f'\nYour order number is: {recent_order_no}.')
+        print(f'Submitted on: {submitted_time}')
         summary_order_data()
         email_print_update_startover()
 
@@ -541,7 +576,7 @@ def main():
     combine_data_for_export()
     submit_order()
 
-main()
+# main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -558,8 +593,10 @@ main()
 # save_order()
 # combine_data_for_export()
 # clear_screen()
-# generate_order_no()
+generate_order_no()
 # generate_date_time()
+generate_UTC_time()
+# update_date_ordered()
 # instruct_user_data()
 # email_print_update_startover()
 # slice_last_order_no()
