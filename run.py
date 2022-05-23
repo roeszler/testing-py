@@ -485,7 +485,18 @@ def input_order_no():
         # return True
         return order_no
 
-
+# Sourced from https://www.pythonpool.com/flatten-list-python/
+def flatten_nested_list(input_list):
+    """
+    Flattens a nested list into a list 
+    """
+    flattened_list = []
+    for i in input_list:
+        if type(i) == list:
+            flattened_list.extend(flatten_nested_list(i))
+        else:
+            flattened_list.append(i)
+    return flattened_list
 
 
 def retrieve_order():
@@ -493,8 +504,20 @@ def retrieve_order():
     Searches worksheet coloum order_no for a match to user input and
     returns row information to local user_data, oder_data and export_data lists
     """
-    search_input = str(input_order_no())
-    order_no = str(SHEET.worksheet('orders').get_values('G2:G'))
+    # search_input = str(input_order_no())
+    # order_no = str(SHEET.worksheet('orders').get_values('G2:G'))
+    search_input = input_order_no()
+    order_no = SHEET.worksheet('orders').get_values('G:G')
+    flatten_nested_list(order_no)
+    print (flatten_nested_list(order_no))
+    
+
+    
+    # for n in range(len(order_no)):
+    #     print(n)
+    #     print(type(order_no[n]))
+
+    # print(order_no.index("2205190001"))
 
     # test_list.clear()
     # for i in order_no:
@@ -503,11 +526,22 @@ def retrieve_order():
     # return test_list
 
      # x = order_no.find(f'{input_order_no()}')
-    x = order_no.index(search_input)
-    print(f'this is the index of order_no: {x}')
-    # print(search_input)
-    print(order_no)
-    print(export_data)
+    x = str(order_no).find(f'{str(search_input)}')
+    # print ("List index-value are : ")
+    # for i in range(len(order_no)):
+    #     print (i, end = " ")
+    #     print (order_no[i])
+    #     test_list.append(order_no[i])
+    # print(test_list)
+
+
+
+    # print(x)
+    # print(type(order_no))
+    # print(f'this is the index of order_no: {int(x)}')
+    # # print(search_input)
+    # print(order_no)
+    # print(export_data)
 
 
 
