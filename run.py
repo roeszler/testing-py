@@ -30,6 +30,7 @@ user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width', 'order_no', 'order_date', 'order_status']
 update_order = ['order_status', 'order_update']
 export_data = []
+test_list = []
 
 
 
@@ -492,8 +493,19 @@ def retrieve_order():
     Searches worksheet coloum order_no for a match to user input and
     returns row information to local user_data, oder_data and export_data lists
     """
-    order_no = input_order_no()
-    order_no_serach = SHEET.worksheet('orders').get_values('G:G').find(order_no)
+    search_input = str(input_order_no())
+    order_no = str(SHEET.worksheet('orders').get_values('G2:G'))
+
+    # test_list.clear()
+    # for i in order_no:
+    #     test_list.append(i)
+    # print(test_list)
+    # return test_list
+
+     # x = order_no.find(f'{input_order_no()}')
+    x = order_no.index(search_input)
+    print(f'this is the index of order_no: {x}')
+    # print(search_input)
     print(order_no)
     print(export_data)
 
