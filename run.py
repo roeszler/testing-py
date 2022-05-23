@@ -28,7 +28,7 @@ UTC = pytz.timezone('Etc/GMT+0')
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width', 'order_no', 'order_date', 'order_status']
-update_order_date = []
+update_order = ['order_status', 'order_update']
 export_data = []
 
 
@@ -460,11 +460,95 @@ def update_date_ordered():
     print(order_data)
 
 
-# def update_status():
-#     """
-    
-#     """
+def input_order_no():
+    """
+    Checks the user input order number is only numerical and correct length
+    """
+    print('Please enter your order number below.')
+    print('This information should be in a valid syntax, with no spaces. For example:\n')
+    print('Example Number: 2205190003\n')
+    while True:
+        try:
+            order_no = int(remove(input('Order Number: ')))
+            order_no_string = str(order_no)
+            if len(order_no_string) != 10:
+                raise ValueError(
+                f'`Our order numbers require 10 digits.\nUnfortunatley {order_no} has {len(order_no_string)} digits.'
+                )
+        except ValueError as e:
+            print(f'Invalid data : {e}\nPlease check your records and try again below;\n')
+            # return False
+            continue
+        print(len(order_no_string))
+        print(order_no)
+        # return True
+        return order_no
 
+
+
+
+def retrieve_order():
+    """
+    Searches worksheet coloum order_no for a match to user input and
+    returns row information to local user_data, oder_data and export_data lists
+    """
+    order_no = input_order_no()
+    print(order_no)
+    print(export_data)
+
+
+
+
+
+
+
+def update_status():
+    """
+    
+    """
+    order_no = order_data[3]
+    f_name = user_data[0]
+
+    print(f'\nHi {f_name}. What would you like to do with order no {order_no}?')
+    print('\nSelect 1. : Re-Print this order again (no changes)')
+    print('Select 2. : Change the features')
+    print('Select 3. : Start a new order')
+    print('Select 4. : Cancel order')
+    print('Select 5. : Return to Previous Screen\n')
+
+    startover = input('Your Selection: ')
+    for i in startover:
+        if i == '1':
+            clear_screen()
+            print(f'Re-printing order number : {order_no}...\n')
+            submit_order()
+            # test_email()
+            # email_print_update_startover()
+        elif i == '2':
+            clear_screen()
+            print(f'Change features of order : {order_no}...\n')
+            # email_print_update_startover()
+        elif i == '3':
+            clear_screen()
+            print('Starting a new N3D insole order...')
+            yes_no_user()
+            # get_order_data()
+        elif i == '4':
+            clear_screen()
+            print(f'Cancelling order {order_no}...\n')
+
+        elif i == '5':
+            clear_screen()
+            print('Returning you to previous screen...\n')
+        else:
+            print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
+            email_print_update_startover()
+
+
+    n = generate_UTC_time()
+    update_order[1] = n
+    print(update_order)
+    print(export_data)
 
 
 def submit_order():
@@ -610,9 +694,12 @@ def main():
 # generate_order_no()
 # generate_date_time()
 # generate_UTC_time()
-update_date_ordered()
+# update_date_ordered()
 # instruct_user_data()
 # email_print_update_startover()
 # slice_last_order_no()
 # test_email()
 # export_to_printer()
+# update_status()
+# retrieve_order()
+input_order_no()
