@@ -506,12 +506,28 @@ def retrieve_order():
     """
     # search_input = str(input_order_no())
     # order_no = str(SHEET.worksheet('orders').get_values('G2:G'))
-    search_input = input_order_no()
-    order_no = SHEET.worksheet('orders').get_values('G:G')
-    flatten_nested_list(order_no)
-    print (flatten_nested_list(order_no))
-    
+    search_input = str(input_order_no())
+    order_nos_import = SHEET.worksheet('orders').get_values('G:G')
+    order_nos = flatten_nested_list(order_nos_import)
 
+    print (flatten_nested_list(order_nos_import))
+    # print(order_no[1])
+    # print(type(order_no[1]))
+    # print(search_input)
+    # print(type(search_input))
+    # # print(str(search_input))
+    # # print(type(str(search_input)))
+    res = [i for i in range(len(order_nos)) if order_nos[i] == search_input]
+    print (f'Indices at which element {search_input} is present: ' + str(res)) 
+    
+    for i in range(len(order_nos)):
+        if search_input == order_nos[i]:
+            print('You habe a Match!!! Winner chicke dinner!')
+            print(order_nos[i])
+            return order_nos[i]
+        else:
+            # print(f'order number {search_input} not found')
+            continue
     
     # for n in range(len(order_no)):
     #     print(n)
@@ -525,8 +541,8 @@ def retrieve_order():
     # print(test_list)
     # return test_list
 
-     # x = order_no.find(f'{input_order_no()}')
-    x = str(order_no).find(f'{str(search_input)}')
+    #  x = order_no.find(f'{input_order_no()}')
+    # x = str(order_no).find(f'{str(search_input)}')
     # print ("List index-value are : ")
     # for i in range(len(order_no)):
     #     print (i, end = " ")
