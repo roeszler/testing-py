@@ -5,11 +5,7 @@ import re # regular extensions import for checking syntax of email
 import os
 import datetime
 from datetime import timezone
-import pytz
-
-# import time
-
-
+import pytz # regional date time for order_no and order_date
 
 import smtplib, ssl
 import getpass
@@ -460,10 +456,6 @@ def update_date_ordered():
     # print(order_data)
 
 
-    
-
-    
-
 def submit_order():
     """
     User choice to deny or confirm order submission. 
@@ -483,6 +475,7 @@ def submit_order():
         user_email = export_data[2]
         recent_order_no = export_data[6]
         submitted_time = export_data[7]
+
         print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
         print(f'\nYour order number is: {recent_order_no}.')
         print(f'Submitted on: {submitted_time}')
@@ -517,6 +510,16 @@ def save_order():
         combine_data_for_export()
         summary_order_data()
         email_print_update_startover()
+
+
+# def export_to_printer():
+#     os.startfile("TestFile.txt", "print")
+#     import platform
+#     print(platform.platform())
+
+
+
+
 
 
 
@@ -576,7 +579,7 @@ def main():
     combine_data_for_export()
     submit_order()
 
-main()
+# main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -601,3 +604,4 @@ main()
 # email_print_update_startover()
 # slice_last_order_no()
 # test_email()
+# export_to_printer()
