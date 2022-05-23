@@ -23,9 +23,12 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
 REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+UTC = pytz.timezone('Etc/GMT+0')
+
 
 user_data = ['f_name', 'l_name', 'user_email']
-order_data = ['size_eu', 'height', 'width', 'order_no', 'order_date']
+order_data = ['size_eu', 'height', 'width', 'order_no', 'order_date', 'order_status']
+update_order_date = []
 export_data = []
 
 
@@ -438,7 +441,7 @@ def generate_UTC_time():
     """
     utc_now = datetime.datetime.now(timezone.utc)
     # CEST = pytz.timezone('Europe/Stockholm')
-    UTC = pytz.timezone('Etc/GMT+0')
+    # UTC = pytz.timezone('Etc/GMT+0')
     # print('{} CEST'.format(utc_now.astimezone(CEST).isoformat()))
     # print('{} UTC'.format(utc_now.astimezone().isoformat()))
     # print('the supported timezones by the pytz module:', pytz.all_timezones, '\n')
@@ -453,7 +456,15 @@ def update_date_ordered():
     """
     n = generate_UTC_time()
     order_data[4] = n
-    # print(order_data)
+    order_data[5] = 'NEW ORDER'
+    print(order_data)
+
+
+# def update_status():
+#     """
+    
+#     """
+
 
 
 def submit_order():
@@ -599,7 +610,7 @@ def main():
 # generate_order_no()
 # generate_date_time()
 # generate_UTC_time()
-# update_date_ordered()
+update_date_ordered()
 # instruct_user_data()
 # email_print_update_startover()
 # slice_last_order_no()
