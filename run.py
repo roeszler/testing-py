@@ -466,10 +466,10 @@ def input_order_no():
     """
     print('Please enter your order number below.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
-    print('Example Number: 2205190003\n')
+    print('Example order_no format: 2205190003\n')
     while True:
         try:
-            order_no = int(remove(input('Order Number: ')))
+            order_no = int(remove(input('You Order Number: ')))
             order_no_string = str(order_no)
             if len(order_no_string) != 10:
                 raise ValueError(
@@ -493,6 +493,7 @@ def retrieve_order():
     returns row information to local user_data, oder_data and export_data lists
     """
     order_no = input_order_no()
+    order_no_serach = SHEET.worksheet('orders').get_values('G:G').find(order_no)
     print(order_no)
     print(export_data)
 
@@ -701,5 +702,5 @@ def main():
 # test_email()
 # export_to_printer()
 # update_status()
-# retrieve_order()
-input_order_no()
+retrieve_order()
+# input_order_no()
