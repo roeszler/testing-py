@@ -1,8 +1,12 @@
+# Modules
 import gspread
 from google.oauth2.service_account import Credentials
 import re # regular extensions import for checking syntax of email
 import os
 import datetime
+import smtplib, ssl
+import getpass
+
 
 SCOPE = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -20,6 +24,47 @@ REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width', 'order_no']
 export_data = []
+
+
+
+# Testing email details SSL
+def test_email():
+    port = 465  # For SSL
+    smtp_server = "smtp.gmail.com"
+    sender_email = "testingn3d@gmail.com"  # Enter your address
+    receiver_email = user_data[2] # retrieves the receiver address
+    print(receiver_email)
+    password = input("Type your password and press enter: ")
+    message = """\
+    Subject: Hi there
+
+    This message is sent from Python."""
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+
+# # Testing email details TLS
+# def test_email():
+#     port = 587  # For starttls
+#     smtp_server = "smtp.gmail.com"
+#     sender_email = "testingn3d@gmail.com"
+#     receiver_email = user_data[2] # retrieves the receiver address
+#     password = input("Type the testing password provided by developer and press enter: ")
+#     message = """\
+#     Subject: Hi there
+
+#     This message is sent from Python."""
+
+#     context = ssl.create_default_context()
+#     with smtplib.SMTP(smtp_server, port) as server:
+#         # server.ehlo()  # Can be omitted
+#         server.starttls(context=context)
+#         # server.ehlo()  # Can be omitted
+#         server.login(sender_email, password)
+#         server.sendmail(sender_email, receiver_email, message)
+
 # order_date = ''
 
 # orders = SHEET.worksheet('orders')
@@ -268,7 +313,7 @@ def get_size_data():
                     order_data[0] = size_eu
                     return size_eu
             else:
-                print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.\n')
+                print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.')
                 get_size_data()
 
         except ValueError as e:
@@ -280,6 +325,7 @@ def get_size_data():
 def get_height_data():
     """
     Height user input converted into ['Low', 'Med', 'High'] for order_data
+    Only strings starting with l, m or h accepted. Not case sensitive.
     """
     height = remove(input('\nWhat level of support under the inside arch would you like?\n(L: Low Support / M: Medium Support / H: High Support): ').lower())
     if height.startswith('l'):
@@ -328,8 +374,6 @@ def combine_data_for_export():
     # print(export_data)
     return export_data
 
-
-
 def clear_screen():
     """
     Checks if Operating System is Mac and Linux or Windows and 
@@ -339,6 +383,7 @@ def clear_screen():
         _ = os.system('clear')
     else:
         _ = os.system('cls')
+
 
 def slice_last_order_no():
     order_no = SHEET.worksheet('orders').get_values('G:G')
@@ -351,9 +396,12 @@ def slice_last_order_no():
     # print(type(reset_no))
     return reset_no_10K
 
+
+
 def generate_order_no():
     """
-    
+    Generates an order number with todays date + increment from previoius 
+    oder entry in worksheet
     """
     order_no = SHEET.worksheet('orders').get_values('G:G')
     last_index = len(order_no) - 1
@@ -401,7 +449,7 @@ def submit_order():
 
         user_email = export_data[2]
         recent_order_no = export_data[6]
-        print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n {user_email} with the details to arrange secure payment')
+        print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
         print(f'\nYour order number is: {recent_order_no}')
         summary_order_data()
         email_print_update_startover()
@@ -452,6 +500,7 @@ def email_print_update_startover():
         if i == '1':
             clear_screen()
             print(f'Emailing order number : {order_no} to {user_email}...\n')
+            test_email()
             email_print_update_startover()
             # main()
         elif i == '2':
@@ -514,3 +563,4 @@ main()
 # instruct_user_data()
 # email_print_update_startover()
 # slice_last_order_no()
+# test_email()
