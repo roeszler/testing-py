@@ -480,8 +480,8 @@ def input_order_no():
             print(f'Invalid data : {e}\nPlease check your records and try again below;\n')
             # return False
             continue
-        print(len(order_no_string))
-        print(order_no)
+        # print(len(order_no_string))
+        # print(order_no)
         # return True
         return order_no
 
@@ -504,60 +504,26 @@ def retrieve_order():
     Searches worksheet coloum order_no for a match to user input and
     returns row information to local user_data, oder_data and export_data lists
     """
-    # search_input = str(input_order_no())
-    # order_no = str(SHEET.worksheet('orders').get_values('G2:G'))
     search_input = str(input_order_no())
     order_nos_import = SHEET.worksheet('orders').get_values('G:G')
     order_nos = flatten_nested_list(order_nos_import)
 
-    print (flatten_nested_list(order_nos_import))
-    # print(order_no[1])
-    # print(type(order_no[1]))
-    # print(search_input)
-    # print(type(search_input))
-    # # print(str(search_input))
-    # # print(type(str(search_input)))
+    # print (flatten_nested_list(order_nos_import))
+   
     res = [i for i in range(len(order_nos)) if order_nos[i] == search_input]
-    print (f'Indices at which element {search_input} is present: ' + str(res)) 
+
+    if res == []:
+        print(f'Order number {search_input} not found?!\n')
+        retrieve_order()
     
-    for i in range(len(order_nos)):
-        if search_input == order_nos[i]:
-            print('You habe a Match!!! Winner chicke dinner!')
-            print(order_nos[i])
-            return order_nos[i]
-        else:
-            # print(f'order number {search_input} not found')
-            continue
-    
-    # for n in range(len(order_no)):
-    #     print(n)
-    #     print(type(order_no[n]))
+    else:
+        for i in range(len(order_nos)):
+            if search_input == order_nos[i]:
+                print (f'Indices at which element {search_input} is present: {str(res)}, cell refrence: G{int(i)+1}')
+                # print('You habe a Match!!! Winner chicke dinner!')
+                print(f'Will use order no {order_nos[i]} and index {int(i)} plus 1. Use this to refrence C{int(i)+1} and return entire row from SHEET...\n')
 
-    # print(order_no.index("2205190001"))
-
-    # test_list.clear()
-    # for i in order_no:
-    #     test_list.append(i)
-    # print(test_list)
-    # return test_list
-
-    #  x = order_no.find(f'{input_order_no()}')
-    # x = str(order_no).find(f'{str(search_input)}')
-    # print ("List index-value are : ")
-    # for i in range(len(order_no)):
-    #     print (i, end = " ")
-    #     print (order_no[i])
-    #     test_list.append(order_no[i])
-    # print(test_list)
-
-
-
-    # print(x)
-    # print(type(order_no))
-    # print(f'this is the index of order_no: {int(x)}')
-    # # print(search_input)
-    # print(order_no)
-    # print(export_data)
+                return order_nos[i]
 
 
 
