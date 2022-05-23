@@ -576,7 +576,7 @@ def main():
     combine_data_for_export()
     submit_order()
 
-# main()
+main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -593,9 +593,9 @@ def main():
 # save_order()
 # combine_data_for_export()
 # clear_screen()
-generate_order_no()
+# generate_order_no()
 # generate_date_time()
-generate_UTC_time()
+# generate_UTC_time()
 # update_date_ordered()
 # instruct_user_data()
 # email_print_update_startover()
