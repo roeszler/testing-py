@@ -98,7 +98,6 @@ def get_user_data():
     validate_user_email(f'{user_email}')
 
 
-
 def summary_user_data():
     """
     Produces a readable summary of the current user_data list
@@ -129,8 +128,10 @@ def summary_order_data():
 
 def validate_user_f_name(values):
     """
-    Inside the try, checks all user_email input syntax.
+    Inside the try, checks all user input syntax.
     Raises ValueError if strings cannot be converted
+    and prompts to replace data in index [0] of the 
+    user_data list = f_name
     """
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
@@ -151,8 +152,10 @@ def validate_user_f_name(values):
 
 def validate_user_l_name(values):
     """
-    Inside the try, checks all user_email input syntax.
+    Inside the try, checks all user input syntax.
     Raises ValueError if strings cannot be converted
+    and prompts to replace data in index [1] of the 
+    user_data list = l_name
     """
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
@@ -174,8 +177,10 @@ def validate_user_l_name(values):
 
 def validate_user_email(values):
     """
-    Inside the try, checks all user_email input syntax.
+    Inside the try, checks all user email input syntax.
     Raises ValueError if strings cannot be converted
+    and prompts to replace data in index [2] of the 
+    user_data list = user_email
     """
     values_string = f'{values.split(",")}'
     # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
@@ -246,27 +251,31 @@ def get_order_data():
 
 def get_size_data():
     """
-    EU shoe size between EU19 and EU50 converted to a float() for order_data
+    Converts to a float() between EU shoe size between EU19 and EU50 only.
+    Inside the try, converts all string values into floating points and
+    raises ValueError if not a number.
     """
-    size_eu = float(remove(input('\nWhat EU Shoe Size would you like to match with?\n(sized in 0.5 increments between 19 and 50): ')))
-    size_divisble = size_eu % 0.5
-    if size_eu >= 19 and size_eu <= 50:
-        if size_divisble != 0:
-            print(f'\nIncorrect information provided for european shoe sizing: {size_eu}\n')
-            get_size_data()
-        else:
-            # print(size_eu) 
-            # print(type(size_eu))          
-            order_data[0] = size_eu
-            return size_eu
-            # print(order_data)
-            # generate_order_no()
-            # submit_order()
-            # get_height_data()
-    else:
-        print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.\n')
-        get_size_data()
+    while True:
+        try:
+            size_eu = float(remove(input('\nWhat EU Shoe Size would you like to match with?\n(sized in 0.5 increments between 19 and 50): ')))
+            size_divisble = size_eu % 0.5
 
+            if size_eu >= 19 and size_eu <= 50:
+                if size_divisble != 0:
+                    print(f'\nIncorrect information provided for european shoe sizing: {size_eu}\n')
+                    get_size_data()
+                else:          
+                    order_data[0] = size_eu
+                    return size_eu
+            else:
+                print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.\n')
+                get_size_data()
+
+        except ValueError as e:
+            print(f'Invalid data : {e}, please try again.\n')
+            # return False
+            continue
+        return True
 
 def get_height_data():
     """
@@ -406,7 +415,7 @@ def update_sales_worksheet(data):
     print('Contacting the mothership...')
     order_worksheet = SHEET.worksheet('orders') # accessing our sales_worksheet from our google sheet
     order_worksheet.append_row(data) # adds a new row in the google worksheet selected
-    print('Success!! The Northo-bots have made contact!')
+    print('Information received...')
 
 
 
