@@ -507,36 +507,36 @@ def retrieve_order():
     search_input = str(input_order_no())
     order_nos_import = SHEET.worksheet('orders').get_values('G:G')
     order_nos = flatten_nested_list(order_nos_import)
-
-    # print (flatten_nested_list(order_nos_import))
    
     res = [i for i in range(len(order_nos)) if order_nos[i] == search_input]
-
     if res == []:
         print(f'Order number {search_input} not found?!\n')
         retrieve_order()
-    
     else:
         for i in range(len(order_nos)):
             if search_input == order_nos[i]:
-                # print (f'Indices at which element {search_input} is present: {str(res)}, cell refrence: G{int(i)+1}')
-                # print('You habe a Match!!! Winner chicke dinner!')
-                # print(f'Will use order no {order_nos[i]} and index {int(i)} plus 1. Use this to refrence C{int(i)+1} and return entire row from SHEET...\n')
                 search_res_row = i+1
                 print(f'\nOrder found in database row no.{search_res_row} :')
-                # print(type(search_res_row))
                 return search_res_row
 
 
 def display_order():
+    """
+    
+    """
     row = int(retrieve_order())
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:L{row}')
     flat_order = flatten_nested_list(order_row)
-    print(flat_order[0:3])
-    print(flat_order[3:9])
+    user_data = flat_order[0:3]
+    order_data = flat_order[3:9]
+    
+    print('\nYour order details are as follows:\n')
+    print(f'Full Name : {flat_order[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
+    print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
+    print(f'Order No. : EU {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}\n')
 
-
-
+    # print(user_data)
+    # print(order_data)
 
 def update_status():
     """
