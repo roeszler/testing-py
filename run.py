@@ -27,7 +27,7 @@ UTC = pytz.timezone('Etc/GMT+0')
 
 
 user_data = ['f_name', 'l_name', 'user_email']
-order_data = ['size_eu', 'height', 'width', 'order_no', 'order_date', 'order_status']
+order_data = ['size_eu', 'height', 'width', 'order_no', '', 'order_status', '']
 update_order = ['order_status', 'order_update']
 export_data = []
 search_res_row = 0
@@ -89,7 +89,8 @@ def start():
     print('Please visit northotics.com/home for more information\n')
     
     print('Select 1. : Place a new N3D insole order')
-    print('Select 2. : Retrieve an exsisting N3D order\n')
+    print('Select 2. : Retrieve an exsisting N3D order')
+    print('Select 3. : Exit Program\n')
     # select_option()
 
 
@@ -108,9 +109,12 @@ def select_option():
             # main()
         elif i == '2':
             print('Taking you to retrieve_order function...\n')
+            display_order()
             # get_user_data()
             # instruct_user_data()
             # get_user_data()
+        elif i == '3':
+            quit()
         else:
             print(f'The number you have provided "{correct}" is not available.\nPlease select again\n')
             select_option()
@@ -374,7 +378,7 @@ def get_width_data():
 def combine_data_for_export():
     """
     Loops through user_data then export_data to create single export_data
-    list in preparation to update_sales_worksheet
+    list in preparation to update_order_worksheet
     """
     clear_screen()
     export_data.clear()
@@ -461,13 +465,27 @@ def update_date_ordered():
     print(order_data)
 
 
+def update_to_pending_status():
+    """
+    Updates status to pending when user saves order
+    """
+    n = generate_UTC_time()
+    export_data[9] = n
+    export_data[8] = 'PENDING'
+    order_worksheet = SHEET.worksheet('orders') # accessing our sales_worksheet from our google sheet
+    order_worksheet.append_row(export_data) # adds a new row in the google worksheet selected
+    # print(export_data)
+    clear_screen()
+    print(f'Data successfully saved as PENDING.\n')
+    print(f'\nPlease carefully record order no.{export_data[6]} to recall this saved item in the future.')
+
 def input_order_no():
     """
     Checks the user input order number is only numerical and correct length
     """
     print('Please enter your order number below.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
-    print('Example order_no format: 2205190003\n')
+    print('Example order_no format: 2205190001\n')
     while True:
         try:
             order_no = int(remove(input('You Order Number: ')))
@@ -527,13 +545,21 @@ def display_order():
     row = int(retrieve_order())
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:L{row}')
     flat_order = flatten_nested_list(order_row)
-    user_data = flat_order[0:3]
-    order_data = flat_order[3:9]
+    user_data[0:3] = flat_order[0:3]
+    order_data[0:6] = flat_order[3:9]
+
+    # f_name = user_data[0]
+    # l_name = user_data[1]
+    # user_email = user_data[2]
     
     print('\nYour order details are as follows:\n')
-    print(f'Full Name : {flat_order[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
+    print(f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
     print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
-    print(f'Order No. : EU {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}\n')
+    print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}\n')
+
+    # print('What would you like to do with this order :')
+    update_status()
+
 
     # print(user_data)
     # print(order_data)
@@ -545,12 +571,13 @@ def update_status():
     order_no = order_data[3]
     f_name = user_data[0]
 
-    print(f'\nHi {f_name}. What would you like to do with order no {order_no}?')
+    print(f'Hi {f_name}. What would you like to do with order no.{order_no} ?')
     print('\nSelect 1. : Re-Print this order again (no changes)')
     print('Select 2. : Change the features')
     print('Select 3. : Start a new order')
     print('Select 4. : Cancel order')
-    print('Select 5. : Return to Previous Screen\n')
+    print('Select 5. : Search different order')
+    print('Select 6. : Take me home\n')
 
     startover = input('Your Selection: ')
     for i in startover:
@@ -572,10 +599,13 @@ def update_status():
         elif i == '4':
             clear_screen()
             print(f'Cancelling order {order_no}...\n')
-
         elif i == '5':
             clear_screen()
-            print('Returning you to previous screen...\n')
+            display_order()
+            # order_no = input(f'Your order no. : {order_no}')
+        elif i == '6':
+            clear_screen()
+            main()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
             email_print_update_startover()
@@ -601,21 +631,21 @@ def submit_order():
         generate_order_no()
         update_date_ordered()
         combine_data_for_export()
-        update_sales_worksheet(export_data)
+        update_order_worksheet(export_data)
 
         user_email = export_data[2]
         recent_order_no = export_data[6]
         submitted_time = export_data[7]
 
         print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
-        print(f'\nYour order number is: {recent_order_no}.')
+        print(f'\nYour order number is: {recent_order_no}')
         print(f'Submitted on: {submitted_time}')
         summary_order_data()
         email_print_update_startover()
 
 
 
-def update_sales_worksheet(data):
+def update_order_worksheet(data):
     """
     Update sales google worksheet, add new row with the list data provided
     """
@@ -638,8 +668,12 @@ def save_order():
         clear_screen()
         main()
     else:
-        combine_data_for_export()
-        summary_order_data()
+        # update_date_ordered()
+        update_to_pending_status()
+        # combine_data_for_export()
+        # print(export_data)
+        # summary_order_data()
+        # display_order()
         email_print_update_startover()
 
 
@@ -660,7 +694,7 @@ def email_print_update_startover():
     print('Select 2. : Print this order')
     print('Select 3. : Start a new N3D insole order')
     print('Select 4. : Retrieve an exsisting N3D order')
-    print('Select 5. : Exit this n3orthotics session\n')
+    print('Select 5. : Take Me Home\n')
 
     startover = input('Your Selection: ')
     order_no = order_data[3]
@@ -687,6 +721,7 @@ def email_print_update_startover():
         elif i == '4':
             clear_screen()
             print('Taking you to retrieve_order function...\n')
+            display_order()
         elif i == '5':
             print('Exiting this n3orthotics session...\n')
             clear_screen()
@@ -710,7 +745,7 @@ def main():
     combine_data_for_export()
     submit_order()
 
-# main()
+main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -738,5 +773,6 @@ def main():
 # export_to_printer()
 # update_status()
 # retrieve_order() 
-display_order()
+# display_order()
 # input_order_no()
+# update_to_pending_status()
