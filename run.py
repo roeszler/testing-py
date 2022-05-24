@@ -590,7 +590,24 @@ def display_order():
 
 
 def change_feat():
+    """
+    
+    """
+    row = order_data[7]
+    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    order_worksheet = SHEET.worksheet('orders') # accessing our order_worksheet from our google sheet
+    
+    print(f'\nCurrent order status is: {export_data[8]}\n')
+    
+    print(export_data[9])
 
+    input('Which feature(s) would you like to change? : ')
+
+    # if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
+    #     print('True')
+    # else:
+    #     print('False')
+    #     # display_order()
 
 
 def update_status():
@@ -814,11 +831,10 @@ def main():
     instruct_user_data()
     get_user_data()
     summary_order_data()
-    # generate_order_no()
     combine_data_for_export()
     submit_order()
 
-main()
+# main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -846,8 +862,9 @@ main()
 # export_to_printer()
 # update_status()
 # retrieve_order() 
-# display_order()
+display_order()
 # input_order_no()
 # update_to_pending_status()
 # update_to_canceled_status()
 # cancel_confirm()
+# change_feat()
