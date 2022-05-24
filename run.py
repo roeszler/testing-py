@@ -242,7 +242,7 @@ def validate_user_email(values):
     # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
     try:
         if (re.fullmatch(REGEX_EMAIL, values)):
-            print('Email is valid...')
+            # print('Email is valid...')
             yes_no_user()
         else:
             raise ValueError(
@@ -273,6 +273,22 @@ def get_latest_row_entry():
     latest = orders[-1]
     print(latest)
 
+
+# def yes_no(answer):
+#     """
+#     Function for a Yes/No result based on the answer provided as an arguement
+#     """
+#     response = input('\nIs this information correct? y/n: ').lower()
+#     # response = raw_input(answer).lower()
+
+#     while True:
+#         # response = raw_input(answer).lower()
+#         if response.startswith('y'):
+#            return True
+#         elif response.startswith('n'):
+#            return False
+#         else:
+#            print ("Please respond with 'yes' or 'no'")
 
 
 def yes_no_user():
@@ -552,8 +568,11 @@ def display_order():
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     flat_order = flatten_nested_list(order_row)
     
+    # converts back to an integer
     size_eu = flat_order[3]
-    flat_order[3] = int(size_eu) # converts back to an integer
+    flat_order[3] = int(size_eu) 
+    order_no = flat_order[6]
+    flat_order[6] = int(order_no)
 
     user_data[0:3] = flat_order[0:3]
     order_data[0:6] = flat_order[3:9]
@@ -561,30 +580,18 @@ def display_order():
     order_data[7] = int(row)
 
     combine_data_for_export()
-
-    # print(export_data)
-    # f_name = user_data[0]
-    # l_name = user_data[1]
-    # user_email = user_data[2]
   
     print('\nYour order details are as follows:\n')
     print(f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
     print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
     print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}')
     print(f'Place in production queue : {flat_order[10]}\n')
-    
-    # size_eu = flat_order[3]
-    # flat_order[3] = int(size_eu)
-    # order_data[0] = int(size_eu)
-    # print(int(flat_order[3]))
-    # print(type(int(flat_order[3])))
-    # print(export_data)
-    # print(order_data)
-    # print(flat_order)
-    # print('What would you like to do with this order :')
     update_status()
-    # print(user_data)
-    # print(order_data)
+
+
+def change_feat():
+
+
 
 def update_status():
     """
@@ -622,7 +629,7 @@ def update_status():
             # get_order_data()
         elif i == '4':
             clear_screen()
-            print(f'Canceling order {order_no}...\n')
+            print(f'Checking the current status of order no.{order_no}...')
             update_to_canceled_status()
 
         elif i == '5':
@@ -642,33 +649,42 @@ def update_status():
     print(export_data)
 
 
+def cancel_confirm():
+    confirm = input('Are you sure you wish to cancel this order? y/n : ')
+    if confirm.startswith('y'):
+        return True
+    elif confirm.startswith('n'):
+        main()
+
+
+
 def update_to_canceled_status():
     """
     Updates status to pending when user saves order
     """
-    # row = int(retrieve_order())
-    n = generate_UTC_time()
-    export_data[9] = n
-    export_data[8] = 'CANCELLED'
-
     row = order_data[7]
-    print(export_data)
-    print(order_data)
-    print(flatten_nested_list(export_data))
-    print(row)
-    print(type(row))
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
-    flat_order = flatten_nested_list(order_row)
     order_worksheet = SHEET.worksheet('orders') # accessing our order_worksheet from our google sheet
     
-    order_worksheet.append_row(export_data) # adds a new row in the google worksheet selected
-    # print(export_data)
-    clear_screen()
-    print(f'Order successfully CANCELLED.')
-    print(f"An email with it's credit note details will be sent to {export_data[2]}")
-    print(f'\nPlease carefully record the order no.{export_data[6]}\nYou will need it to refer to this action into the future.')
-    display_order()
+    print(f'\nCurrent order status is: {export_data[8]}\n')
 
+    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
+        # print('true')
+        cancel_confirm()
+        n = generate_UTC_time()
+        export_data[9] = n
+        export_data[8] = 'CANCELED'
+        order_worksheet.update(f'I{row}', f'{export_data[8]}') # updating cell i in colom I
+        order_worksheet.update(f'J{row}', f'{export_data[9]}') # updating cell i in colom J
+        print(f'\nOrder successfully CANCELED.')
+        print(f"An email with it's credit note details will be sent to {export_data[2]}")
+        print(f'\nPlease carefully record the order no.{export_data[6]}\nYou will need it to refer to this action into the future.')
+        email_print_update_startover()
+
+    else:
+        # print('false')
+        print(f'\nUnfortunatley as a custom-to-order product, this order is currently at a point in\nmanufacture that is beyond the point of no return and cannot be canceled or refunded.\n\nFor further clarificaiton of made-to-order products purchased online, please feel free to contact info@northotics.com refering order number {export_data[6]}.\nYour purchasing rights have not been affected.\n')
+        email_print_update_startover()
 
 
 def submit_order():
@@ -834,3 +850,4 @@ main()
 # input_order_no()
 # update_to_pending_status()
 # update_to_canceled_status()
+# cancel_confirm()
