@@ -476,8 +476,9 @@ def update_to_pending_status():
     order_worksheet.append_row(export_data) # adds a new row in the google worksheet selected
     # print(export_data)
     clear_screen()
-    print(f'Data successfully saved as PENDING.\n')
-    print(f'\nPlease carefully record order no.{export_data[6]} to recall this saved item in the future.')
+    print(f'Data successfully saved as PENDING.')
+    print(f"An email with it's details to {export_data[2]}")
+    print(f'\nPlease carefully record order no.{export_data[6]}\nYou will need it to recall thi5s item into the future.')
 
 def input_order_no():
     """
@@ -694,7 +695,8 @@ def email_print_update_startover():
     print('Select 2. : Print this order')
     print('Select 3. : Start a new N3D insole order')
     print('Select 4. : Retrieve an exsisting N3D order')
-    print('Select 5. : Take Me Home\n')
+    print('Select 5. : Take Me Home')
+    print('Select 6. : Exit the Program\n')
 
     startover = input('Your Selection: ')
     order_no = order_data[3]
@@ -727,6 +729,8 @@ def email_print_update_startover():
             clear_screen()
             start()
             select_option()
+        elif i == '6':
+            exit()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
             email_print_update_startover()
