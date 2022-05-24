@@ -27,7 +27,7 @@ UTC = pytz.timezone('Etc/GMT+0')
 
 
 user_data = ['f_name', 'l_name', 'user_email']
-order_data = ['size_eu', 'height', 'width', 'order_no', '', 'order_status', '']
+order_data = ['size_eu', 'height', 'width', 'order_no', '', 'order_status', '', 'row_no']
 update_order = ['order_status', 'order_update']
 export_data = []
 search_res_row = 0
@@ -386,6 +386,7 @@ def combine_data_for_export():
         export_data.append(i)
     for i in order_data:
         export_data.append(i)
+    export_data.pop()
     # print(export_data)
     return export_data
 
@@ -478,7 +479,10 @@ def update_to_pending_status():
     clear_screen()
     print(f'Data successfully saved as PENDING.')
     print(f"An email with it's details to {export_data[2]}")
-    print(f'\nPlease carefully record order no.{export_data[6]}\nYou will need it to recall thi5s item into the future.')
+    print(f'\nPlease carefully record order no.{export_data[6]}\nYou will need it to recall this item into the future.')
+
+
+
 
 def input_order_no():
     """
@@ -535,7 +539,8 @@ def retrieve_order():
         for i in range(len(order_nos)):
             if search_input == order_nos[i]:
                 search_res_row = i+1
-                print(f'\nOrder found in database row no.{search_res_row} :')
+                print(f'\nOrder found in database row no.{search_res_row}')
+                # search_res_row = order_data[7]
                 return search_res_row
 
 
@@ -544,24 +549,40 @@ def display_order():
     
     """
     row = int(retrieve_order())
-    order_row = SHEET.worksheet('orders').get_values(f'A{row}:L{row}')
+    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     flat_order = flatten_nested_list(order_row)
+    
+    size_eu = flat_order[3]
+    flat_order[3] = int(size_eu) # converts back to an integer
+
     user_data[0:3] = flat_order[0:3]
     order_data[0:6] = flat_order[3:9]
 
+    order_data[7] = int(row)
+
+    combine_data_for_export()
+
+    # print(export_data)
     # f_name = user_data[0]
     # l_name = user_data[1]
     # user_email = user_data[2]
-    
+  
     print('\nYour order details are as follows:\n')
     print(f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
     print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
-    print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}\n')
-
+    print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}')
+    print(f'Place in production queue : {flat_order[10]}\n')
+    
+    # size_eu = flat_order[3]
+    # flat_order[3] = int(size_eu)
+    # order_data[0] = int(size_eu)
+    # print(int(flat_order[3]))
+    # print(type(int(flat_order[3])))
+    # print(export_data)
+    # print(order_data)
+    # print(flat_order)
     # print('What would you like to do with this order :')
     update_status()
-
-
     # print(user_data)
     # print(order_data)
 
@@ -571,6 +592,7 @@ def update_status():
     """
     order_no = order_data[3]
     f_name = user_data[0]
+    # print(export_data)
 
     print(f'Hi {f_name}. What would you like to do with order no.{order_no} ?')
     print('\nSelect 1. : Re-Print this order again (no changes)')
@@ -590,7 +612,8 @@ def update_status():
             # email_print_update_startover()
         elif i == '2':
             clear_screen()
-            print(f'Change features of order : {order_no}...\n')
+            print(f'Which features of order : {order_no} would you like to change...\n')
+            change_feat()
             # email_print_update_startover()
         elif i == '3':
             clear_screen()
@@ -599,7 +622,9 @@ def update_status():
             # get_order_data()
         elif i == '4':
             clear_screen()
-            print(f'Cancelling order {order_no}...\n')
+            print(f'Canceling order {order_no}...\n')
+            update_to_canceled_status()
+
         elif i == '5':
             clear_screen()
             display_order()
@@ -611,11 +636,39 @@ def update_status():
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
             email_print_update_startover()
 
-
     n = generate_UTC_time()
     update_order[1] = n
     print(update_order)
     print(export_data)
+
+
+def update_to_canceled_status():
+    """
+    Updates status to pending when user saves order
+    """
+    # row = int(retrieve_order())
+    n = generate_UTC_time()
+    export_data[9] = n
+    export_data[8] = 'CANCELLED'
+
+    row = order_data[7]
+    print(export_data)
+    print(order_data)
+    print(flatten_nested_list(export_data))
+    print(row)
+    print(type(row))
+    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    flat_order = flatten_nested_list(order_row)
+    order_worksheet = SHEET.worksheet('orders') # accessing our order_worksheet from our google sheet
+    
+    order_worksheet.append_row(export_data) # adds a new row in the google worksheet selected
+    # print(export_data)
+    clear_screen()
+    print(f'Order successfully CANCELLED.')
+    print(f"An email with it's credit note details will be sent to {export_data[2]}")
+    print(f'\nPlease carefully record the order no.{export_data[6]}\nYou will need it to refer to this action into the future.')
+    display_order()
+
 
 
 def submit_order():
@@ -780,3 +833,4 @@ main()
 # display_order()
 # input_order_no()
 # update_to_pending_status()
+# update_to_canceled_status()
