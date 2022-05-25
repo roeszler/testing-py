@@ -341,7 +341,7 @@ def get_size_data():
     """
     while True:
         try:
-            size_eu = float(remove(input('\nWhat EU Shoe Size would you like to match with?\n(sized in 0.5 increments between 19 and 50): ')))
+            size_eu = float(remove(input('\nWhat EU Shoe Size would you like to fit into?\n(sized in 0.5 increments between 19 and 50): ')))
             size_divisble = size_eu % 0.5
 
             if size_eu >= 19 and size_eu <= 50:
@@ -359,7 +359,7 @@ def get_size_data():
             print(f'Invalid data : {e}, please try again.\n')
             # return False
             continue
-        return True
+        # return True
 
 def get_height_data():
     """
@@ -660,7 +660,15 @@ def change_feat():
         # print(user_data[2])
         validate_change_feat()
     elif i == '4':
-        print('size_eu : ')
+        # print('size_eu : ')
+        clear_screen()
+        # size_eu = order_data[0]
+        get_size_data()
+        # order_data[0] = size_eu
+        # print(order_data[0])
+        # print(order_data)
+        clear_screen()
+        validate_change_feat()
     elif i == '5':
         print('Height : ')
     elif i == '6':
