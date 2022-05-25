@@ -85,7 +85,7 @@ def start():
     2. Retrieve an exsisting order with order number
     """
     print('1234567890123456789012345678901234567890123456789012345678901234567890123456789')
-    print('Welcome to N(3)ORTHOTICS.\n')
+    print('Welcome to N(3)ORTHOTICS order portal.\n')
     print('Use this app to directly access made-to-order N3D Printed Insoles')
     print('Please visit northotics.com/home for more information\n')
     
@@ -405,7 +405,7 @@ def get_width_data():
 
 def combine_data_for_export():
     """
-    Loops through user_data then export_data to create single export_data
+    Loops through user_data then order_data to create single export_data
     list in preparation to update_order_worksheet
     """
     clear_screen()
@@ -610,7 +610,7 @@ def validate_change_feat():
     flat_order = flatten_nested_list(order_row)
     
     print(f'Current order status is: {flat_order[8]}')
-    if flat_order[8] == 'PENDING' or flat_order[8] == 'NEW ORDER' or flat_order[8] == 'CREATED' or flat_order[8] == 'ACCEPTED' or flat_order[8] == 'DESIGNED':
+    if flat_order[8] == 'PENDING' or flat_order[8] == 'NEW ORDER' or flat_order[8] == 'UPDATED ORDER' or flat_order[8] == 'CREATED' or flat_order[8] == 'ACCEPTED' or flat_order[8] == 'DESIGNED':
         print('Order is modifiable.')
         print('\nYour order details are as follows:\n')
         print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nPlace in production queue : {flat_order[10]}\nCurrent Status : {flat_order[8]}')
@@ -621,13 +621,13 @@ def validate_change_feat():
         change_feat()
 
     else:
-        print(f'Unfortunately, at the {flat_order[8]} stage, this order is past the point\nwhere modifications can occur without charges.')
+        print(f'\nUnfortunately, at the {flat_order[8]} stage, this order is past the point\nwhere modifications can occur without charges.')
         email_print_update_startover()
 
 
 def change_feat():
     """
-    
+    Generates a list to choose which feature of an exsisting order to change
     """
     i = input('Your Selection : ')
     if i == '1':
@@ -674,10 +674,14 @@ def change_feat():
         clear_screen()
         validate_change_feat()
     elif i == '7':
-        print('Submit : ')
-        combine_data_for_export()
+        # print('Submit : ')
+        # submit_order()
         print(export_data)
+        print('Create submit_row_data() function')
+        combine_data_for_export()
+        submit_row_data()
     elif i == '8':
+        combine_data_for_export()
         main()
     else:
         print(f'The number you have provided "{selection}" is not part of this selection.\nPlease select again\n')
@@ -687,13 +691,14 @@ def change_feat():
 
 def update_status():
     """
-    
+    Generates a list of user options to append details of an exsisting order ot
+    create new order details and/or navigate through the system
     """
     order_no = order_data[3]
     f_name = user_data[0]
     # print(export_data)
 
-    print(f'Hi {f_name}. What would you like to do with order no.{order_no} ?')
+    print(f'What would you like to do with order no.{order_no} ?')
     print('\nSelect 1. : Re-Print this order again (no changes)')
     print('Select 2. : Change the features')
     print('Select 3. : Start a new order')
@@ -737,11 +742,14 @@ def update_status():
 
     n = generate_UTC_time()
     update_order[1] = n
-    print(update_order)
-    print(export_data)
+    # print(update_order)
+    # print(export_data)
 
 
 def cancel_confirm():
+    """
+    
+    """
     confirm = input('Are you sure you wish to cancel this order? y/n : ')
     if confirm.startswith('y'):
         return True
@@ -760,7 +768,7 @@ def update_to_canceled_status():
     
     print(f'\nCurrent order status is: {export_data[8]}\n')
 
-    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
+    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or flat_order[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
         # print('true')
         cancel_confirm()
         n = generate_UTC_time()
@@ -777,6 +785,39 @@ def update_to_canceled_status():
         # print('false')
         print(f'\nUnfortunatley as a custom-to-order product, this order is currently at a point in\nmanufacture that is beyond the point of no return and cannot be canceled or refunded.\n\nFor further clarificaiton of made-to-order products purchased online, please feel free to contact info@northotics.com refering order number {export_data[6]}.\nYour purchasing rights have not been affected.\n')
         email_print_update_startover()
+
+def submit_row_data():
+    """
+    Replaces the exsisting row data in the worksheet with updated data and 
+    records the date of the order update
+    """
+    row = order_data[7]
+    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    order_worksheet = SHEET.worksheet('orders')
+
+    print(f'Accessing your order on row number : {row}')
+    # print(f'order_row :\n{order_row}')
+    # print(f'export_data :\n{export_data}')
+    # print(f'order_data :\n{order_data}')
+    # print(f'user_data :\n{user_data}')
+
+    n = generate_UTC_time()
+    export_data[9] = n
+    export_data[8] = 'UPDATED ORDER'
+    order_worksheet.update(f'A{row}', export_data[0])
+    order_worksheet.update(f'B{row}', export_data[1])
+    order_worksheet.update(f'C{row}', export_data[2])
+    order_worksheet.update(f'D{row}', int(export_data[3]))
+    order_worksheet.update(f'E{row}', export_data[4])
+    order_worksheet.update(f'F{row}', export_data[5])
+    order_worksheet.update(f'G{row}', int(export_data[6]))
+    order_worksheet.update(f'H{row}', export_data[7])
+    order_worksheet.update(f'I{row}', export_data[8])
+    order_worksheet.update(f'J{row}', export_data[9])
+
+    print(f'\nOrder No.{export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email to {export_data[2]} confirming the changes')
+    update_status()
+
 
 
 def submit_order():
@@ -851,13 +892,16 @@ def save_order():
 
 
 def email_print_update_startover():
+    """
+    
+    """
     print('\nWhat would you like to do next?')
     print('\nSelect 1. : Email this order')
     print('Select 2. : Print this order')
     print('Select 3. : Start a new N3D insole order')
     print('Select 4. : Retrieve an exsisting N3D order')
     print('Select 5. : Take Me Home')
-    print('Select 6. : Exit the Program\n')
+    print('Select 6. : Exit the N(3)Orthotics order portal\n')
 
     startover = input('Your Selection: ')
     order_no = order_data[3]
