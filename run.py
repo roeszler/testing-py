@@ -84,6 +84,7 @@ def start():
     1. Create a new order, or
     2. Retrieve an exsisting order with order number
     """
+    print('1234567890123456789012345678901234567890123456789012345678901234567890123456789')
     print('Welcome to N(3)ORTHOTICS.\n')
     print('Use this app to directly access made-to-order N3D Printed Insoles')
     print('Please visit northotics.com/home for more information\n')
@@ -189,21 +190,30 @@ def validate_user_f_name(values):
     and prompts to replace data in index [0] of the 
     user_data list = f_name
     """
+    # f_name = (f'{values}')
+    # print(values)
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
             # print('Name is valid...')
-            return True
+            # f_name = values
+            user_data[0] = values.capitalize()
+            # print(values)
+            # return True
         else:
             raise ValueError(
                 f'The name you have provided "{values}" does not seem\nto be in a regular format'
             )
     except ValueError as e:
         print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
-        f_name = remove(input('Your First Name: ').capitalize())
+        f_name = remove(input('First Name details: ').capitalize())
         user_data[0] = f_name
+        # print(user_data[0])
         validate_user_f_name(f_name)
         # print(user_data)
+    # else:
+    #     f_name = (f'{values}')
+    #     user_data[0] = f_name
 
 
 def validate_user_l_name(values):
@@ -216,16 +226,17 @@ def validate_user_l_name(values):
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
-            print('Name is valid...')
-            return True
+            user_data[1] = values.capitalize()
+            print(user_data[1])
         else:
             raise ValueError(
                 f'The name you have provided "{values}" does not seem\nto be in a regular format'
             )
     except ValueError as e:
         print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
-        l_name = remove(input('Your Last Name: ').capitalize())
+        l_name = remove(input('Last Name details : ').capitalize())
         user_data[1] = l_name
+        print(user_data[1])
         validate_user_l_name(l_name)
         # print(user_data)
 
@@ -243,7 +254,8 @@ def validate_user_email(values):
     try:
         if (re.fullmatch(REGEX_EMAIL, values)):
             # print('Email is valid...')
-            yes_no_user()
+            user_data[2] = values.lower()
+            # yes_no_user()
         else:
             raise ValueError(
                 f'The email you have provided "{values}" does not seem\nto be in a regular format'
@@ -562,7 +574,9 @@ def retrieve_order():
 
 def display_order():
     """
-    
+    Gets orders by row from worksheet 
+    Converts specific string values back into integers and 
+    Displays entire order as a list 
     """
     row = int(retrieve_order())
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
@@ -573,10 +587,8 @@ def display_order():
     flat_order[3] = int(size_eu) 
     order_no = flat_order[6]
     flat_order[6] = int(order_no)
-
     user_data[0:3] = flat_order[0:3]
     order_data[0:6] = flat_order[3:9]
-
     order_data[7] = int(row)
 
     combine_data_for_export()
@@ -589,35 +601,80 @@ def display_order():
     update_status()
 
 
-def change_feat():
+def validate_change_feat():
     """
-    
+    Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feat function
     """
     row = order_data[7]
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     flat_order = flatten_nested_list(order_row)
     
-    print(f'\nCurrent order status is: {export_data[8]}\n')
-    print(flat_order)
-    print(order_data[7])
-    print(type(order_data[7]))
-    print(export_data[9])
+    print(f'Current order status is: {flat_order[8]}')
+    if flat_order[8] == 'PENDING' or flat_order[8] == 'NEW ORDER' or flat_order[8] == 'CREATED' or flat_order[8] == 'ACCEPTED' or flat_order[8] == 'DESIGNED':
+        print('Order is modifiable.')
+        print('\nYour order details are as follows:\n')
+        print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nPlace in production queue : {flat_order[10]}\nCurrent Status : {flat_order[8]}')
+        print('\nDetails you can edit:\n')
+        print(f'1. First Name : {user_data[0]}\n2. Surname : {user_data[1]}\n3. Email : {user_data[2]}')
+        print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
+        print(f'7. Submit the above details\n8. Take me Home\n')
+        change_feat()
 
-    print('\nYour order details are as follows:\n')
-    print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nPlace in production queue : {flat_order[10]}\n')
+    else:
+        print(f'Unfortunately, at the {flat_order[8]} stage, this order is past the point\nwhere modifications can occur without charges.')
+        email_print_update_startover()
+
+
+def change_feat():
+    """
     
-    print('\nDetails you can edit:\n')
-    print(f'1. Full Name : {user_data[0]} {flat_order[1]}\n2. Email : {flat_order[2]}')
-    print(f'3. Shoe Size : EU {flat_order[3]}\n4. Arch Height : {flat_order[4]}\n5. Insole Width : {flat_order[5]}')
-    print(f'6. Current Status : {flat_order[8]}\n')
+    """
+    i = input('Your Selection : ')
+    if i == '1':
+        clear_screen()
+        f_name = input('New First Name details: ')
+        validate_user_f_name(f_name)
+        f_name = user_data[0]
+        # print(f_name)
+        # export_data[0] = f_name
+        validate_change_feat()
+    #     print(f'user_data:\n {user_data}')
+    #     print(order_data)
+    #     print(f'order_data:\n {order_data}')
+    #     print(export_data)
+    #     print(f'export_data:\n {export_data}')
+    #     print(flat_order)
+    #     print(f'flat_order:\n {flat_order}')
+    elif i == '2':
+        clear_screen()
+        l_name = input('New Last Name details: ')
+        validate_user_l_name(l_name)
+        l_name = user_data[1]
+        # print(user_data[1])
+        validate_change_feat()
+    elif i == '3':
+        clear_screen()
+        user_email = input('New Email details: ')
+        validate_user_email(user_email)
+        user_email = user_data[2]
+        # print(user_data[2])
+        validate_change_feat()
+    elif i == '4':
+        print('size_eu : ')
+    elif i == '5':
+        print('Height : ')
+    elif i == '6':
+        print('Width : ')
+    elif i == '7':
+        print('Submit : ')
+        combine_data_for_export()
+        print(export_data)
+    elif i == '8':
+        main()
+    else:
+        print(f'The number you have provided "{selection}" is not part of this selection.\nPlease select again\n')
+        validate_change_feat()
 
-    input('Which feature(s) would you like to change? : ')
-
-    # if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
-    #     print('True')
-    # else:
-    #     print('False')
-    #     # display_order()
 
 
 def update_status():
@@ -646,8 +703,8 @@ def update_status():
             # email_print_update_startover()
         elif i == '2':
             clear_screen()
-            print(f'Which features of order : {order_no} would you like to change...\n')
-            change_feat()
+            print(f'Order No.{order_no}\n')
+            validate_change_feat()
             # email_print_update_startover()
         elif i == '3':
             clear_screen()
@@ -877,4 +934,4 @@ display_order()
 # update_to_pending_status()
 # update_to_canceled_status()
 # cancel_confirm()
-# change_feat()
+# validate_change_feat()
