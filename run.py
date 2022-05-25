@@ -657,22 +657,22 @@ def change_feat():
         user_email = input('New Email details: ')
         validate_user_email(user_email)
         user_email = user_data[2]
-        # print(user_data[2])
         validate_change_feat()
     elif i == '4':
-        # print('size_eu : ')
         clear_screen()
-        # size_eu = order_data[0]
         get_size_data()
-        # order_data[0] = size_eu
-        # print(order_data[0])
-        # print(order_data)
         clear_screen()
         validate_change_feat()
     elif i == '5':
-        print('Height : ')
+        clear_screen()
+        get_height_data()
+        clear_screen()
+        validate_change_feat()
     elif i == '6':
-        print('Width : ')
+        clear_screen()
+        get_width_data()
+        clear_screen()
+        validate_change_feat()
     elif i == '7':
         print('Submit : ')
         combine_data_for_export()
