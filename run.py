@@ -676,8 +676,8 @@ def change_feat():
     elif i == '7':
         # print('Submit : ')
         # submit_order()
-        print(export_data)
-        print('Create submit_row_data() function')
+        # print(export_data)
+        # print('Create submit_row_data() function')
         combine_data_for_export()
         submit_row_data()
     elif i == '8':
