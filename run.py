@@ -227,7 +227,7 @@ def validate_user_l_name(values):
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
             user_data[1] = values.capitalize()
-            print(user_data[1])
+            # print(user_data[1])
         else:
             raise ValueError(
                 f'The name you have provided "{values}" does not seem\nto be in a regular format'
@@ -597,7 +597,7 @@ def display_order():
     print(f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
     print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
     print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}')
-    print(f'Place in production queue : {flat_order[10]}\n')
+    print(f'Row : {flat_order[10]}\n')
     update_status()
 
 
@@ -621,7 +621,7 @@ def validate_change_feat():
         change_feat()
 
     else:
-        print(f'\nUnfortunately, at the {flat_order[8]} stage, this order is past the point\nwhere modifications can occur without charges.')
+        print(f'\nAt the {flat_order[8]} stage, this order is beyond the point in production\nwhere modifications can occur without charges.')
         email_print_update_startover()
 
 
@@ -783,7 +783,9 @@ def update_to_canceled_status():
 
     else:
         # print('false')
-        print(f'\nUnfortunatley as a custom-to-order product, this order is currently at a point in\nmanufacture that is beyond the point of no return and cannot be canceled or refunded.\n\nFor further clarificaiton of made-to-order products purchased online, please feel free to contact info@northotics.com refering order number {export_data[6]}.\nYour purchasing rights have not been affected.\n')
+        print(f'\nUnfortunatley as a custom-to-order product, this order is already at the {export_data[8]} stage.')
+        print(f'At this point manufacturing has commenced, and as the priduct is custom\n made to your specifications, the window to alter or cancel the order has passed.')
+        print(f'\nFor further clarificaiton of made-to-order products purchased online,\nspecifically section 13(1)(c) of the UK Distance Selling Regulations, please visit\nhttps://www.legislation.gov.uk/uksi/2000/2334/contents/made.) or contact\ninfo@northotics.com refering order number {export_data[6]}.\nYour purchasing rights are not affected.\n')
         email_print_update_startover()
 
 def submit_row_data():
