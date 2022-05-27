@@ -109,7 +109,8 @@ def select_option():
             return True
             # main()
         elif i == '2':
-            print('Taking you to retrieve_order function...\n')
+            clear_screen()
+            print('Retieve an esxisting N3D insole order : \n')
             display_order()
             # get_user_data()
             # instruct_user_data()
@@ -128,8 +129,8 @@ def instruct_user_data():
     print('\nPlace a NORTHOTICS.com N3D Printed Insole order:\n')
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
-    print('First Name: Bob\nLast Name: Hunden')
-    print('Email: bobby123@yourdomain.com\n')
+    print('First Name: Rob\nLast Name: Bertoes')
+    print('Email: rub.bertoes@yourdomain.com\n')
 
 
 
@@ -150,6 +151,7 @@ def get_user_data():
     user_data[2] = user_email
     # print(user_data)
 
+    clear_screen()
     validate_user_f_name(f'{f_name}')
     validate_user_l_name(f'{l_name}')
     validate_user_email(f'{user_email}')
@@ -195,7 +197,7 @@ def validate_user_f_name(values):
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
-            # print('Name is valid...')
+            print('Name is valid...')
             # f_name = values
             user_data[0] = values.capitalize()
             # print(values)
@@ -253,9 +255,9 @@ def validate_user_email(values):
     # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
     try:
         if (re.fullmatch(REGEX_EMAIL, values)):
-            # print('Email is valid...')
+            print('Email is valid...')
             user_data[2] = values.lower()
-            # yes_no_user()
+            yes_no_user()
         else:
             raise ValueError(
                 f'The email you have provided "{values}" does not seem\nto be in a regular format'
@@ -507,7 +509,7 @@ def update_to_pending_status():
     clear_screen()
     print(f'Data successfully saved as PENDING.')
     print(f"An email with it's details to {export_data[2]}")
-    print(f'\nPlease carefully record order no.{export_data[6]}\nYou will need it to recall this item into the future.')
+    print(f'\nPlease carefully record order no : {export_data[6]}\nYou will need it to recall this item into the future.')
 
 
 
@@ -567,7 +569,7 @@ def retrieve_order():
         for i in range(len(order_nos)):
             if search_input == order_nos[i]:
                 search_res_row = i+1
-                print(f'\nOrder found in database row no.{search_res_row}')
+                print(f'\nOrder found in database row no. {search_res_row}')
                 # search_res_row = order_data[7]
                 return search_res_row
 
@@ -584,7 +586,7 @@ def display_order():
     
     # converts back to an integer
     size_eu = flat_order[3]
-    flat_order[3] = int(size_eu) 
+    flat_order[3] = float(size_eu) 
     order_no = flat_order[6]
     flat_order[6] = int(order_no)
     user_data[0:3] = flat_order[0:3]
@@ -621,7 +623,7 @@ def validate_change_feat():
         change_feat()
 
     else:
-        print(f'\nAt the {flat_order[8]} stage, this order is beyond the point in production\nwhere modifications can occur without charges.')
+        print(f'\nAt the {flat_order[8]} stage, this order is beyond the point in production\nwhere modifications can occur.')
         email_print_update_startover()
 
 
@@ -698,10 +700,10 @@ def update_status():
     f_name = user_data[0]
     # print(export_data)
 
-    print(f'What would you like to do with order no.{order_no} ?')
+    print(f'What would you like to do with order no. {order_no} ?')
     print('\nSelect 1. : Re-Print this order again (no changes)')
     print('Select 2. : Change the features')
-    print('Select 3. : Start a new order')
+    print('Select 3. : Start a new N3D insole order')
     print('Select 4. : Cancel order')
     print('Select 5. : Search different order')
     print('Select 6. : Take me home\n')
@@ -716,7 +718,7 @@ def update_status():
             # email_print_update_startover()
         elif i == '2':
             clear_screen()
-            print(f'Order No.{order_no}\n')
+            print(f'Order No. {order_no}\n')
             validate_change_feat()
             # email_print_update_startover()
         elif i == '3':
@@ -726,7 +728,7 @@ def update_status():
             # get_order_data()
         elif i == '4':
             clear_screen()
-            print(f'Checking the current status of order no.{order_no}...')
+            print(f'Checking the current status of order no. {order_no} ...')
             update_to_canceled_status()
 
         elif i == '5':
@@ -778,7 +780,7 @@ def update_to_canceled_status():
         order_worksheet.update(f'J{row}', f'{export_data[9]}') # updating cell i in colom J
         print(f'\nOrder successfully CANCELED.')
         print(f"An email with it's credit note details will be sent to {export_data[2]}")
-        print(f'\nPlease carefully record the order no.{export_data[6]}\nYou will need it to refer to this action into the future.')
+        print(f'\nPlease carefully record the order no. {export_data[6]}\nYou will need it to refer to this action into the future.')
         email_print_update_startover()
 
     else:
@@ -809,7 +811,7 @@ def submit_row_data():
     order_worksheet.update(f'A{row}', export_data[0])
     order_worksheet.update(f'B{row}', export_data[1])
     order_worksheet.update(f'C{row}', export_data[2])
-    order_worksheet.update(f'D{row}', int(export_data[3]))
+    order_worksheet.update(f'D{row}', float(export_data[3]))
     order_worksheet.update(f'E{row}', export_data[4])
     order_worksheet.update(f'F{row}', export_data[5])
     order_worksheet.update(f'G{row}', int(export_data[6]))
@@ -817,7 +819,7 @@ def submit_row_data():
     order_worksheet.update(f'I{row}', export_data[8])
     order_worksheet.update(f'J{row}', export_data[9])
 
-    print(f'\nOrder No.{export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email to {export_data[2]} confirming the changes')
+    print(f'\nOrder No. {export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}')
     update_status()
 
 
@@ -951,11 +953,13 @@ def main():
     select_option()
     instruct_user_data()
     get_user_data()
+    clear_screen()
+    # yes_no_user()
     summary_order_data()
     combine_data_for_export()
-    submit_order()
+    # submit_order()
 
-# main()
+main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -983,7 +987,7 @@ def main():
 # export_to_printer()
 # update_status()
 # retrieve_order() 
-display_order()
+# display_order()
 # input_order_no()
 # update_to_pending_status()
 # update_to_canceled_status()
