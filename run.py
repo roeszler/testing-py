@@ -770,7 +770,7 @@ def update_to_canceled_status():
     
     print(f'\nCurrent order status is: {export_data[8]}\n')
 
-    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or flat_order[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
+    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
         # print('true')
         cancel_confirm()
         n = generate_UTC_time()
@@ -785,9 +785,9 @@ def update_to_canceled_status():
 
     else:
         # print('false')
-        print(f'\nUnfortunatley as a custom-to-order product, this order is already at the {export_data[8]} stage.')
-        print(f'At this point manufacturing has commenced, and as the priduct is custom\n made to your specifications, the window to alter or cancel the order has passed.')
-        print(f'\nFor further clarificaiton of made-to-order products purchased online,\nspecifically section 13(1)(c) of the UK Distance Selling Regulations, please visit\nhttps://www.legislation.gov.uk/uksi/2000/2334/contents/made.) or contact\ninfo@northotics.com refering order number {export_data[6]}.\nYour purchasing rights are not affected.\n')
+        print(f'Unfortunatley as a custom made product, this order is already at the {export_data[8]} stage.')
+        print(f'\nFrom this point manufacturing has already commenced. As it is \nmade to your specific specifications, the window to alter or cancel the order has passed.')
+        print(f'\nFor further clarificaiton of made-to-order products purchased online,\nspecifically section 13(1)(c) of the UK Distance Selling Regulations, please visit: https://www.legislation.gov.uk/uksi/2000/2334/contents/made. \nAlternately, contact info@northotics.com refering order number : {export_data[6]}.\nYour purchasing rights have not been affected.\n')
         email_print_update_startover()
 
 def submit_row_data():
@@ -902,10 +902,11 @@ def email_print_update_startover():
     print('\nWhat would you like to do next?')
     print('\nSelect 1. : Email this order')
     print('Select 2. : Print this order')
-    print('Select 3. : Start a new N3D insole order')
-    print('Select 4. : Retrieve an exsisting N3D order')
-    print('Select 5. : Take Me Home')
-    print('Select 6. : Exit the N(3)Orthotics order portal\n')
+    print('Select 3. : Change the feature of this Order (needs checking)')
+    print('Select 4. : Start a new N3D insole order')
+    print('Select 5. : Retrieve an exsisting N3D order')
+    print('Select 6. : Take Me Home')
+    print('Select 7. : Exit the N(3)Orthotics order portal\n')
 
     startover = input('Your Selection: ')
     order_no = order_data[3]
@@ -926,19 +927,23 @@ def email_print_update_startover():
             # get_user_data()
         elif i == '3':
             clear_screen()
+            print(f'Order No. {order_no}\n')
+            validate_change_feat()
+        elif i == '4':
+            clear_screen()
             print('Starting a new N3D insole order...')
             yes_no_user()
             # get_order_data()
-        elif i == '4':
+        elif i == '5':
             clear_screen()
             print('Taking you to retrieve_order function...\n')
             display_order()
-        elif i == '5':
+        elif i == '6':
             print('Exiting this n3orthotics session...\n')
             clear_screen()
             start()
             select_option()
-        elif i == '6':
+        elif i == '7':
             exit()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
