@@ -499,7 +499,7 @@ def update_date_ordered():
 def generate_row_no():
     row_data = SHEET.worksheet('orders').get_values('K:K')
     new_row_no = len(row_data) + 1
-    order_data[7] = new_row_no
+    # order_data[7] = new_row_no
     export_data.append(new_row_no)
 
 
