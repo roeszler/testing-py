@@ -509,6 +509,12 @@ def update_date_ordered():
     order_data[5] = 'NEW ORDER'
     print(order_data)
 
+def generate_row_no():
+    row_data = SHEET.worksheet('orders').get_values('K:K')
+    last_row = len(order_no) - 1
+    print(row_data)
+    print(last_row)
+
 
 def update_to_pending_status():
     """
@@ -523,7 +529,7 @@ def update_to_pending_status():
     clear_screen()
     print(f'Data successfully saved as PENDING.')
     print(f"An email with it's details to {export_data[2]}")
-    print(f'\nPlease carefully record order no : {color.BOLD + export_data[6]+ color.END}\nYou will need it to recall this item into the future.')
+    print(f'\nPlease carefully record order no : {export_data[6]}\nYou will need it to recall this item into the future.')
     # print(color.BOLD + 'Hello World !' + color.END)
 
 
@@ -841,7 +847,7 @@ def submit_row_data():
     order_worksheet.update(f'I{row}', export_data[8])
     order_worksheet.update(f'J{row}', export_data[9])
 
-    print(f'\nOrder No. {export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}')
+    print(f'\nOrder No. {export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}\n')
     update_status()
 
 
@@ -926,7 +932,7 @@ def email_print_update_startover():
     print('Select 2. : Print this order (TBC)')
     print('Select 3. : Change the features of this Order')
     print('Select 4. : Start a new N3D insole order')
-    print('Select 5. : Retrieve an exsisting 3N3D order\n')
+    print('Select 5. : Retrieve an exsisting N(3) order\n')
     print('Select 6. : Take Me Home')
     print('Select 7. : Exit the N(3)Orthotics order portal\n')
 
