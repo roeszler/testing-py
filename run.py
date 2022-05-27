@@ -151,7 +151,7 @@ def get_user_data():
     user_data[2] = user_email
     # print(user_data)
 
-    clear_screen()
+    # clear_screen() # removed for option 1 initial screen
     validate_user_f_name(f'{f_name}')
     validate_user_l_name(f'{l_name}')
     validate_user_email(f'{user_email}')
@@ -197,9 +197,10 @@ def validate_user_f_name(values):
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
-            print('Name is valid...')
+            # print('Name is valid...')
             # f_name = values
             user_data[0] = values.capitalize()
+            # clear_screen()
             # print(values)
             # return True
         else:
@@ -594,6 +595,7 @@ def display_order():
     order_data[0:6] = flat_order[3:9]
     order_data[7] = int(row)
 
+
     combine_data_for_export()
   
     print('\nYour order details are as follows:\n')
@@ -620,7 +622,7 @@ def validate_change_feat():
         print('\nDetails you can edit:\n')
         print(f'1. First Name : {user_data[0]}\n2. Surname : {user_data[1]}\n3. Email : {user_data[2]}')
         print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
-        print(f'7. Submit the above details\n8. Re-Print this order again (no changes)\n9. Take me Home\n')
+        print(f'7. Submit the above details\n8. Re-Print without changes\n9. Take me Home\n')
         change_feat()
 
     else:
@@ -636,6 +638,7 @@ def change_feat():
     if i == '1':
         clear_screen()
         f_name = input('New First Name details: ')
+        clear_screen()
         validate_user_f_name(f_name)
         f_name = user_data[0]
         # print(f_name)
@@ -651,6 +654,7 @@ def change_feat():
     elif i == '2':
         clear_screen()
         l_name = input('New Last Name details: ')
+        clear_screen()
         validate_user_l_name(l_name)
         l_name = user_data[1]
         # print(user_data[1])
@@ -945,11 +949,12 @@ def email_print_update_startover():
             print('Taking you to retrieve_order function...\n')
             display_order()
         elif i == '6':
-            print('Exiting this n3orthotics session...\n')
+            print('Taking you to home page...\n')
             clear_screen()
             start()
             select_option()
         elif i == '7':
+            print('Exiting this n3orthotics session...\n')
             exit()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
@@ -965,7 +970,7 @@ def main():
     instruct_user_data()
     get_user_data()
     clear_screen()
-    # yes_no_user()
+    yes_no_user()
     summary_order_data()
     combine_data_for_export()
     # submit_order()
