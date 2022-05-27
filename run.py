@@ -33,7 +33,6 @@ export_data = []
 search_res_row = 0
 
 
-
 # Testing email details SSL
 def test_email():
     port = 465  # For SSL
@@ -44,7 +43,6 @@ def test_email():
     password = input("Type your password and press enter: ")
     message = """\
     Subject: Hi there
-
     This message is sent from Python."""
 
     context = ssl.create_default_context()
@@ -116,6 +114,7 @@ def select_option():
             # instruct_user_data()
             # get_user_data()
         elif i == '3':
+            clear_screen()
             quit()
         else:
             print(f'The number you have provided "{correct}" is not available.\nPlease select again\n')
@@ -151,7 +150,7 @@ def get_user_data():
     user_data[2] = user_email
     # print(user_data)
 
-    clear_screen()
+    # clear_screen() # removed for option 1 initial screen
     validate_user_f_name(f'{f_name}')
     validate_user_l_name(f'{l_name}')
     validate_user_email(f'{user_email}')
@@ -197,9 +196,10 @@ def validate_user_f_name(values):
     try:
         # if (re.fullmatch(REGEX_NAME, values)):
         if values.isalpha():
-            print('Name is valid...')
+            # print('Name is valid...')
             # f_name = values
             user_data[0] = values.capitalize()
+            # clear_screen()
             # print(values)
             # return True
         else:
@@ -496,6 +496,12 @@ def update_date_ordered():
     order_data[5] = 'NEW ORDER'
     print(order_data)
 
+def generate_row_no():
+    row_data = SHEET.worksheet('orders').get_values('K:K')
+    new_row_no = len(row_data) + 1
+    order_data[7] = new_row_no
+    export_data.append(new_row_no)
+
 
 def update_to_pending_status():
     """
@@ -504,14 +510,19 @@ def update_to_pending_status():
     n = generate_UTC_time()
     export_data[9] = n
     export_data[8] = 'PENDING'
+    generate_row_no()
+    # export_data[10] = order_data[7]
+    # export_data[10] == new_order_no
     order_worksheet = SHEET.worksheet('orders') # accessing our sales_worksheet from our google sheet
     order_worksheet.append_row(export_data) # adds a new row in the google worksheet selected
     # print(export_data)
     clear_screen()
+    # print(export_data)
+    # print(order_data[7])
+    # print(generate_order_no())
     print(f'Data successfully saved as PENDING.')
     print(f"An email with it's details to {export_data[2]}")
     print(f'\nPlease carefully record order no : {export_data[6]}\nYou will need it to recall this item into the future.')
-
 
 
 
@@ -594,6 +605,7 @@ def display_order():
     order_data[0:6] = flat_order[3:9]
     order_data[7] = int(row)
 
+
     combine_data_for_export()
   
     print('\nYour order details are as follows:\n')
@@ -620,7 +632,7 @@ def validate_change_feat():
         print('\nDetails you can edit:\n')
         print(f'1. First Name : {user_data[0]}\n2. Surname : {user_data[1]}\n3. Email : {user_data[2]}')
         print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
-        print(f'7. Submit the above details\n8. Re-Print this order again (no changes)\n9. Take me Home\n')
+        print(f'7. Submit the above details\n8. Re-Print without changes\n9. Take me Home\n')
         change_feat()
 
     else:
@@ -636,6 +648,7 @@ def change_feat():
     if i == '1':
         clear_screen()
         f_name = input('New First Name details: ')
+        clear_screen()
         validate_user_f_name(f_name)
         f_name = user_data[0]
         # print(f_name)
@@ -651,6 +664,7 @@ def change_feat():
     elif i == '2':
         clear_screen()
         l_name = input('New Last Name details: ')
+        clear_screen()
         validate_user_l_name(l_name)
         l_name = user_data[1]
         # print(user_data[1])
@@ -681,6 +695,7 @@ def change_feat():
         # submit_order()
         # print(export_data)
         # print('Create submit_row_data() function')
+        update_date_ordered()
         combine_data_for_export()
         submit_row_data()
     elif i == '8':
@@ -774,10 +789,9 @@ def update_to_canceled_status():
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     order_worksheet = SHEET.worksheet('orders') # accessing our order_worksheet from our google sheet
     
-    print(f'\nCurrent order status is: {export_data[8]}\n')
-
+    print(f'\nCurrent order status is: {export_data[8]}')
     if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
-        # print('true')
+        print('Order is modifiable.\n')
         cancel_confirm()
         n = generate_UTC_time()
         export_data[9] = n
@@ -825,7 +839,7 @@ def submit_row_data():
     order_worksheet.update(f'I{row}', export_data[8])
     order_worksheet.update(f'J{row}', export_data[9])
 
-    print(f'\nOrder No. {export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}')
+    print(f'\nOrder No. {export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}\n')
     update_status()
 
 
@@ -844,6 +858,7 @@ def submit_order():
         generate_order_no()
         update_date_ordered()
         combine_data_for_export()
+        generate_row_no() # test
         update_order_worksheet(export_data)
 
         user_email = export_data[2]
@@ -853,6 +868,8 @@ def submit_order():
         print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
         print(f'\nYour order number is: {recent_order_no}')
         print(f'Submitted on: {submitted_time}')
+        # print(export_data)
+
         summary_order_data()
         email_print_update_startover()
 
@@ -910,7 +927,7 @@ def email_print_update_startover():
     print('Select 2. : Print this order (TBC)')
     print('Select 3. : Change the features of this Order')
     print('Select 4. : Start a new N3D insole order')
-    print('Select 5. : Retrieve an exsisting 3N3D order\n')
+    print('Select 5. : Retrieve an exsisting N(3) order\n')
     print('Select 6. : Take Me Home')
     print('Select 7. : Exit the N(3)Orthotics order portal\n')
 
@@ -945,11 +962,13 @@ def email_print_update_startover():
             print('Taking you to retrieve_order function...\n')
             display_order()
         elif i == '6':
-            print('Exiting this n3orthotics session...\n')
+            print('Taking you to home page...\n')
             clear_screen()
             start()
             select_option()
         elif i == '7':
+            print('Exiting this n3orthotics session...\n')
+            clear_screen()
             exit()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
@@ -965,7 +984,7 @@ def main():
     instruct_user_data()
     get_user_data()
     clear_screen()
-    # yes_no_user()
+    yes_no_user()
     summary_order_data()
     combine_data_for_export()
     # submit_order()
@@ -1004,3 +1023,4 @@ main()
 # update_to_canceled_status()
 # cancel_confirm()
 # validate_change_feat()
+# generate_row_no()
