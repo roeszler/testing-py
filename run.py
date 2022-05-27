@@ -129,8 +129,8 @@ def instruct_user_data():
     print('\nPlace a NORTHOTICS.com N3D Printed Insole order:\n')
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces. For example:\n')
-    print('First Name: Rob\nLast Name: Bertoes')
-    print('Email: rub.bertoes@yourdomain.com\n')
+    print('First Name: Rob\nLast Name: Bertoe')
+    print('Email: rubbertoes@yourdomain.com\n')
 
 
 
@@ -257,7 +257,8 @@ def validate_user_email(values):
         if (re.fullmatch(REGEX_EMAIL, values)):
             print('Email is valid...')
             user_data[2] = values.lower()
-            yes_no_user()
+            # yes_no_user() # removed this for the change email option 3. in update_exsisting order function
+            clear_screen()
         else:
             raise ValueError(
                 f'The email you have provided "{values}" does not seem\nto be in a regular format'
@@ -619,7 +620,7 @@ def validate_change_feat():
         print('\nDetails you can edit:\n')
         print(f'1. First Name : {user_data[0]}\n2. Surname : {user_data[1]}\n3. Email : {user_data[2]}')
         print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
-        print(f'7. Submit the above details\n8. Take me Home\n')
+        print(f'7. Submit the above details\n8. Re-Print this order again (no changes)\n9. Take me Home\n')
         change_feat()
 
     else:
@@ -683,6 +684,11 @@ def change_feat():
         combine_data_for_export()
         submit_row_data()
     elif i == '8':
+        clear_screen()
+        order_no = order_data[3]
+        print(f'Re-printing order number : {order_no}...\n')
+        submit_order()
+    elif i == '9':
         combine_data_for_export()
         main()
     else:
@@ -900,11 +906,11 @@ def email_print_update_startover():
     
     """
     print('\nWhat would you like to do next?')
-    print('\nSelect 1. : Email this order')
-    print('Select 2. : Print this order')
-    print('Select 3. : Change the feature of this Order (needs checking)')
+    print('\nSelect 1. : Email this order (TBC)')
+    print('Select 2. : Print this order (TBC)')
+    print('Select 3. : Change the features of this Order')
     print('Select 4. : Start a new N3D insole order')
-    print('Select 5. : Retrieve an exsisting N3D order')
+    print('Select 5. : Retrieve an exsisting 3N3D order\n')
     print('Select 6. : Take Me Home')
     print('Select 7. : Exit the N(3)Orthotics order portal\n')
 
