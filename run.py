@@ -32,6 +32,17 @@ update_order = ['order_status', 'order_update']
 export_data = []
 search_res_row = 0
 
+class color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
 
 
 # Testing email details SSL
@@ -116,6 +127,7 @@ def select_option():
             # instruct_user_data()
             # get_user_data()
         elif i == '3':
+            clear_screen()
             quit()
         else:
             print(f'The number you have provided "{correct}" is not available.\nPlease select again\n')
@@ -511,8 +523,8 @@ def update_to_pending_status():
     clear_screen()
     print(f'Data successfully saved as PENDING.')
     print(f"An email with it's details to {export_data[2]}")
-    print(f'\nPlease carefully record order no : {export_data[6]}\nYou will need it to recall this item into the future.')
-
+    print(f'\nPlease carefully record order no : {color.BOLD + export_data[6]+ color.END}\nYou will need it to recall this item into the future.')
+    # print(color.BOLD + 'Hello World !' + color.END)
 
 
 
@@ -685,6 +697,7 @@ def change_feat():
         # submit_order()
         # print(export_data)
         # print('Create submit_row_data() function')
+        update_date_ordered()
         combine_data_for_export()
         submit_row_data()
     elif i == '8':
@@ -778,10 +791,9 @@ def update_to_canceled_status():
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     order_worksheet = SHEET.worksheet('orders') # accessing our order_worksheet from our google sheet
     
-    print(f'\nCurrent order status is: {export_data[8]}\n')
-
+    print(f'\nCurrent order status is: {export_data[8]}')
     if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
-        # print('true')
+        print('Order is modifiable.\n')
         cancel_confirm()
         n = generate_UTC_time()
         export_data[9] = n
@@ -955,6 +967,7 @@ def email_print_update_startover():
             select_option()
         elif i == '7':
             print('Exiting this n3orthotics session...\n')
+            clear_screen()
             exit()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
