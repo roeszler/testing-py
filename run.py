@@ -25,7 +25,6 @@ SHEET = GSPREAD_CLIENT.open('n3orthotics')
 REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 UTC = pytz.timezone('Etc/GMT+0')
 
-
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = ['size_eu', 'height', 'width', 'order_no', '', 'order_status', '', 'row_no']
 update_order = ['order_status', 'order_update']
@@ -36,7 +35,7 @@ search_res_row = 0
 # Testing email details SSL
 def test_email():
     """
-    
+    Accesses Email account to send summary information of order
     """
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
@@ -214,7 +213,7 @@ def validate_user_f_name(values):
             )
     except ValueError as e:
         print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
-        f_name = remove(input('First Name details: ').capitalize())
+        f_name = remove(input('Your First Name : ').capitalize())
         user_data[0] = f_name
         # print(user_data[0])
         validate_user_f_name(f_name)
@@ -242,7 +241,7 @@ def validate_user_l_name(values):
             )
     except ValueError as e:
         print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
-        l_name = remove(input('Last Name details : ').capitalize())
+        l_name = remove(input('Your Last Name : ').capitalize())
         user_data[1] = l_name
         print(user_data[1])
         validate_user_l_name(l_name)
@@ -528,7 +527,7 @@ def update_to_pending_status():
     # print(order_data[7])
     # print(generate_order_no())
     print(f'Data successfully saved as PENDING.')
-    print(f"An email with it's details to {export_data[2]}")
+    # print(f"An email with it's details to {export_data[2]}")
     print(f'\nPlease carefully record order no : {export_data[6]}\nYou will need it to recall this item into the future.')
 
 
@@ -807,7 +806,7 @@ def update_to_canceled_status():
         order_worksheet.update(f'I{row}', f'{export_data[8]}') # updating cell i in colom I
         order_worksheet.update(f'J{row}', f'{export_data[9]}') # updating cell i in colom J
         print(f'\nOrder successfully CANCELED.')
-        print(f"An email with it's credit note details will be sent to {export_data[2]}")
+        # print(f"An email with it's credit note details will be sent to {export_data[2]}")
         print(f'\nPlease carefully record the order no. {export_data[6]}\nYou will need it to refer to this action into the future.')
         email_print_update_startover()
 
@@ -847,7 +846,9 @@ def submit_row_data():
     order_worksheet.update(f'I{row}', export_data[8])
     order_worksheet.update(f'J{row}', export_data[9])
 
-    print(f'\nOrder No. {export_data[6]} successfully updated!\nThanks for using the N(3)Orthotics order submission app.\n\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}\n')
+    print(f'\nOrder No. {export_data[6]} successfully updated!')
+    print('Thanks for using the N(3)Orthotics order submission app.\n')
+    # print(f'\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}\n')
     update_status()
 
 
@@ -872,12 +873,13 @@ def submit_order():
         user_email = export_data[2]
         recent_order_no = export_data[6] # updates order number for export to gsheets
         order_data[7] = export_data[10] # ensures order row data is same as export row data
-        print(export_data[10])
-        print(order_data[7])
+        # print(export_data[10])
+        # print(order_data[7])
         # recent_order_no = order_data[7] # updates local order data for change feat
         submitted_time = export_data[7]
 
-        print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
+        print('Order Successfully Submitted!!')
+        # print(f'\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
         print(f'\nYour order number is: {recent_order_no}')
         print(f'Submitted on: {submitted_time}')
         # print(export_data)
@@ -935,13 +937,13 @@ def email_print_update_startover():
     
     """
     print('\nWhat would you like to do next?')
-    print('\nSelect 1. : Email this order (TBC)')
-    print('Select 2. : Print this order (TBC)')
-    print('Select 3. : Change the features of this Order')
-    print('Select 4. : Start a new N3D insole order')
-    print('Select 5. : Retrieve an exsisting N(3) order\n')
-    print('Select 6. : Take Me Home')
-    print('Select 7. : Exit the N(3)Orthotics order portal\n')
+    print('\nSelect 1. : Change the features of this Order')
+    print('Select 2. : Start a new N3D insole order')
+    print('Select 3. : Retrieve an exsisting N(3) order\n')
+    print('Select 4. : Take Me Home')
+    print('Select 5. : Exit the N(3)Orthotics order portal\n')
+    # print('\nSelect 6. : Email this order (TBC)')
+    # print('Select 7. : Print this order (TBC)')
 
     startover = input('Your Selection: ')
     order_no = order_data[3]
@@ -949,39 +951,39 @@ def email_print_update_startover():
     for i in startover:
         if i == '1':
             clear_screen()
-            print(f'Emailing order number : {order_no} to {user_email}...\n')
-            test_email()
-            email_print_update_startover()
-            # main()
-        elif i == '2':
-            clear_screen()
-            print(f'Printing order number : {order_no}...\n')
-            email_print_update_startover()
-            # get_user_data()
-            # instruct_user_data()
-            # get_user_data()
-        elif i == '3':
-            clear_screen()
             print(f'Order No. {order_no}\n')
             validate_change_feat()
-        elif i == '4':
+        elif i == '2':
             clear_screen()
             print('Starting a new N3D insole order...')
             yes_no_user()
             # get_order_data()
-        elif i == '5':
+        elif i == '3':
             clear_screen()
             print('Taking you to retrieve_order function...\n')
             display_order()
-        elif i == '6':
+        elif i == '4':
             print('Taking you to home page...\n')
             clear_screen()
             start()
             select_option()
-        elif i == '7':
+        elif i == '5':
             print('Exiting this n3orthotics session...\n')
             clear_screen()
             exit()
+        # elif i == '6':
+        #     clear_screen()
+        #     print(f'Emailing order number : {order_no} to {user_email}...\n')
+        #     # test_email()
+        #     email_print_update_startover()
+        #     # main()
+        # elif i == '7':
+        #     clear_screen()
+        #     print(f'Printing order number : {order_no}...\n')
+        #     email_print_update_startover()
+        #     # get_user_data()
+        #     # instruct_user_data()
+        #     # get_user_data()
         else:
             print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
             email_print_update_startover()
@@ -1025,7 +1027,7 @@ main()
 # instruct_user_data()
 # email_print_update_startover()
 # slice_last_order_no()
-# test_email()
+# test_email() # not yet working
 # export_to_printer()
 # update_status()
 # retrieve_order() 
