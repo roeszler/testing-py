@@ -1,11 +1,11 @@
 # Modules
 import gspread
 from google.oauth2.service_account import Credentials
-import  re
+import re
 import os
 import datetime
 from datetime import timezone
-import  pytz
+import pytz
 
 import smtplib, ssl
 import getpass
