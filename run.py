@@ -134,10 +134,10 @@ def instruct_user_data():
     clear_screen()
     print('\nPlace a NORTHOTICS.com N3D Printed Insole order:\n')
     print('Where prompted below, please enter your name and email.')
-    print('This information should be in a valid syntax, with no spaces. For example:\n')
+    print('This information should be in a valid syntax, with no spaces.')
+    print('For example:\n')
     print('First Name: Rob\nLast Name: Bertoe')
     print('Email: rubbertoes@yourdomain.com\n')
-
 
 
 def get_user_data():
@@ -162,6 +162,7 @@ def get_user_data():
 
     # clear_screen() # removed for option 1 initial screen
 
+
 def summary_user_data():
     """
     Produces a readable summary of the current user_data list
@@ -180,7 +181,7 @@ def summary_order_data():
     """
     Produces a summary of the current order data stored locally
     """
-    f_name = user_data[0]
+    # f_name = user_data[0]
     size_eu = order_data[0]
     height = order_data[1]
     width = order_data[2]
@@ -188,9 +189,10 @@ def summary_order_data():
     print('\nYour order details are as follows:')
     # print('------------')
     summary_user_data()
-    print(f'Shoe Size : EU {size_eu}\nArch Height : {height}\nInsole Width : {width}\n')
+    print(f'Shoe Size : EU {size_eu}')
+    print(f'Arch Height : {height}')
+    print(f'Insole Width : {width}\n')
     # print('------------')
-
 
 
 def validate_user_f_name(values):
@@ -213,7 +215,8 @@ def validate_user_f_name(values):
             # return True
         else:
             raise ValueError(
-                f'The name you have provided "{values}" does not seem\nto be in a regular format'
+                f'The name you have provided "{values}" does not seem'
+                f'to be in a regular format'
             )
     except ValueError as e:
         print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
@@ -241,7 +244,8 @@ def validate_user_l_name(values):
             # print(user_data[1])
         else:
             raise ValueError(
-                f'The name you have provided "{values}" does not seem\nto be in a regular format'
+                f'The name you have provided "{values}" does not seem'
+                f'to be in a regular format'
             )
     except ValueError as e:
         print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
@@ -252,7 +256,6 @@ def validate_user_l_name(values):
         # print(user_data)
 
 
-
 def validate_user_email(values):
     """
     Inside the try, checks all user email input syntax.
@@ -260,7 +263,7 @@ def validate_user_email(values):
     and prompts to replace data in index [2] of the 
     user_data list = user_email
     """
-    values_string = f'{values.split(",")}'
+    # values_string = f'{values.split(",")}'
     # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
     try:
         if (re.fullmatch(REGEX, values)):
