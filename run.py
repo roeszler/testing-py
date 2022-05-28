@@ -497,7 +497,7 @@ def generate_order_no():
     new_order_no = (
         int(order_date)*10000) + (last_entry_int - slice_last_order_no() + 1)
     order_data[3] = new_order_no
-    print(new_order_no)
+    # print(new_order_no)
     return new_order_no
 
 
@@ -557,6 +557,9 @@ def update_to_pending_status():
     n = generate_UTC_time()
     export_data[9] = n
     export_data[8] = 'PENDING'
+    export_data[7] = ''
+    new_order_no = generate_order_no()
+    export_data[6] = new_order_no
     generate_row_no()
     # export_data[10] = order_data[7]
     # export_data[10] == new_order_no
@@ -667,7 +670,7 @@ def display_order():
     order_data[7] = int(row)
 
     combine_data_for_export()
-    print('\nYour order details are as follows:\n')
+    print('Your order details are as follows:\n')
     print(
         f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}'
         )
@@ -883,7 +886,7 @@ def update_to_canceled_status():
     Updates status to pending when user saves order
     """
     row = order_data[7]
-    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
 # accessing our order_worksheet from our google sheet
     order_worksheet = SHEET.worksheet('orders') 
     
@@ -942,7 +945,7 @@ def submit_row_data():
     records the date of the order update
     """
     row = order_data[7]
-    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     order_worksheet = SHEET.worksheet('orders')
 
     print(f'Accessing your order on row number : {row}')
@@ -1041,6 +1044,8 @@ def save_order():
         main()
     else:
         # update_date_ordered()
+        export_data[7] = ''
+        # generate_order_no()
         update_to_pending_status()
         # combine_data_for_export()
         # print(export_data)
@@ -1071,7 +1076,7 @@ def email_print_update_startover():
 
     startover = input('Your Selection: ')
     order_no = order_data[3]
-    user_email = user_data[2]
+    # user_email = user_data[2]
     for i in startover:
         if i == '1':
             clear_screen()
