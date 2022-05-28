@@ -90,8 +90,7 @@ def start():
     """
     print('Welcome to N(3)ORTHOTICS order portal.\n')
     print('Use this app to directly access made-to-order N3D Printed Insoles')
-    print('Please visit northotics.com/home for more information\n')
-    
+    print('Please visit northotics.com/home for more information\n')    
     print('Select 1. : Place a new N3D insole order')
     print('Select 2. : Retrieve an exsisting N3D order')
     print('Select 3. : Exit Program\n')
@@ -449,8 +448,10 @@ def combine_data_for_export():
     export_data.clear()
     for i in user_data:
         export_data.append(i)
+        # export_data.update(i)
     for i in order_data:
         export_data.append(i)
+        # export_data.update(i)
     export_data.pop()
     # print(export_data)
     return export_data
@@ -886,7 +887,7 @@ def update_to_canceled_status():
     Updates status to pending when user saves order
     """
     row = order_data[7]
-    # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
 # accessing our order_worksheet from our google sheet
     order_worksheet = SHEET.worksheet('orders') 
     
@@ -945,7 +946,7 @@ def submit_row_data():
     records the date of the order update
     """
     row = order_data[7]
-    # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     order_worksheet = SHEET.worksheet('orders')
 
     print(f'Accessing your order on row number : {row}')
