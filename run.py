@@ -33,24 +33,24 @@ search_res_row = 0
 
 
 # Testing email details SSL
-def test_email():
-    """
-    Accesses Email account to send summary information of order
-    """
-    port = 465  # For SSL
-    smtp_server = "smtp.gmail.com"
-    sender_email = "testingn3d@gmail.com"  # Enter your address
-    receiver_email = user_data[2] # retrieves the receiver address
-    print(receiver_email)
-    password = input("Type your password and press enter: ")
-    message = """\
-    Subject: Hi there
-    This message is sent from Python."""
+# def test_email():
+#     """
+#     Accesses Email account to send summary information of order
+#     """
+#     port = 465  # For SSL
+#     smtp_server = "smtp.gmail.com"
+#     sender_email = "testingn3d@gmail.com"  # Enter your address
+#     receiver_email = user_data[2] # retrieves the receiver address
+#     print(receiver_email)
+#     password = input("Type your password and press enter: ")
+#     message = """\
+#     Subject: Hi there
+#     This message is sent from Python."""
 
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message)
+#     context = ssl.create_default_context()
+#     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+#         server.login(sender_email, password)
+#         server.sendmail(sender_email, receiver_email, message)
 
 # # Testing email details TLS
 # def test_email():
@@ -156,10 +156,6 @@ def get_user_data():
     validate_user_email(f'{user_email}')
 
     # clear_screen() # removed for option 1 initial screen
-    
-    
-    
-
 
 def summary_user_data():
     """
@@ -176,6 +172,9 @@ def summary_user_data():
 
 
 def summary_order_data():
+    """
+    Produces a summary of the current order data stored locally
+    """
     f_name = user_data[0]
     size_eu = order_data[0]
     height = order_data[1]
@@ -438,6 +437,10 @@ def clear_screen():
 
 
 def slice_last_order_no():
+    """
+    Steps order number back by one value to account for the heading information
+    within gsheets document.
+    """
     order_no = SHEET.worksheet('orders').get_values('G:G')
     last_index = len(order_no) - 1
     last_entry = order_no[last_index]
@@ -452,8 +455,8 @@ def slice_last_order_no():
 
 def generate_order_no():
     """
-    Generates an order number with todays date + increment from previoius 
-    oder entry in worksheet
+    Generates an order number with todays date + increment from previoius
+    order entry in worksheet
     """
     order_no = SHEET.worksheet('orders').get_values('G:G')
     last_index = len(order_no) - 1
@@ -502,6 +505,9 @@ def update_date_ordered():
     print(order_data)
 
 def generate_row_no():
+    """
+    Retrieves current row data length and extends it by 1 value
+    """
     row_data = SHEET.worksheet('orders').get_values('K:K')
     new_row_no = len(row_data) + 1
     # order_data[7] = new_row_no
@@ -559,7 +565,7 @@ def input_order_no():
 # Sourced from https://www.pythonpool.com/flatten-list-python/
 def flatten_nested_list(input_list):
     """
-    Flattens a nested list into a list 
+    Flattens a nested list into a list
     """
     flattened_list = []
     for i in input_list:
@@ -572,24 +578,24 @@ def flatten_nested_list(input_list):
 
 def retrieve_order():
     """
-    Searches worksheet coloum order_no for a match to user input and
+    Searches worksheet coloum 'order_no' for a match to user input and
     returns row information to local user_data, oder_data and export_data lists
     """
     search_input = str(input_order_no())
     order_nos_import = SHEET.worksheet('orders').get_values('G:G')
     order_nos = flatten_nested_list(order_nos_import)
    
-    res = [i for i in range(len(order_nos)) if order_nos[i] == search_input]
-    if res == []:
+    order_match = [i for i in range(len(order_nos)) if order_nos[i] == search_input]
+    if order_match == []:
         print(f'Order number {search_input} not found?!\n')
         retrieve_order()
     else:
         for i in range(len(order_nos)):
             if search_input == order_nos[i]:
-                search_res_row = i+1
-                print(f'\nOrder found in database row no. {search_res_row}')
-                # search_res_row = order_data[7]
-                return search_res_row
+                search_match_row = i+1
+                print(f'\nOrder found in database row no. {search_match_row}')
+                # search_match_row = order_data[7]
+                return search_match_row
 
 
 def display_order():
@@ -611,9 +617,7 @@ def display_order():
     order_data[0:6] = flat_order[3:9]
     order_data[7] = int(row)
 
-
     combine_data_for_export()
-  
     print('\nYour order details are as follows:\n')
     print(f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
     print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
@@ -641,7 +645,6 @@ def validate_change_feat():
         print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
         print(f'7. Submit the above details\n8. Re-Print without changes\n9. Take me Home\n')
         change_feat()
-
     else:
         print(f'\nAt the {flat_order[8]} stage, this order is beyond the point in production\nwhere modifications can occur.')
         email_print_update_startover()
@@ -714,9 +717,9 @@ def change_feat():
         combine_data_for_export()
         main()
     else:
-        print(f'The number you have provided "{selection}" is not part of this selection.\nPlease select again\n')
+        print(f'The number you have provided "{selection}" is not part of this selection.')
+        print('Please select again\n')
         validate_change_feat()
-
 
 
 def update_status():
@@ -778,7 +781,7 @@ def update_status():
 
 def cancel_confirm():
     """
-    
+    Confirms the user input to cancel order and returns to main screen 
     """
     confirm = input('Are you sure you wish to cancel this order? y/n : ')
     if confirm.startswith('y'):
@@ -902,7 +905,8 @@ def update_order_worksheet(data):
 
 def save_order():
     """
-    
+    User descision to save order as pending within gsheets or
+    clear all local data and return to main screen
     """
     save = input('\nWould you like to save this order? y/n: ').lower()
     if save.startswith('n'):
@@ -934,7 +938,8 @@ def save_order():
 
 def email_print_update_startover():
     """
-    
+    User descision tree to navigate following a successful submission,
+    fetaure change, save or change of status
     """
     print('\nWhat would you like to do next?')
     print('\nSelect 1. : Change the features of this Order')
@@ -990,7 +995,7 @@ def email_print_update_startover():
 
 def main():
     """
-    Run all program functions
+    Run all primary program functions
     """
     clear_screen()
     start()
