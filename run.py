@@ -1,11 +1,11 @@
 # Modules
 import gspread
 from google.oauth2.service_account import Credentials
-import  re # regular extensions import for checking syntax of email
+import  re
 import os
 import datetime
 from datetime import timezone
-import  pytz # regional date time for order_no and order_date
+import  pytz
 
 import smtplib, ssl
 import getpass
