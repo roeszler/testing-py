@@ -1,11 +1,15 @@
-# Modules
-import gspread
-from google.oauth2.service_account import Credentials
-import re
+"""
+Conatins all moduels impoted to provide and export live data such as
+operating system, email formats, current Coordinated Universal Timezone
+and google sheets
+"""
 import os
+import re
 import datetime
 from datetime import timezone
 import pytz
+import gspread
+from google.oauth2.service_account import Credentials
 
 # import smtplib, ssl
 # import getpass
@@ -30,7 +34,7 @@ order_data = [
     ]
 update_order = ['order_status', 'order_update']
 export_data = []
-search_res_row = 0
+SEARCH_RES_ROW = 0
 
 
 # Testing email details SSL
@@ -90,7 +94,7 @@ def start():
     """
     print('Welcome to N(3)ORTHOTICS order portal.\n')
     print('Use this app to directly access made-to-order N3D Printed Insoles')
-    print('Please visit northotics.com/home for more information\n')    
+    print('Please visit northotics.com/home for more information\n')
     print('Select 1. : Place a new N3D insole order')
     print('Select 2. : Retrieve an exsisting N3D order')
     print('Select 3. : Exit Program\n')
@@ -142,7 +146,7 @@ def instruct_user_data():
 def get_user_data():
     """
     User input of first name, last name and email to from a string
-    with fist letter capitalized for names and all lowercase email 
+    with fist letter capitalized for names and all lowercase email
     """
     f_name = remove(input('Your First Name: ').capitalize())
     user_data[0] = f_name
@@ -198,7 +202,7 @@ def validate_user_f_name(values):
     """
     Inside the try, checks all user input syntax.
     Raises ValueError if strings cannot be converted
-    and prompts to replace data in index [0] of the 
+    and prompts to replace data in index [0] of the
     user_data list = f_name
     """
     # f_name = (f'{values}')
@@ -217,8 +221,10 @@ def validate_user_f_name(values):
                 f'The name you have provided "{values}" does not seem'
                 f'to be in a regular format'
             )
-    except ValueError as e:
-        print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
+    except ValueError as error:
+        print(
+            f'\nInvalid data: {error}. Please check the entry and try again.\n'
+            )
         f_name = remove(input('Your First Name : ').capitalize())
         user_data[0] = f_name
         # print(user_data[0])
@@ -233,7 +239,7 @@ def validate_user_l_name(values):
     """
     Inside the try, checks all user input syntax.
     Raises ValueError if strings cannot be converted
-    and prompts to replace data in index [1] of the 
+    and prompts to replace data in index [1] of the
     user_data list = l_name
     """
     try:
@@ -246,8 +252,10 @@ def validate_user_l_name(values):
                 f'The name you have provided "{values}" does not seem'
                 f'to be in a regular format'
             )
-    except ValueError as e:
-        print(f'\nInvalid data: {e}. Please check the entry and try again.\n')
+    except ValueError as error:
+        print(
+            f'\nInvalid data: {error}. Please check the entry and try again.\n'
+            )
         l_name = remove(input('Your Last Name : ').capitalize())
         user_data[1] = l_name
         print(user_data[1])
@@ -259,14 +267,14 @@ def validate_user_email(values):
     """
     Inside the try, checks all user email input syntax.
     Raises ValueError if strings cannot be converted
-    and prompts to replace data in index [2] of the 
+    and prompts to replace data in index [2] of the
     user_data list = user_email
     """
     # values_string = f'{values.split(",")}'
     # print('The user_data you provided converted into a list of strings is:')
     # print(f'\n{values_string}\n')
     try:
-        if (re.fullmatch(REGEX, values)):
+        if re.fullmatch(REGEX, values):
             print('Email is valid...')
             user_data[2] = values.lower()
 # removed this for the change email option 3. in update_exsisting order f
@@ -374,7 +382,7 @@ def get_size_data():
                         f'shoe sizing: {size_eu}'
                         )
                     get_size_data()
-                else:          
+                else:
                     order_data[0] = size_eu
                     return size_eu
             else:
@@ -384,8 +392,8 @@ def get_size_data():
                     )
                 get_size_data()
 
-        except ValueError as e:
-            print(f'Invalid data : {e}, please try again.\n')
+        except ValueError as error:
+            print(f'Invalid data : {error}, please try again.\n')
             # return False
             continue
         # return True
@@ -414,7 +422,7 @@ def get_height_data():
 
 def get_width_data():
     """
-    Width user input converted into ['Narrow', 'Standard', 'Wide'] for 
+    Width user input converted into ['Narrow', 'Standard', 'Wide'] for
     order_data
     """
     width = remove(input(
@@ -459,7 +467,7 @@ def combine_data_for_export():
 
 def clear_screen():
     """
-    Checks if Operating System is Mac and Linux or Windows and 
+    Checks if Operating System is Mac and Linux or Windows and
     clears the screen
     """
     if os.name == 'posix':
@@ -477,11 +485,11 @@ def slice_last_order_no():
     last_index = len(order_no) - 1
     last_entry = order_no[last_index]
     last_entry_int = last_entry[0]
-    x = slice(6)
-    reset_no = int(last_entry_int[x])
-    reset_no_10K = reset_no * 10000
+    slice_last_digit = slice(6)
+    reset_no = int(last_entry_int[slice_last_digit])
+    reset_no_to_ten_thousand = reset_no * 10000
     # print(type(reset_no))
-    return reset_no_10K
+    return reset_no_to_ten_thousand
 
 
 def generate_order_no():
@@ -511,10 +519,10 @@ def generate_order_no():
 #     n = order_date.title()
 #     print(f'{n}')
 
-def generate_UTC_time():
+def generate_utc_time():
     """
     Creates Central European Standard Time (CEST) version of date and time
-    in iso 
+    in iso
     """
     utc_now = datetime.datetime.now(timezone.utc)
     # CEST = pytz.timezone('Europe/Stockholm')
@@ -525,17 +533,17 @@ def generate_UTC_time():
     #     'the supported timezones by the pytz module:', pytz.all_timezones, '
     #     '\n')
     # n = '{}'.format(utc_now.astimezone(CEST).isoformat())
-    n = '{}'.format(utc_now.astimezone(UTC).isoformat())
+    iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
     # print(export_data)
-    return n
+    return iso_format_timezone
 
 
 def update_date_ordered():
     """
     Updates the order_date filed within order_data list
     """
-    n = generate_UTC_time()
-    order_data[4] = n
+    time_zone = generate_utc_time()
+    order_data[4] = time_zone
     order_data[5] = 'NEW ORDER'
     print(order_data)
 
@@ -555,8 +563,8 @@ def update_to_pending_status():
     """
     Updates status to pending when user saves order
     """
-    n = generate_UTC_time()
-    export_data[9] = n
+    time_zone = generate_utc_time()
+    export_data[9] = time_zone
     export_data[8] = 'PENDING'
     export_data[7] = ''
     new_order_no = generate_order_no()
@@ -601,9 +609,9 @@ def input_order_no():
                     f'\nUnfortunatley {order_no} has {len(order_no_string)}'
                     ' digits.'
                 )
-        except ValueError as e:
+        except ValueError as error:
             print(
-                f'Invalid data : {e}'
+                f'Invalid data : {error}'
                 '\nPlease check your records and try again below;\n')
             # return False
             continue
@@ -620,7 +628,8 @@ def flatten_nested_list(input_list):
     """
     flattened_list = []
     for i in input_list:
-        if type(i) == list:
+        # if type(i) == list:
+        if isinstance(i) == list:
             flattened_list.extend(flatten_nested_list(i))
         else:
             flattened_list.append(i)
@@ -635,7 +644,6 @@ def retrieve_order():
     search_input = str(input_order_no())
     order_nos_import = SHEET.worksheet('orders').get_values('G:G')
     order_nos = flatten_nested_list(order_nos_import)
-   
     order_match = [
         i for i in range(len(order_nos)) if order_nos[i] == search_input
         ]
@@ -643,7 +651,7 @@ def retrieve_order():
         print(f'Order number {search_input} not found?!\n')
         retrieve_order()
     else:
-        for i in range(len(order_nos)):
+        for i in enumerate(order_nos):
             if search_input == order_nos[i]:
                 search_match_row = i+1
                 print(f'\nOrder found in database row no. {search_match_row}')
@@ -653,17 +661,16 @@ def retrieve_order():
 
 def display_order():
     """
-    Gets orders by row from worksheet 
-    Converts specific string values back into integers and 
-    Displays entire order as a list 
+    Gets orders by row from worksheet
+    Converts specific string values back into integers and
+    Displays entire order as a list
     """
     row = int(retrieve_order())
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     flat_order = flatten_nested_list(order_row)
-    
     # converts back to an integer
     size_eu = flat_order[3]
-    flat_order[3] = float(size_eu) 
+    flat_order[3] = float(size_eu)
     order_no = flat_order[6]
     flat_order[6] = int(order_no)
     user_data[0:3] = flat_order[0:3]
@@ -697,7 +704,6 @@ def validate_change_feat():
     # row = export_data[10]
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     flat_order = flatten_nested_list(order_row)
-    
     print(f'Current order status is: {flat_order[8]}')
     if flat_order[8] == 'PENDING' or flat_order[8] == 'NEW ORDER' or \
             flat_order[8] == 'UPDATED ORDER' or flat_order[8] == 'CREATED' or \
@@ -865,15 +871,15 @@ def update_status():
             print('Please select again\n')
             email_print_update_startover()
 
-    n = generate_UTC_time()
-    update_order[1] = n
+    iso_format_timezone = generate_utc_time()
+    update_order[1] = iso_format_timezone
     # print(update_order)
     # print(export_data)
 
 
 def cancel_confirm():
     """
-    Confirms the user input to cancel order and returns to main screen 
+    Confirms the user input to cancel order and returns to main screen
     """
     confirm = input('Are you sure you wish to cancel this order? y/n : ')
     if confirm.startswith('y'):
@@ -889,16 +895,15 @@ def update_to_canceled_status():
     row = order_data[7]
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
 # accessing our order_worksheet from our google sheet
-    order_worksheet = SHEET.worksheet('orders') 
-    
+    order_worksheet = SHEET.worksheet('orders')
     print(f'\nCurrent order status is: {export_data[8]}')
     if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or \
             export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' \
             or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
         print('Order is modifiable.\n')
         cancel_confirm()
-        n = generate_UTC_time()
-        export_data[9] = n
+        iso_format_timezone = generate_utc_time()
+        export_data[9] = iso_format_timezone
         export_data[8] = 'CANCELED'
 # updating cell i in colom I
         order_worksheet.update(f'I{row}', f'{export_data[8]}')
@@ -942,7 +947,7 @@ def update_to_canceled_status():
 
 def submit_row_data():
     """
-    Replaces the exsisting row data in the worksheet with updated data and 
+    Replaces the exsisting row data in the worksheet with updated data and
     records the date of the order update
     """
     row = order_data[7]
@@ -955,8 +960,8 @@ def submit_row_data():
     # print(f'order_data :\n{order_data}')
     # print(f'user_data :\n{user_data}')
 
-    n = generate_UTC_time()
-    export_data[9] = n
+    iso_format_timezone = generate_utc_time()
+    export_data[9] = iso_format_timezone
     export_data[8] = 'UPDATED ORDER'
     order_worksheet.update(f'A{row}', export_data[0])
     order_worksheet.update(f'B{row}', export_data[1])
@@ -980,8 +985,8 @@ def submit_row_data():
 
 def submit_order():
     """
-    User choice to deny or confirm order submission. 
-    Confirn compiles list from user_data and oder_data then 
+    User choice to deny or confirm order submission.
+    Confirn compiles list from user_data and oder_data then
     exports it to update_sales-worksheet function
     """
     submit = input('Would you like to submit this order? y/n: ').lower()
@@ -999,7 +1004,7 @@ def submit_order():
 # updates order number for export to gsheets
         recent_order_no = export_data[6]
 # ensures order row data is same as export row data
-        order_data[7] = export_data[10] 
+        order_data[7] = export_data[10]
         # print(export_data[10])
         # print(order_data[7])
 # updates local order data for change feat
@@ -1138,7 +1143,7 @@ def main():
     # submit_order()
 
 
-main()
+# main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -1157,7 +1162,7 @@ main()
 # clear_screen()
 # generate_order_no()
 # generate_date_time()
-# generate_UTC_time()
+generate_utc_time()
 # update_date_ordered()
 # instruct_user_data()
 # email_print_update_startover()
@@ -1165,7 +1170,7 @@ main()
 # test_email() # not yet working
 # export_to_printer()
 # update_status()
-# retrieve_order() 
+# retrieve_order()
 # display_order()
 # input_order_no()
 # update_to_pending_status()
