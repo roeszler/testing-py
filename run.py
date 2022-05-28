@@ -700,15 +700,35 @@ def validate_change_feat():
             flat_order[8] == 'ACCEPTED' or flat_order[8] == 'DESIGNED':
         print('Order is modifiable.')
         print('\nYour order details are as follows:\n')
-        print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nPlace in production queue : {flat_order[10]}\nCurrent Status : {flat_order[8]}')
+        print(
+            f'Order No. : {flat_order[6]}'
+            f'\nDate Ordered : {flat_order[7]}'
+            f'\nPlace in production queue : {flat_order[10]}'
+            f'\nCurrent Status : {flat_order[8]}'
+            )
         print('\nDetails you can edit:\n')
-        print(f'1. First Name : {user_data[0]}\n2. Surname : {user_data[1]}\n3. Email : {user_data[2]}')
-        print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
-        print(f'7. Submit the above details\n8. Re-Print without changes\n9. Take me Home\n')
+        print(
+            f'1. First Name : {user_data[0]}'
+            f'\n2. Surname : {user_data[1]}'
+            f'\n3. Email : {user_data[2]}'
+            )
+        print(
+            f'4. Shoe Size : EU {order_data[0]}'
+            f'\n5. Arch Height : {order_data[1]}'
+            f'\n6. Insole Width : {order_data[2]}\n'
+            )
+        print(
+            '7. Submit the above details'
+            '\n8. Re-Print without changes'
+            '\n9. Take me Home\n'
+            )
         change_feat()
 
     else:
-        print(f'\nAt the {flat_order[8]} stage, this order is beyond the point in production\nwhere modifications can occur.')
+        print(
+            f'\nAt the {flat_order[8]} stage, this order is beyond the point'
+            'in production\nwhere modifications can occur.'
+            )
         email_print_update_startover()
 
 
@@ -716,8 +736,8 @@ def change_feat():
     """
     Generates a list to choose which feature of an exsisting order to change
     """
-    i = input('Your Selection : ')
-    if i == '1':
+    feature_selection = input('Your Selection : ')
+    if feature_selection == '1':
         clear_screen()
         f_name = input('New First Name details: ')
         clear_screen()
@@ -733,7 +753,7 @@ def change_feat():
     #     print(f'export_data:\n {export_data}')
     #     print(flat_order)
     #     print(f'flat_order:\n {flat_order}')
-    elif i == '2':
+    elif feature_selection == '2':
         clear_screen()
         l_name = input('New Last Name details: ')
         clear_screen()
@@ -741,28 +761,28 @@ def change_feat():
         l_name = user_data[1]
         # print(user_data[1])
         validate_change_feat()
-    elif i == '3':
+    elif feature_selection == '3':
         clear_screen()
         user_email = input('New Email details: ')
         validate_user_email(user_email)
         user_email = user_data[2]
         validate_change_feat()
-    elif i == '4':
+    elif feature_selection == '4':
         clear_screen()
         get_size_data()
         clear_screen()
         validate_change_feat()
-    elif i == '5':
+    elif feature_selection == '5':
         clear_screen()
         get_height_data()
         clear_screen()
         validate_change_feat()
-    elif i == '6':
+    elif feature_selection == '6':
         clear_screen()
         get_width_data()
         clear_screen()
         validate_change_feat()
-    elif i == '7':
+    elif feature_selection == '7':
         # print('Submit : ')
         # submit_order()
         # print(export_data)
@@ -770,16 +790,19 @@ def change_feat():
         update_date_ordered()
         combine_data_for_export()
         submit_row_data()
-    elif i == '8':
+    elif feature_selection == '8':
         clear_screen()
         order_no = order_data[3]
         print(f'Re-printing order number : {order_no}...\n')
         submit_order()
-    elif i == '9':
+    elif feature_selection == '9':
         combine_data_for_export()
         main()
     else:
-        print(f'The number you have provided "{selection}" is not part of this selection.')
+        print(
+            f'The number you have provided "{feature_selection}" is not part'
+            'of this selection.'
+            )
         print('Please select again\n')
         validate_change_feat()
 
@@ -790,7 +813,7 @@ def update_status():
     create new order details and/or navigate through the system
     """
     order_no = order_data[3]
-    f_name = user_data[0]
+    # f_name = user_data[0]
     # print(export_data)
 
     print(f'What would you like to do with order no. {order_no} ?')
@@ -832,7 +855,10 @@ def update_status():
             clear_screen()
             main()
         else:
-            print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
+            print(
+                f'The number you have provided "{startover}" is not available.'
+            )
+            print('Please select again\n')
             email_print_update_startover()
 
     n = generate_UTC_time()
@@ -852,35 +878,63 @@ def cancel_confirm():
         main()
 
 
-
 def update_to_canceled_status():
     """
     Updates status to pending when user saves order
     """
     row = order_data[7]
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
-    order_worksheet = SHEET.worksheet('orders') # accessing our order_worksheet from our google sheet
+# accessing our order_worksheet from our google sheet
+    order_worksheet = SHEET.worksheet('orders') 
     
     print(f'\nCurrent order status is: {export_data[8]}')
-    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
+    if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or \
+            export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' \
+            or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
         print('Order is modifiable.\n')
         cancel_confirm()
         n = generate_UTC_time()
         export_data[9] = n
         export_data[8] = 'CANCELED'
-        order_worksheet.update(f'I{row}', f'{export_data[8]}') # updating cell i in colom I
-        order_worksheet.update(f'J{row}', f'{export_data[9]}') # updating cell i in colom J
-        print(f'\nOrder successfully CANCELED.')
-        # print(f"An email with it's credit note details will be sent to {export_data[2]}")
-        print(f'\nPlease carefully record the order no. {export_data[6]}\nYou will need it to refer to this action into the future.')
+# updating cell i in colom I
+        order_worksheet.update(f'I{row}', f'{export_data[8]}')
+# updating cell i in colom J
+        order_worksheet.update(f'J{row}', f'{export_data[9]}')
+        print('\nOrder successfully CANCELED.')
+        print(
+            f"An email with it's credit note details will be sent to"
+            f' {export_data[2]}'
+            )
+        print(
+            f'\nPlease carefully record the order no. {export_data[6]}'
+            '\nYou will need it to refer to this action into the future.'
+            )
         email_print_update_startover()
 
     else:
         # print('false')
-        print(f'Unfortunatley as a custom made product, this order is already at the {export_data[8]} stage.')
-        print(f'\nFrom this point manufacturing has already commenced. As it is \nmade to your specific specifications, the window to alter or cancel the order has passed.')
-        print(f'\nFor further clarificaiton of made-to-order products purchased online,\nspecifically section 13(1)(c) of the UK Distance Selling Regulations, please visit: https://www.legislation.gov.uk/uksi/2000/2334/contents/made. \nAlternately, contact info@northotics.com refering order number : {export_data[6]}.\nYour purchasing rights have not been affected.\n')
+        print(
+            'Unfortunatley as a custom made product, this order is already at'
+            f' the {export_data[8]} stage.'
+            )
+        print(
+            '\nFrom this point manufacturing has already commenced. As it '
+            '\nis made to your specifications, the window to alter or cancel '
+            '\nthe order has passed.'
+            )
+        print(
+            '\nFor further clarificaiton of made-to-order products purchased'
+            ' online,'
+            '\nspecifically section 13(1)(c) of the UK Distance Selling'
+            ' Regulations, please visit: '
+            'https://www.legislation.gov.uk/uksi/2000/2334/contents/made. '
+            '\nAlternately, contact info@northotics.com refering order '
+            'number :'
+            f' {export_data[6]}.'
+            '\nYour purchasing rights have not been affected.\n'
+            )
         email_print_update_startover()
+
 
 def submit_row_data():
     """
@@ -913,9 +967,11 @@ def submit_row_data():
 
     print(f'\nOrder No. {export_data[6]} successfully updated!')
     print('Thanks for using the N(3)Orthotics order submission app.\n')
-    # print(f'\nYou should shortly recieve an email confirming these changes to:\n{export_data[2]}\n')
+    # print(
+    #     '\nYou should shortly recieve an email confirming these changes to:'
+    #     f'\n{export_data[2]}\n'
+    #     )
     update_status()
-
 
 
 def submit_order():
@@ -936,15 +992,21 @@ def submit_order():
         update_order_worksheet(export_data)
 
         user_email = export_data[2]
-        recent_order_no = export_data[6] # updates order number for export to gsheets
-        order_data[7] = export_data[10] # ensures order row data is same as export row data
+# updates order number for export to gsheets
+        recent_order_no = export_data[6]
+# ensures order row data is same as export row data
+        order_data[7] = export_data[10] 
         # print(export_data[10])
         # print(order_data[7])
-        # recent_order_no = order_data[7] # updates local order data for change feat
+# updates local order data for change feat
+        # recent_order_no = order_data[7]
         submitted_time = export_data[7]
 
         print('Order Successfully Submitted!!')
-        # print(f'\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')
+        print(
+            '\nYou will shortly receive an email instructions to:'
+            f'\n{user_email} with the details to arrange secure payment.'
+            )
         print(f'\nYour order number is: {recent_order_no}')
         print(f'Submitted on: {submitted_time}')
         # print(export_data)
@@ -953,16 +1015,16 @@ def submit_order():
         email_print_update_startover()
 
 
-
 def update_order_worksheet(data):
     """
     Update sales google worksheet, add new row with the list data provided
     """
     print('Contacting the mothership...')
-    order_worksheet = SHEET.worksheet('orders') # accessing our sales_worksheet from our google sheet
-    order_worksheet.append_row(data) # adds a new row in the google worksheet selected
+# accessing our sales_worksheet from our google sheet
+    order_worksheet = SHEET.worksheet('orders')
+# adds a new row in the google worksheet selected
+    order_worksheet.append_row(data)
     print('Information received...')
-
 
 
 def save_order():
@@ -991,11 +1053,6 @@ def save_order():
 #     os.startfile("TestFile.txt", "print")
 #     import platform
 #     print(platform.platform())
-
-
-
-
-
 
 
 def email_print_update_startover():
@@ -1052,8 +1109,12 @@ def email_print_update_startover():
         #     # instruct_user_data()
         #     # get_user_data()
         else:
-            print(f'The number you have provided "{startover}" is not available.\nPlease select again\n')
+            print(
+                f'The number you have provided "{startover}" is not available.'
+                '\nPlease select again\n'
+                )
             email_print_update_startover()
+
 
 def main():
     """
@@ -1069,6 +1130,7 @@ def main():
     summary_order_data()
     combine_data_for_export()
     # submit_order()
+
 
 main()
 
