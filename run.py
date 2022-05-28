@@ -35,6 +35,9 @@ search_res_row = 0
 
 # Testing email details SSL
 def test_email():
+    """
+    
+    """
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
     sender_email = "testingn3d@gmail.com"  # Enter your address
@@ -141,19 +144,22 @@ def get_user_data():
     f_name = remove(input('Your First Name: ').capitalize())
     user_data[0] = f_name
     # print(user_data)
+    validate_user_f_name(f'{f_name}')
 
     l_name = remove(input('Your Last Name: ').capitalize())
     user_data[1] = l_name
     # print(user_data)
+    validate_user_l_name(f'{l_name}')
 
     user_email = remove(input('Your Email: ').lower())
     user_data[2] = user_email
     # print(user_data)
+    validate_user_email(f'{user_email}')
 
     # clear_screen() # removed for option 1 initial screen
-    validate_user_f_name(f'{f_name}')
-    validate_user_l_name(f'{l_name}')
-    validate_user_email(f'{user_email}')
+    
+    
+    
 
 
 def summary_user_data():
@@ -349,7 +355,7 @@ def get_size_data():
 
             if size_eu >= 19 and size_eu <= 50:
                 if size_divisble != 0:
-                    print(f'\nIncorrect information provided for european shoe sizing: {size_eu}\n')
+                    print(f'\nIncorrect information provided for european shoe sizing: {size_eu}')
                     get_size_data()
                 else:          
                     order_data[0] = size_eu
@@ -501,6 +507,7 @@ def generate_row_no():
     new_row_no = len(row_data) + 1
     # order_data[7] = new_row_no
     export_data.append(new_row_no)
+    # return new_row_no
 
 
 def update_to_pending_status():
@@ -621,6 +628,7 @@ def validate_change_feat():
     Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feat function
     """
     row = order_data[7]
+    # row = export_data[10]
     order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     flat_order = flatten_nested_list(order_row)
     
@@ -858,11 +866,15 @@ def submit_order():
         generate_order_no()
         update_date_ordered()
         combine_data_for_export()
-        generate_row_no() # test
+        generate_row_no()
         update_order_worksheet(export_data)
 
         user_email = export_data[2]
-        recent_order_no = export_data[6]
+        recent_order_no = export_data[6] # updates order number for export to gsheets
+        order_data[7] = export_data[10] # ensures order row data is same as export row data
+        print(export_data[10])
+        print(order_data[7])
+        # recent_order_no = order_data[7] # updates local order data for change feat
         submitted_time = export_data[7]
 
         print(f'\nOrder Successfully Submitted!!\nYou will shortly receive an email instructions to:\n{user_email} with the details to arrange secure payment.')

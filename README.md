@@ -29,3 +29,6 @@ The deployment terminal is set to 80 columns by 24 rows. That means that each li
 
 -----
 Happy coding!
+
+![Flowchart 1](assets/pictures/lucidFlowchartOne_AddOrders.png)
+![Flowchart 2](assets/pictures/lucidFlowchartTwo_DisplayOrder.png)
