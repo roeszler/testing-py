@@ -7,7 +7,7 @@ import os
 import re
 import datetime
 from datetime import timezone
-import pytz
+# import pytz
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -26,7 +26,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
 REGEX = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-UTC = pytz.timezone('Etc/GMT+0')
+# UTC = pytz.timezone('Etc/GMT+0')
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = [
@@ -533,9 +533,12 @@ def generate_utc_time():
     #     'the supported timezones by the pytz module:', pytz.all_timezones, '
     #     '\n')
     # n = '{}'.format(utc_now.astimezone(CEST).isoformat())
-    iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
+    # iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
+    # print(utc_now)
+    # print(iso_format_timezone)
     # print(export_data)
-    return iso_format_timezone
+    # return iso_format_timezone
+    return utc_now
 
 
 def update_date_ordered():
@@ -628,8 +631,7 @@ def flatten_nested_list(input_list):
     """
     flattened_list = []
     for i in input_list:
-        # if type(i) == list:
-        if isinstance(i) == list:
+        if isinstance(i, list):
             flattened_list.extend(flatten_nested_list(i))
         else:
             flattened_list.append(i)
@@ -651,7 +653,7 @@ def retrieve_order():
         print(f'Order number {search_input} not found?!\n')
         retrieve_order()
     else:
-        for i in enumerate(order_nos):
+        for i in range(len(order_nos)):
             if search_input == order_nos[i]:
                 search_match_row = i+1
                 print(f'\nOrder found in database row no. {search_match_row}')
@@ -1143,7 +1145,7 @@ def main():
     # submit_order()
 
 
-# main()
+main()
 
 # get_latest_row_entry()
 # validate_user_email(values='stuart@roeszler.com')
@@ -1162,7 +1164,7 @@ def main():
 # clear_screen()
 # generate_order_no()
 # generate_date_time()
-generate_utc_time()
+# generate_utc_time()
 # update_date_ordered()
 # instruct_user_data()
 # email_print_update_startover()
