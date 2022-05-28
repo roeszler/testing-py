@@ -7,8 +7,8 @@ import datetime
 from datetime import timezone
 import pytz
 
-import smtplib, ssl
-import getpass
+# import smtplib, ssl
+# import getpass
 
 SCOPE = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -21,11 +21,13 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
-REGEX_EMAIL = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+REGEX = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 UTC = pytz.timezone('Etc/GMT+0')
 
 user_data = ['f_name', 'l_name', 'user_email']
-order_data = ['size_eu', 'height', 'width', 'order_no', '', 'order_status', '', 'row_no']
+order_data = [
+    'size_eu', 'height', 'width', 'order_no', '', 'order_status', '', 'row_no'
+    ]
 update_order = ['order_status', 'order_update']
 export_data = []
 search_res_row = 0
@@ -56,8 +58,11 @@ search_res_row = 0
 #     port = 587  # For starttls
 #     smtp_server = "smtp.gmail.com"
 #     sender_email = "testingn3d@gmail.com"
-#     receiver_email = user_data[2] # retrieves the receiver address
-#     password = input("Type the testing password provided by developer and press enter: ")
+# # retrieves the receiver address
+#     receiver_email = user_data[2]
+#     password = input(
+#         "Type the testing password provided by developer and press enter: "
+#         )
 #     message = """\
 #     Subject: Hi there
 
@@ -83,7 +88,6 @@ def start():
     1. Create a new order, or
     2. Retrieve an exsisting order with order number
     """
-    print('1234567890123456789012345678901234567890123456789012345678901234567890123456789')
     print('Welcome to N(3)ORTHOTICS order portal.\n')
     print('Use this app to directly access made-to-order N3D Printed Insoles')
     print('Please visit northotics.com/home for more information\n')
@@ -92,7 +96,6 @@ def start():
     print('Select 2. : Retrieve an exsisting N3D order')
     print('Select 3. : Exit Program\n')
     # select_option()
-
 
 
 def select_option():
@@ -118,8 +121,11 @@ def select_option():
             clear_screen()
             quit()
         else:
-            print(f'The number you have provided "{correct}" is not available.\nPlease select again\n')
+            print(
+                f'The number you have provided "{correct}" is not available.')
+            print('Please select again\n')
             select_option()
+
 
 def instruct_user_data():
     """
@@ -257,7 +263,7 @@ def validate_user_email(values):
     values_string = f'{values.split(",")}'
     # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
     try:
-        if (re.fullmatch(REGEX_EMAIL, values)):
+        if (re.fullmatch(REGEX, values)):
             print('Email is valid...')
             user_data[2] = values.lower()
             # yes_no_user() # removed this for the change email option 3. in update_exsisting order function
