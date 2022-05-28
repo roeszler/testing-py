@@ -264,24 +264,28 @@ def validate_user_email(values):
     user_data list = user_email
     """
     # values_string = f'{values.split(",")}'
-    # print(f'The user_data you provided converted into a list of strings is:\n{values_string}\n')
+    # print('The user_data you provided converted into a list of strings is:')
+    # print(f'\n{values_string}\n')
     try:
         if (re.fullmatch(REGEX, values)):
             print('Email is valid...')
             user_data[2] = values.lower()
-            # yes_no_user() # removed this for the change email option 3. in update_exsisting order function
+# removed this for the change email option 3. in update_exsisting order f
+            # yes_no_user()
             clear_screen()
         else:
             raise ValueError(
-                f'The email you have provided "{values}" does not seem\nto be in a regular format'
+                f'The email you have provided "{values}" does not seem'
+                'to be in a regular format'
             )
     except ValueError as error:
-        print(f'\nInvalid data: {error}. Please check the entry and try again.\n')
+        print(
+            f'\nInvalid data: {error}. Please check the entry and try again.\n'
+            )
         user_email = remove(input('Your Email: ').lower())
         user_data[2] = user_email
         validate_user_email(user_email)
         # print(user_data)
-
 
 
 def remove(string):
@@ -327,7 +331,9 @@ def yes_no_user():
     if correct.startswith('y'):
         clear_screen()
         f_name = user_data[0]
-        print(f'\nThanks {f_name}. Now lets customise your N3 Othoses order...')
+        print(
+            f'\nThanks {f_name}. Now lets customise your N3 Othoses order...'
+            )
         get_order_data()
         generate_order_no()
         combine_data_for_export()
@@ -356,18 +362,27 @@ def get_size_data():
     """
     while True:
         try:
-            size_eu = float(remove(input('\nWhat EU Shoe Size would you like to fit into?\n(sized in 0.5 increments between 19 and 50): ')))
+            size_eu = float(remove(input(
+                '\nWhat EU Shoe Size would you like to fit into?'
+                '\n(sized in 0.5 increments between 19 and 50): '
+                )))
             size_divisble = size_eu % 0.5
 
             if size_eu >= 19 and size_eu <= 50:
                 if size_divisble != 0:
-                    print(f'\nIncorrect information provided for european shoe sizing: {size_eu}')
+                    print(
+                        '\nIncorrect information provided for european'
+                        f'shoe sizing: {size_eu}'
+                        )
                     get_size_data()
                 else:          
                     order_data[0] = size_eu
                     return size_eu
             else:
-                print(f'\nUnfortunatley {size_eu} is not within the european shoe size range we do.')
+                print(
+                    f'\nUnfortunatley {size_eu} is not within the european'
+                    'shoe size range we do.'
+                    )
                 get_size_data()
 
         except ValueError as e:
@@ -376,12 +391,16 @@ def get_size_data():
             continue
         # return True
 
+
 def get_height_data():
     """
     Height user input converted into ['Low', 'Med', 'High'] for order_data
     Only strings starting with l, m or h accepted. Not case sensitive.
     """
-    height = remove(input('\nWhat level of support under the inside arch would you like?\n(L: Low Support / M: Medium Support / H: High Support): ').lower())
+    height = remove(input(
+        '\nWhat level of support under the inside arch would you like?'
+        '\n(L: Low Support / M: Medium Support / H: High Support): '
+        ).lower())
     if height.startswith('l'):
         order_data[1] = 'Low'
     elif height.startswith('m'):
@@ -394,12 +413,15 @@ def get_height_data():
     # print(order_data)
 
 
-
 def get_width_data():
     """
-    Width user input converted into ['Narrow', 'Standard', 'Wide'] for order_data
+    Width user input converted into ['Narrow', 'Standard', 'Wide'] for 
+    order_data
     """
-    width = remove(input('\nWidth of insole to fit the foot &/or shoe\n(N: Narrow / S: Standard / W: Wide): ').lower())
+    width = remove(input(
+        '\nWidth of insole to fit the foot &/or shoe'
+        'n(N: Narrow / S: Standard / W: Wide): '
+        ).lower())
     if width.startswith('n'):
         order_data[2] = 'Narrow'
         # generate_order_no()
@@ -433,6 +455,7 @@ def combine_data_for_export():
     # print(export_data)
     return export_data
 
+
 def clear_screen():
     """
     Checks if Operating System is Mac and Linux or Windows and 
@@ -460,7 +483,6 @@ def slice_last_order_no():
     return reset_no_10K
 
 
-
 def generate_order_no():
     """
     Generates an order number with todays date + increment from previoius
@@ -472,7 +494,8 @@ def generate_order_no():
     last_entry_int = int(last_entry[0])
     now = datetime.datetime.now(timezone.utc)
     order_date = now.strftime('%y%m%d')
-    new_order_no = (int(order_date)*10000) + (last_entry_int - slice_last_order_no() + 1)
+    new_order_no = (
+        int(order_date)*10000) + (last_entry_int - slice_last_order_no() + 1)
     order_data[3] = new_order_no
     print(new_order_no)
     return new_order_no
@@ -497,11 +520,14 @@ def generate_UTC_time():
     # UTC = pytz.timezone('Etc/GMT+0')
     # print('{} CEST'.format(utc_now.astimezone(CEST).isoformat()))
     # print('{} UTC'.format(utc_now.astimezone().isoformat()))
-    # print('the supported timezones by the pytz module:', pytz.all_timezones, '\n')
+    # print(
+    #     'the supported timezones by the pytz module:', pytz.all_timezones, '
+    #     '\n')
     # n = '{}'.format(utc_now.astimezone(CEST).isoformat())
     n = '{}'.format(utc_now.astimezone(UTC).isoformat())
     # print(export_data)
     return n
+
 
 def update_date_ordered():
     """
@@ -511,6 +537,7 @@ def update_date_ordered():
     order_data[4] = n
     order_data[5] = 'NEW ORDER'
     print(order_data)
+
 
 def generate_row_no():
     """
@@ -533,17 +560,21 @@ def update_to_pending_status():
     generate_row_no()
     # export_data[10] = order_data[7]
     # export_data[10] == new_order_no
-    order_worksheet = SHEET.worksheet('orders') # accessing our sales_worksheet from our google sheet
-    order_worksheet.append_row(export_data) # adds a new row in the google worksheet selected
+# accessing our sales_worksheet from our google sheet
+    order_worksheet = SHEET.worksheet('orders')
+# adds a new row in the google worksheet selected
+    order_worksheet.append_row(export_data)
     # print(export_data)
     clear_screen()
     # print(export_data)
     # print(order_data[7])
     # print(generate_order_no())
-    print(f'Data successfully saved as PENDING.')
+    print('Data successfully saved as PENDING.')
     # print(f"An email with it's details to {export_data[2]}")
-    print(f'\nPlease carefully record order no : {export_data[6]}\nYou will need it to recall this item into the future.')
-
+    print(
+        f'\nPlease carefully record order no : {export_data[6]}'
+        '\nYou will need it to recall this item into the future.'
+        )
 
 
 def input_order_no():
@@ -551,7 +582,10 @@ def input_order_no():
     Checks the user input order number is only numerical and correct length
     """
     print('Please enter your order number below.')
-    print('This information should be in a valid syntax, with no spaces. For example:\n')
+    print(
+        'This information should be in a valid syntax, with no spaces.'
+        'For example:\n'
+        )
     print('Example order_no format: 2205190001\n')
     while True:
         try:
@@ -559,16 +593,21 @@ def input_order_no():
             order_no_string = str(order_no)
             if len(order_no_string) != 10:
                 raise ValueError(
-                f'`Our order numbers require 10 digits.\nUnfortunatley {order_no} has {len(order_no_string)} digits.'
+                    'Our order numbers require 10 digits.'
+                    f'\nUnfortunatley {order_no} has {len(order_no_string)}'
+                    ' digits.'
                 )
         except ValueError as e:
-            print(f'Invalid data : {e}\nPlease check your records and try again below;\n')
+            print(
+                f'Invalid data : {e}'
+                '\nPlease check your records and try again below;\n')
             # return False
             continue
         # print(len(order_no_string))
         # print(order_no)
         # return True
         return order_no
+
 
 # Sourced from https://www.pythonpool.com/flatten-list-python/
 def flatten_nested_list(input_list):
@@ -593,7 +632,9 @@ def retrieve_order():
     order_nos_import = SHEET.worksheet('orders').get_values('G:G')
     order_nos = flatten_nested_list(order_nos_import)
    
-    order_match = [i for i in range(len(order_nos)) if order_nos[i] == search_input]
+    order_match = [
+        i for i in range(len(order_nos)) if order_nos[i] == search_input
+        ]
     if order_match == []:
         print(f'Order number {search_input} not found?!\n')
         retrieve_order()
@@ -627,16 +668,26 @@ def display_order():
 
     combine_data_for_export()
     print('\nYour order details are as follows:\n')
-    print(f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}')
-    print(f'Shoe Size : EU {flat_order[3]}\nArch Height : {flat_order[4]}\nInsole Width : {flat_order[5]}')
-    print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nCurrent Status : {flat_order[8]}')
+    print(
+        f'Full Name : {user_data[0]} {flat_order[1]}\nEmail : {flat_order[2]}'
+        )
+    print(
+        f'Shoe Size : EU {flat_order[3]}'
+        f'\nArch Height : {flat_order[4]}'
+        f'\nInsole Width : {flat_order[5]}'
+        )
+    print(
+        f'Order No. : {flat_order[6]}'
+        f'\nDate Ordered : {flat_order[7]}'
+        f'\nCurrent Status : {flat_order[8]}')
     print(f'Row : {flat_order[10]}\n')
     update_status()
 
 
 def validate_change_feat():
     """
-    Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feat function
+    Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feat
+     function
     """
     row = order_data[7]
     # row = export_data[10]
@@ -644,7 +695,9 @@ def validate_change_feat():
     flat_order = flatten_nested_list(order_row)
     
     print(f'Current order status is: {flat_order[8]}')
-    if flat_order[8] == 'PENDING' or flat_order[8] == 'NEW ORDER' or flat_order[8] == 'UPDATED ORDER' or flat_order[8] == 'CREATED' or flat_order[8] == 'ACCEPTED' or flat_order[8] == 'DESIGNED':
+    if flat_order[8] == 'PENDING' or flat_order[8] == 'NEW ORDER' or \
+            flat_order[8] == 'UPDATED ORDER' or flat_order[8] == 'CREATED' or \
+            flat_order[8] == 'ACCEPTED' or flat_order[8] == 'DESIGNED':
         print('Order is modifiable.')
         print('\nYour order details are as follows:\n')
         print(f'Order No. : {flat_order[6]}\nDate Ordered : {flat_order[7]}\nPlace in production queue : {flat_order[10]}\nCurrent Status : {flat_order[8]}')
@@ -653,6 +706,7 @@ def validate_change_feat():
         print(f'4. Shoe Size : EU {order_data[0]}\n5. Arch Height : {order_data[1]}\n6. Insole Width : {order_data[2]}\n')
         print(f'7. Submit the above details\n8. Re-Print without changes\n9. Take me Home\n')
         change_feat()
+
     else:
         print(f'\nAt the {flat_order[8]} stage, this order is beyond the point in production\nwhere modifications can occur.')
         email_print_update_startover()
