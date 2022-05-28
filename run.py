@@ -10,7 +10,6 @@ import pytz # regional date time for order_no and order_date
 import smtplib, ssl
 import getpass
 
-
 SCOPE = [
     'https://www.googleapis.com/auth/spreadsheets',
     'https://www.googleapis.com/auth/drive.file',
