@@ -228,9 +228,9 @@ def validate_user_f_name(values):
             f'\nInvalid data: {error}. Please check the entry and try again.\n'
             )
         f_name = remove(input('Your First Name : ').capitalize())
-        user_data[0] = f_name
         # print(user_data[0])
         validate_user_f_name(f_name)
+        user_data[0] = f_name
         # print(user_data)
     # else:
     #     f_name = (f'{values}')
@@ -259,9 +259,9 @@ def validate_user_l_name(values):
             f'\nInvalid data: {error}. Please check the entry and try again.\n'
             )
         l_name = remove(input('Your Last Name : ').capitalize())
-        user_data[1] = l_name
-        print(user_data[1])
+        # print(user_data[1])
         validate_user_l_name(l_name)
+        user_data[1] = l_name
         # print(user_data)
 
 
@@ -292,8 +292,8 @@ def validate_user_email(values):
             f'\nInvalid data: {error}. Please check the entry and try again.\n'
             )
         user_email = remove(input('Your Email: ').lower())
-        user_data[2] = user_email
         validate_user_email(user_email)
+        user_data[2] = user_email
         # print(user_data)
 
 
