@@ -431,7 +431,7 @@ def get_height_data():
     elif height.startswith('h'):
         order_data[1] = 'High'
     else:
-        print(f'\nIncorrect information provided for arch height: {height}\n')
+        print(f'\nIncorrect information provided for arch height: {height}')
         get_height_data()
     # print(order_data)
 
@@ -458,7 +458,7 @@ def get_width_data():
         # generate_order_no()
         # submit_order()
     else:
-        print(f'\nIncorrect information provided for insole width: {width}\n')
+        print(f'\nIncorrect information provided for insole width: {width}')
         get_width_data()
     # print(order_data)
 
