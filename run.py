@@ -220,8 +220,8 @@ def validate_user_f_name(values):
             # return True
         else:
             raise ValueError(
-                print(f'The name you have provided "{values}" does not seem')
-                print('to be in a regular format')
+                f'The name you have provided "{values}" does not seem'
+                f'\nto be in a regular format'
             )
     except ValueError as error:
         print(
