@@ -149,19 +149,21 @@ def get_user_data():
     with fist letter capitalized for names and all lowercase email
     """
     f_name = remove(input('Your First Name: ').capitalize())
+    validate_user_f_name(f'{f_name}')
     user_data[0] = f_name
     # print(user_data)
-    validate_user_f_name(f'{f_name}')
 
     l_name = remove(input('Your Last Name: ').capitalize())
+    validate_user_l_name(f'{l_name}')
     user_data[1] = l_name
     # print(user_data)
-    validate_user_l_name(f'{l_name}')
+    
 
     user_email = remove(input('Your Email: ').lower())
+    validate_user_email(f'{user_email}')
     user_data[2] = user_email
     # print(user_data)
-    validate_user_email(f'{user_email}')
+    
 
     # clear_screen() # removed for option 1 initial screen
 
@@ -218,8 +220,8 @@ def validate_user_f_name(values):
             # return True
         else:
             raise ValueError(
-                f'The name you have provided "{values}" does not seem'
-                f'to be in a regular format'
+                print(f'The name you have provided "{values}" does not seem')
+                print('to be in a regular format')
             )
     except ValueError as error:
         print(
