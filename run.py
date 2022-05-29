@@ -824,7 +824,7 @@ def change_feat():
     elif feature_selection == '8':
         clear_screen()
         order_no = order_data[3]
-        print(f'Re-printing order number : {order_no}...\n')
+        print(f'Re-printing order number : {order_no}...')
         submit_order()
     elif feature_selection == '9':
         combine_data_for_export()
