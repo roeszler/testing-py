@@ -10,7 +10,7 @@ import datetime
 from datetime import timezone
 import gspread
 from google.oauth2.service_account import Credentials
-import pytz
+# import pytz
 # import smtplib, ssl
 # import getpass
 
@@ -26,7 +26,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
 REGEX = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-UTC = pytz.timezone('Etc/GMT+0')
+# UTC = pytz.timezone('Etc/GMT+0')
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = [
@@ -176,7 +176,7 @@ def summary_user_data():
 
     # print(f'\nThanks {f_name}. Your user details are as follows:')
     # print('------------')
-    print(f'\nFull Name : {f_name} {l_name}\nEmail : {user_email}')
+    print(f'Full Name : {f_name} {l_name}\nEmail : {user_email}')
     # print('------------')
 
 
@@ -524,7 +524,7 @@ def generate_utc_time():
     Creates Central European Standard Time (CEST) version of date and time
     in iso
     """
-    utc_now = datetime.datetime.now(timezone.utc)
+    iso_utc_now = datetime.datetime.now(timezone.utc).isoformat()
     # CEST = pytz.timezone('Europe/Stockholm')
     # UTC = pytz.timezone('Etc/GMT+0')
     # print('{} CEST'.format(utc_now.astimezone(CEST).isoformat()))
@@ -533,12 +533,15 @@ def generate_utc_time():
     #     'the supported timezones by the pytz module:', pytz.all_timezones, '
     #     '\n')
     # n = '{}'.format(utc_now.astimezone(CEST).isoformat())
-    iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
+
+    # iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
+    # iso_format_timezone = datetime.now(timezone.utc).isoformat()
+
     # print(utc_now)
     # print(iso_format_timezone)
     # print(export_data)
-    return iso_format_timezone
-    # return utc_now
+    # return iso_format_timezone
+    return iso_utc_now
 
 
 def update_date_ordered():
@@ -991,7 +994,7 @@ def submit_order():
     Confirn compiles list from user_data and oder_data then
     exports it to update_sales-worksheet function
     """
-    submit = input('Would you like to submit this order? y/n: ').lower()
+    submit = input('\nWould you like to submit this order? y/n: ').lower()
     if submit.startswith('n'):
         save_order()
     else:
@@ -1073,8 +1076,8 @@ def email_print_update_startover():
     User descision tree to navigate following a successful submission,
     fetaure change, save or change of status
     """
-    print('What would you like to do next?')
-    print('\nSelect 1. : Change the features of this Order')
+    print('\nWhat would you like to do next?')
+    print('Select 1. : Change the features of this Order')
     print('Select 2. : Start a new N3D insole order')
     print('Select 3. : Retrieve an exsisting N(3) order')
     print('Select 4. : Take Me Home')
