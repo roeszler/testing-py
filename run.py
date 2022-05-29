@@ -159,16 +159,11 @@ def get_user_data():
     # user_data[1] = l_name
     l_name = user_data[1]
     # print(user_data)
-    
-
     user_email = remove(input('Your Email: ').lower())
     validate_user_email(f'{user_email}')
     # user_data[2] = user_email
     user_email = user_data[2]
     # print(user_data)
-    
-
-    # clear_screen() # removed for option 1 initial screen
 
 
 def summary_user_data():
@@ -914,7 +909,7 @@ def update_to_canceled_status():
     Updates status to pending when user saves order
     """
     row = order_data[7]
-    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
 # accessing our order_worksheet from our google sheet
     order_worksheet = SHEET.worksheet('orders')
     print(f'\nCurrent order status is: {export_data[8]}')
@@ -972,7 +967,7 @@ def submit_row_data():
     records the date of the order update
     """
     row = order_data[7]
-    order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
+    # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
     order_worksheet = SHEET.worksheet('orders')
 
     print(f'Accessing your order on row number : {row}')
@@ -1021,7 +1016,7 @@ def submit_order():
         generate_row_no()
         update_order_worksheet(export_data)
 
-        user_email = export_data[2]
+        # user_email = export_data[2]
 # updates order number for export to gsheets
         recent_order_no = export_data[6]
 # ensures order row data is same as export row data
