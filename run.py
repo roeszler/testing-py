@@ -24,6 +24,7 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
+SEARCH_RES_ROW = 0
 
 REGEX = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 # UTC = pytz.timezone('Etc/GMT+0')
@@ -34,7 +35,6 @@ order_data = [
     ]
 update_order = ['order_status', 'order_update']
 export_data = []
-SEARCH_RES_ROW = 0
 
 
 # Testing email details SSL
@@ -150,18 +150,21 @@ def get_user_data():
     """
     f_name = remove(input('Your First Name: ').capitalize())
     validate_user_f_name(f'{f_name}')
-    user_data[0] = f_name
+    # user_data[0] = valid_f_name
+    f_name = user_data[0]
     # print(user_data)
 
     l_name = remove(input('Your Last Name: ').capitalize())
     validate_user_l_name(f'{l_name}')
-    user_data[1] = l_name
+    # user_data[1] = l_name
+    l_name = user_data[1]
     # print(user_data)
     
 
     user_email = remove(input('Your Email: ').lower())
     validate_user_email(f'{user_email}')
-    user_data[2] = user_email
+    # user_data[2] = user_email
+    user_email = user_data[2]
     # print(user_data)
     
 
@@ -172,13 +175,13 @@ def summary_user_data():
     """
     Produces a readable summary of the current user_data list
     """
-    f_name = user_data[0]
-    l_name = user_data[1]
-    user_email = user_data[2]
+    # f_name = user_data[0]
+    # l_name = user_data[1]
+    # user_email = user_data[2]
 
     # print(f'\nThanks {f_name}. Your user details are as follows:')
     # print('------------')
-    print(f'Full Name : {f_name} {l_name}\nEmail : {user_email}')
+    print(f'Full Name : {user_data[0]} {user_data[1]}\nEmail : {user_data[2]}')
     # print('------------')
 
 
@@ -215,6 +218,12 @@ def validate_user_f_name(values):
             # print('Name is valid...')
             # f_name = values
             user_data[0] = values.capitalize()
+            # correct_data = values.capitalize()
+            # user_data[0] = correct_data
+            # user_data[0] = values
+            # print(user_data[0])
+            # print(user_data)
+            # user_data[0].update(correct_data)
             # clear_screen()
             # print(values)
             # return True
@@ -229,8 +238,10 @@ def validate_user_f_name(values):
             )
         f_name = remove(input('Your First Name : ').capitalize())
         # print(user_data[0])
+        # print(user_data)
         validate_user_f_name(f_name)
         user_data[0] = f_name
+    # user_data[0] = values
         # print(user_data)
     # else:
     #     f_name = (f'{values}')
@@ -293,6 +304,7 @@ def validate_user_email(values):
             )
         user_email = remove(input('Your Email: ').lower())
         validate_user_email(user_email)
+        # user_data[2].update(user_email)
         user_data[2] = user_email
         # print(user_data)
 
@@ -336,6 +348,8 @@ def yes_no_user():
     Prompt for user to confirm or input correct user_data
     """
     summary_user_data()
+    # print(user_data[0])
+    # print(user_data)
     correct = input('\nIs this information correct? y/n: ').lower()
     if correct.startswith('y'):
         clear_screen()
