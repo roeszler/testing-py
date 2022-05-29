@@ -6,11 +6,11 @@ and google sheets
 import os
 import re
 import datetime
+# import json
 from datetime import timezone
 import gspread
 from google.oauth2.service_account import Credentials
-
-# import pytz
+import pytz
 # import smtplib, ssl
 # import getpass
 
@@ -26,7 +26,7 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
 
 REGEX = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-# UTC = pytz.timezone('Etc/GMT+0')
+UTC = pytz.timezone('Etc/GMT+0')
 
 user_data = ['f_name', 'l_name', 'user_email']
 order_data = [
@@ -427,7 +427,7 @@ def get_width_data():
     """
     width = remove(input(
         '\nWidth of insole to fit the foot &/or shoe'
-        'n(N: Narrow / S: Standard / W: Wide): '
+        '\n(N: Narrow / S: Standard / W: Wide): '
         ).lower())
     if width.startswith('n'):
         order_data[2] = 'Narrow'
@@ -533,12 +533,12 @@ def generate_utc_time():
     #     'the supported timezones by the pytz module:', pytz.all_timezones, '
     #     '\n')
     # n = '{}'.format(utc_now.astimezone(CEST).isoformat())
-    # iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
+    iso_format_timezone = '{}'.format(utc_now.astimezone(UTC).isoformat())
     # print(utc_now)
     # print(iso_format_timezone)
     # print(export_data)
-    # return iso_format_timezone
-    return utc_now
+    return iso_format_timezone
+    # return utc_now
 
 
 def update_date_ordered():
