@@ -135,7 +135,7 @@ def instruct_user_data():
     Insruct User on format of first name, last name and email.
     """
     clear_screen()
-    print('\nPlace a NORTHOTICS.com N3D Printed Insole order:\n')
+    print('Place a N(3)ORTHOTICS.com N3D printed insole order:\n')
     print('Where prompted below, please enter your name and email.')
     print('This information should be in a valid syntax, with no spaces.')
     print('For example:\n')
