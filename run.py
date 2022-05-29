@@ -355,7 +355,7 @@ def yes_no_user():
         clear_screen()
         f_name = user_data[0]
         print(
-            f'\nThanks {f_name}. Now lets customise your N3 Othoses order...'
+            f'Thanks {f_name}. Now lets customise your N3 Othoses order...'
             )
         get_order_data()
         generate_order_no()
