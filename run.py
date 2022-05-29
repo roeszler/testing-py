@@ -176,7 +176,7 @@ def summary_user_data():
 
     # print(f'\nThanks {f_name}. Your user details are as follows:')
     # print('------------')
-    print(f'Full Name : {f_name} {l_name}\nEmail : {user_email}')
+    print(f'\nFull Name : {f_name} {l_name}\nEmail : {user_email}')
     # print('------------')
 
 
