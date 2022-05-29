@@ -194,7 +194,7 @@ def summary_order_data():
     summary_user_data()
     print(f'Shoe Size : EU {size_eu}')
     print(f'Arch Height : {height}')
-    print(f'Insole Width : {width}\n')
+    print(f'Insole Width : {width}')
     # print('------------')
 
 
@@ -1073,10 +1073,10 @@ def email_print_update_startover():
     User descision tree to navigate following a successful submission,
     fetaure change, save or change of status
     """
-    print('\nWhat would you like to do next?')
+    print('What would you like to do next?')
     print('\nSelect 1. : Change the features of this Order')
     print('Select 2. : Start a new N3D insole order')
-    print('Select 3. : Retrieve an exsisting N(3) order\n')
+    print('Select 3. : Retrieve an exsisting N(3) order')
     print('Select 4. : Take Me Home')
     print('Select 5. : Exit the N(3)Orthotics order portal\n')
     # print('\nSelect 6. : Email this order (TBC)')
