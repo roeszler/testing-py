@@ -1014,10 +1014,10 @@ def submit_order():
         submitted_time = export_data[7]
 
         print('Order Successfully Submitted!!')
-        print(
-            '\nYou will shortly receive an email instructions to:'
-            f'\n{user_email} with the details to arrange secure payment.'
-            )
+        # print(
+        #     '\nYou will shortly receive an email instructions to:'
+        #     f'\n{user_email} with the details to arrange secure payment.'
+        #     )
         print(f'\nYour order number is: {recent_order_no}')
         print(f'Submitted on: {submitted_time}')
         # print(export_data)
