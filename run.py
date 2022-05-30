@@ -746,7 +746,7 @@ def validate_change_feature_of_order():
         print(
             '7. Submit the above details'
             # '\n8. Re-Print without changes'
-            '\n8. Discard changes & Take me Home\n'
+            '\n8. Take me Home\n'
             )
         change_feature_of_order()
 
@@ -912,7 +912,7 @@ def update_to_canceled_status():
     # order_row = SHEET.worksheet('orders').get_values(f'A{row}:K{row}')
 # accessing our order_worksheet from our google sheet
     order_worksheet = SHEET.worksheet('orders')
-    print(f'\nCurrent order status is: {export_data[8]}')
+    print(f'Current order status is: {export_data[8]}')
     if export_data[8] == 'PENDING' or export_data[8] == 'NEW ORDER' or \
             export_data[8] == 'UPDATED ORDER' or export_data[8] == 'CREATED' \
             or export_data[8] == 'ACCEPTED' or export_data[8] == 'DESIGNED':
