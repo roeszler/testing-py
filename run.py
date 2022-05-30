@@ -644,11 +644,11 @@ def flatten_nested_list(input_list):
     Flattens a nested list into a list
     """
     flattened_list = []
-    for i in input_list:
-        if isinstance(i, list):
-            flattened_list.extend(flatten_nested_list(i))
+    for value in input_list:
+        if isinstance(value, list):
+            flattened_list.extend(flatten_nested_list(value))
         else:
-            flattened_list.append(i)
+            flattened_list.append(value)
     return flattened_list
 
 
@@ -729,7 +729,7 @@ def validate_change_feature_of_order():
         print(
             f'Order No. : {flat_order[6]}'
             f'\nDate Ordered : {flat_order[7]}'
-            f'\nPlace in production queue : {flat_order[10]}'
+            f'\nDatabase Row entry : {flat_order[10]}'
             f'\nCurrent Status : {flat_order[8]}'
             )
         print('\nDetails you can edit:\n')
@@ -745,8 +745,8 @@ def validate_change_feature_of_order():
             )
         print(
             '7. Submit the above details'
-            '\n8. Re-Print without changes'
-            '\n9. Take me Home\n'
+            # '\n8. Re-Print without changes'
+            '\n8. Take me Home\n'
             )
         change_feature_of_order()
 
@@ -816,12 +816,12 @@ def change_feature_of_order():
         update_date_ordered()
         combine_data_for_export()
         submit_row_data()
+    # elif feature_selection == '8':
+    #     clear_screen()
+    #     order_no = order_data[3]
+    #     print(f'Re-printing order number : {order_no}...')
+    #     submit_order()
     elif feature_selection == '8':
-        clear_screen()
-        order_no = order_data[3]
-        print(f'Re-printing order number : {order_no}...')
-        submit_order()
-    elif feature_selection == '9':
         combine_data_for_export()
         main()
     else:
