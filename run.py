@@ -845,7 +845,7 @@ def update_status():
     print(f'What would you like to do with order no. {order_no} ?')
     print('\nSelect 1. : Re-Print this order again (no changes)')
     print('Select 2. : Change the features')
-    print('Select 3. : Start a new N3D insole order')
+    print('Select 3. : Place a new N3D insole order')
     print('Select 4. : Cancel order')
     print('Select 5. : Search different order')
     print('Select 6. : Take me home\n')
@@ -1089,7 +1089,7 @@ def email_print_update_startover():
     """
     print('\nWhat would you like to do next?')
     print('Select 1. : Change the features of this Order')
-    print('Select 2. : Start a new N3D insole order')
+    print('Select 2. : Place a new N3D insole order')
     print('Select 3. : Retrieve an exsisting N(3) order')
     print('Select 4. : Take Me Home')
     print('Select 5. : Exit the N(3)Orthotics order portal\n')
