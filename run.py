@@ -562,7 +562,7 @@ def update_date_ordered():
     time_zone = generate_utc_time()
     order_data[4] = time_zone
     order_data[5] = 'NEW ORDER'
-    print(order_data)
+    # print(order_data)
 
 
 def generate_row_no():
@@ -711,9 +711,9 @@ def display_order():
     update_status()
 
 
-def validate_change_feat():
+def validate_change_feature_of_order():
     """
-    Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feat
+    Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feature_of_order
      function
     """
     row = order_data[7]
@@ -748,7 +748,7 @@ def validate_change_feat():
             '\n8. Re-Print without changes'
             '\n9. Take me Home\n'
             )
-        change_feat()
+        change_feature_of_order()
 
     else:
         print(
@@ -758,7 +758,7 @@ def validate_change_feat():
         email_print_update_startover()
 
 
-def change_feat():
+def change_feature_of_order():
     """
     Generates a list to choose which feature of an exsisting order to change
     """
@@ -771,7 +771,7 @@ def change_feat():
         f_name = user_data[0]
         # print(f_name)
         # export_data[0] = f_name
-        validate_change_feat()
+        validate_change_feature_of_order()
     #     print(f'user_data:\n {user_data}')
     #     print(order_data)
     #     print(f'order_data:\n {order_data}')
@@ -786,28 +786,28 @@ def change_feat():
         validate_user_l_name(l_name)
         l_name = user_data[1]
         # print(user_data[1])
-        validate_change_feat()
+        validate_change_feature_of_order()
     elif feature_selection == '3':
         clear_screen()
         user_email = input('New Email details: ')
         validate_user_email(user_email)
         user_email = user_data[2]
-        validate_change_feat()
+        validate_change_feature_of_order()
     elif feature_selection == '4':
         clear_screen()
         get_size_data()
         clear_screen()
-        validate_change_feat()
+        validate_change_feature_of_order()
     elif feature_selection == '5':
         clear_screen()
         get_height_data()
         clear_screen()
-        validate_change_feat()
+        validate_change_feature_of_order()
     elif feature_selection == '6':
         clear_screen()
         get_width_data()
         clear_screen()
-        validate_change_feat()
+        validate_change_feature_of_order()
     elif feature_selection == '7':
         # print('Submit : ')
         # submit_order()
@@ -830,7 +830,7 @@ def change_feat():
             'of this selection.'
             )
         print('Please select again\n')
-        validate_change_feat()
+        validate_change_feature_of_order()
 
 
 def update_status():
@@ -861,7 +861,7 @@ def update_status():
         elif i == '2':
             clear_screen()
             print(f'Order No. {order_no}\n')
-            validate_change_feat()
+            validate_change_feature_of_order()
             # email_print_update_startover()
         elif i == '3':
             clear_screen()
@@ -1103,7 +1103,7 @@ def email_print_update_startover():
         if i == '1':
             clear_screen()
             print(f'Order No. {order_no}\n')
-            validate_change_feat()
+            validate_change_feature_of_order()
         elif i == '2':
             clear_screen()
             print('Starting a new N3D insole order...')
@@ -1192,5 +1192,5 @@ main()
 # update_to_pending_status()
 # update_to_canceled_status()
 # cancel_confirm()
-# validate_change_feat()
+# validate_change_feature_of_order()
 # generate_row_no()
