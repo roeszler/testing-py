@@ -746,7 +746,7 @@ def validate_change_feature_of_order():
         print(
             '7. Submit the above details'
             # '\n8. Re-Print without changes'
-            '\n8. Take me Home\n'
+            '\n8. Discard changes & Take me Home\n'
             )
         change_feature_of_order()
 
