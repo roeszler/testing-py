@@ -24,7 +24,7 @@ CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('n3orthotics')
-SEARCH_RES_ROW = 0
+# SEARCH_RES_ROW = 0
 
 REGEX = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
 # UTC = pytz.timezone('Etc/GMT+0')
@@ -148,18 +148,18 @@ def get_user_data():
     User input of first name, last name and email to from a string
     with fist letter capitalized for names and all lowercase email
     """
-    f_name = remove(input('Your First Name: ').capitalize())
+    f_name = remove_blank_space(input('Your First Name: ').capitalize())
     validate_user_f_name(f'{f_name}')
     # user_data[0] = valid_f_name
     f_name = user_data[0]
     # print(user_data)
 
-    l_name = remove(input('Your Last Name: ').capitalize())
+    l_name = remove_blank_space(input('Your Last Name: ').capitalize())
     validate_user_l_name(f'{l_name}')
     # user_data[1] = l_name
     l_name = user_data[1]
     # print(user_data)
-    user_email = remove(input('Your Email: ').lower())
+    user_email = remove_blank_space(input('Your Email: ').lower())
     validate_user_email(f'{user_email}')
     # user_data[2] = user_email
     user_email = user_data[2]
@@ -231,7 +231,7 @@ def validate_user_f_name(values):
         print(
             f'\nInvalid data: {error}. Please check the entry and try again.\n'
             )
-        f_name = remove(input('Your First Name : ').capitalize())
+        f_name = remove_blank_space(input('Your First Name : ').capitalize())
         # print(user_data[0])
         # print(user_data)
         validate_user_f_name(f_name)
@@ -264,11 +264,13 @@ def validate_user_l_name(values):
         print(
             f'\nInvalid data: {error}. Please check the entry and try again.\n'
             )
-        l_name = remove(input('Your Last Name : ').capitalize())
+        l_name = remove_blank_space(input('Your Last Name : ').capitalize())
         # print(user_data[1])
         validate_user_l_name(l_name)
         user_data[1] = l_name
         # print(user_data)
+
+# needs import re
 
 
 def validate_user_email(values):
@@ -297,14 +299,14 @@ def validate_user_email(values):
         print(
             f'\nInvalid data: {error}. Please check the entry and try again.\n'
             )
-        user_email = remove(input('Your Email: ').lower())
+        user_email = remove_blank_space(input('Your Email: ').lower())
         validate_user_email(user_email)
         # user_data[2].update(user_email)
         user_data[2] = user_email
         # print(user_data)
 
 
-def remove(string):
+def remove_blank_space(string):
     """
     Removes all spaces in string inputs
     """
@@ -380,7 +382,7 @@ def get_size_data():
     """
     while True:
         try:
-            size_eu = float(remove(input(
+            size_eu = float(remove_blank_space(input(
                 '\nWhat EU Shoe Size would you like to fit into?'
                 '\n(sized in 0.5 increments between 19 and 50): '
                 )))
@@ -402,7 +404,6 @@ def get_size_data():
                     'shoe size range we do.'
                     )
                 get_size_data()
-
         except ValueError as error:
             print(f'Invalid data : {error}, please try again.\n')
             # return False
@@ -415,7 +416,7 @@ def get_height_data():
     Height user input converted into ['Low', 'Med', 'High'] for order_data
     Only strings starting with l, m or h accepted. Not case sensitive.
     """
-    height = remove(input(
+    height = remove_blank_space(input(
         '\nWhat level of support under the inside arch would you like?'
         '\n(L: Low Support / M: Medium Support / H: High Support): '
         ).lower())
@@ -436,7 +437,7 @@ def get_width_data():
     Width user input converted into ['Narrow', 'Standard', 'Wide'] for
     order_data
     """
-    width = remove(input(
+    width = remove_blank_space(input(
         '\nWidth of insole to fit the foot &/or shoe'
         '\n(N: Narrow / S: Standard / W: Wide): '
         ).lower())
@@ -618,7 +619,7 @@ def input_order_no():
     print('Example order_no format: 2205190001\n')
     while True:
         try:
-            order_no = int(remove(input('You Order Number: ')))
+            order_no = int(remove_blank_space(input('You Order Number: ')))
             order_no_string = str(order_no)
             if len(order_no_string) != 10:
                 raise ValueError(
@@ -671,7 +672,6 @@ def retrieve_order():
             if search_input == order_nos[i]:
                 search_match_row = i+1
                 print(f'\nOrder found in database row no. {search_match_row}')
-                # search_match_row = order_data[7]
                 return search_match_row
 
 
@@ -713,8 +713,8 @@ def display_order():
 
 def validate_change_feature_of_order():
     """
-    Valudates order is prior to 'SUBMITTED TO PRINT' stage for change_feature_of_order
-     function
+    Valudates order is prior to 'SUBMITTED TO PRINT' stage for
+    change_feature_of_order function
     """
     row = order_data[7]
     # row = export_data[10]
@@ -749,7 +749,6 @@ def validate_change_feature_of_order():
             '\n8. Take me Home\n'
             )
         change_feature_of_order()
-
     else:
         print(
             f'\nAt the {flat_order[8]} stage, this order is beyond the point'
@@ -935,7 +934,6 @@ def update_to_canceled_status():
             '\nYou will need it to refer to this action into the future.'
             )
         email_print_update_startover()
-
     else:
         # print('false')
         print(
@@ -1111,7 +1109,7 @@ def email_print_update_startover():
             # get_order_data()
         elif i == '3':
             clear_screen()
-            print('Taking you to retrieve_order function...\n')
+            print('Retrieve an Exsisting Order...\n')
             display_order()
         elif i == '4':
             print('Taking you to home page...\n')
