@@ -1,7 +1,7 @@
 """
 Moduels impoted to start n3orthotics portal
 """
-from northotics.__init__ import start
+from northotics.landing import start
 
 
 start()

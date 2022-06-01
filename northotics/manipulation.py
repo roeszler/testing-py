@@ -4,51 +4,48 @@ Functions that manipulate data
 import datetime
 from datetime import timezone
 from northotics.system import clear_screen
-from northotics.store import SHEET, order_data, export_data, user_data
-from northotics.validation import (
-    verify_user_f_name, verify_change_feature_of_order,
-    verify_user_l_name, verify_user_email
-    )
-from northotics.inputs import get_size_data, get_height_data, get_width_data
-from northotics.submit import submit_row_data
-from northotics.__init__ import start
+from northotics.store import SHEET, order_data, export_data
+from northotics.dates import generate_utc_time
+# from northotics.inputs import get_size_data, get_height_data, get_width_data
+# from northotics.submit import submit_row_data
+# from northotics.landing import start
 
 
-def flatten_nested_list(input_list):
-    """
-    Flattens a nested list into a list
-    """
-    flattened_list = []
-    for value in input_list:
-        if isinstance(value, list):
-            flattened_list.extend(flatten_nested_list(value))
-        else:
-            flattened_list.append(value)
-    return flattened_list
+# def flatten_nested_list(input_list):
+#     """
+#     Flattens a nested list into a list
+#     """
+#     flattened_list = []
+#     for value in input_list:
+#         if isinstance(value, list):
+#             flattened_list.extend(flatten_nested_list(value))
+#         else:
+#             flattened_list.append(value)
+#     return flattened_list
 
 
-def combine_data_for_export():
-    """
-    Loops through user_data then order_data to create single export_data
-    list in preparation to update_order_worksheet
-    """
-    clear_screen()
-    export_data.clear()
-    for value in user_data:
-        export_data.append(value)
-    for value in order_data:
-        export_data.append(value)
-    export_data.pop()
-    return export_data
+# def combine_data_for_export():
+#     """
+#     Loops through user_data then order_data to create single export_data
+#     list in preparation to update_order_worksheet
+#     """
+#     clear_screen()
+#     export_data.clear()
+#     for value in user_data:
+#         export_data.append(value)
+#     for value in order_data:
+#         export_data.append(value)
+#     export_data.pop()
+#     return export_data
 
 
-def generate_utc_time():
-    """
-    Creates Univesal Coordinated time (UTC) version of date and time
-    in iso format
-    """
-    iso_utc_now = datetime.datetime.now(timezone.utc).isoformat()
-    return iso_utc_now
+# def generate_utc_time():
+#     """
+#     Creates Univesal Coordinated time (UTC) version of date and time
+#     in iso format
+#     """
+#     iso_utc_now = datetime.datetime.now(timezone.utc).isoformat()
+#     return iso_utc_now
 
 
 def slice_last_order_no():
@@ -83,13 +80,13 @@ def generate_order_no():
     return new_order_no
 
 
-def update_date_ordered():
-    """
-    Updates the order_date filed within order_data list
-    """
-    time_zone = generate_utc_time()
-    order_data[4] = time_zone
-    order_data[5] = 'NEW ORDER'
+# def update_date_ordered():
+#     """
+#     Updates the order_date filed within order_data list
+#     """
+#     time_zone = generate_utc_time()
+#     order_data[4] = time_zone
+#     order_data[5] = 'NEW ORDER'
 
 
 def generate_row_no():
@@ -101,67 +98,67 @@ def generate_row_no():
     export_data.append(new_row_no)
 
 
-def delete_blank_space(string):
-    """
-    deletes all spaces in string inputs
-    """
-    return string.replace(' ', '')
+# def delete_blank_space(string):
+#     """
+#     deletes all spaces in string inputs
+#     """
+#     return string.replace(' ', '')
 
 
-def change_feature_of_order():
-    """
-    Generates a list to choose which feature of an exsisting order to change
-    """
-    feature_selection = input('Your Selection : ')
-    if feature_selection == '1':
-        clear_screen()
-        f_name = input('New First Name details: ')
-        clear_screen()
-        verify_user_f_name(f_name)
-        f_name = user_data[0]
-        verify_change_feature_of_order()
-    elif feature_selection == '2':
-        clear_screen()
-        l_name = input('New Last Name details: ')
-        clear_screen()
-        verify_user_l_name(l_name)
-        l_name = user_data[1]
-        verify_change_feature_of_order()
-    elif feature_selection == '3':
-        clear_screen()
-        user_email = input('New Email details: ')
-        verify_user_email(user_email)
-        user_email = user_data[2]
-        verify_change_feature_of_order()
-    elif feature_selection == '4':
-        clear_screen()
-        get_size_data()
-        clear_screen()
-        verify_change_feature_of_order()
-    elif feature_selection == '5':
-        clear_screen()
-        get_height_data()
-        clear_screen()
-        verify_change_feature_of_order()
-    elif feature_selection == '6':
-        clear_screen()
-        get_width_data()
-        clear_screen()
-        verify_change_feature_of_order()
-    elif feature_selection == '7':
-        update_date_ordered()
-        combine_data_for_export()
-        submit_row_data()
-    elif feature_selection == '8':
-        combine_data_for_export()
-        start()
-    else:
-        print(
-            f'The number you have provided "{feature_selection}" is not part'
-            'of this selection.'
-            )
-        print('Please select again\n')
-        verify_change_feature_of_order()
+# def change_feature_of_order():
+#     """
+#     Generates a list to choose which feature of an exsisting order to change
+#     """
+#     feature_selection = input('Your Selection : ')
+#     if feature_selection == '1':
+#         clear_screen()
+#         f_name = input('New First Name details: ')
+#         clear_screen()
+#         verify_user_f_name(f_name)
+#         f_name = user_data[0]
+#         verify_change_feature_of_order()
+#     elif feature_selection == '2':
+#         clear_screen()
+#         l_name = input('New Last Name details: ')
+#         clear_screen()
+#         verify_user_l_name(l_name)
+#         l_name = user_data[1]
+#         verify_change_feature_of_order()
+#     elif feature_selection == '3':
+#         clear_screen()
+#         user_email = input('New Email details: ')
+#         verify_user_email(user_email)
+#         user_email = user_data[2]
+#         verify_change_feature_of_order()
+#     elif feature_selection == '4':
+#         clear_screen()
+#         get_size_data()
+#         clear_screen()
+#         verify_change_feature_of_order()
+#     elif feature_selection == '5':
+#         clear_screen()
+#         get_height_data()
+#         clear_screen()
+#         verify_change_feature_of_order()
+#     elif feature_selection == '6':
+#         clear_screen()
+#         get_width_data()
+#         clear_screen()
+#         verify_change_feature_of_order()
+#     elif feature_selection == '7':
+#         update_date_ordered()
+#         combine_data_for_export()
+#         submit_row_data()
+#     elif feature_selection == '8':
+#         combine_data_for_export()
+#         start()
+#     else:
+#         print(
+#             f'The number you have provided "{feature_selection}" is not part'
+#             'of this selection.'
+#             )
+#         print('Please select again\n')
+#         verify_change_feature_of_order()
 
 
 def update_to_pending_status():

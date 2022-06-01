@@ -1,11 +1,13 @@
 """
 Conatins start screen function
 """
+from northotics.store import order_data
 from northotics.system import clear_screen
 from northotics.display import (
-    display_order, summary_order_data, instruct_user_data, yes_no_user
+    display_order, instruct_user_data,
+    yes_no_user, summary_user_data
     )
-from northotics.manipulation import combine_data_for_export
+from northotics.utilities import combine_data_for_export
 from northotics.inputs import get_user_data
 
 
@@ -42,6 +44,21 @@ def select_option():
                 f'The number you have provided "{correct}" is not available.')
             print('Please select again\n')
             select_option()
+
+
+def summary_order_data():
+    """
+    Produces a summary of the current order data stored locally
+    """
+    size_eu = order_data[0]
+    height = order_data[1]
+    width = order_data[2]
+
+    print('\nYour order details are as follows:')
+    summary_user_data()
+    print(f'Shoe Size : EU {size_eu}')
+    print(f'Arch Height : {height}')
+    print(f'Insole Width : {width}')
 
 
 instruct_user_data()

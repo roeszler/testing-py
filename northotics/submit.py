@@ -1,17 +1,23 @@
 """
 Functions to submit data to the database
 """
+import os
 from northotics.display import (
-    clear_screen, summary_order_data, email_print_update_startover,
-    summary_user_data, update_status
+    update_status, display_order
+    )
+from northotics.utilities import (
+    update_date_ordered, combine_data_for_export,
+    verify_change_feature_of_order
+    )
+from northotics.inputs import (
+    get_order_data, get_user_data, cancel_confirm
     )
 from northotics.manipulation import (
-    generate_order_no, update_date_ordered, combine_data_for_export,
-    generate_row_no, update_to_pending_status, generate_utc_time
+    generate_row_no, generate_order_no, update_to_pending_status
     )
-from northotics.inputs import get_order_data, get_user_data, cancel_confirm
 from northotics.store import SHEET, export_data, order_data, user_data
-from northotics.__init__ import start
+from northotics.landing import start, summary_order_data, select_option
+from northotics.dates import generate_utc_time
 
 
 def submit_order():
@@ -166,3 +172,64 @@ def submit_row_data():
     print(f'\nOrder No. {export_data[6]} successfully updated!')
     print('Thanks for using the N(3)Orthotics order submission app.\n')
     update_status()
+
+
+def clear_screen():
+    """
+    Checks if Operating System is Mac and Linux or Windows and
+    clears the screen
+    """
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        _ = os.system('cls')
+
+
+def email_print_update_startover():
+    """
+    User descision tree to navigate following a successful submission,
+    fetaure change, save or change of status
+    """
+    print('\nWhat would you like to do next?')
+    print('Select 1. : Change the features of this Order')
+    print('Select 2. : Place a new N3D insole order')
+    print('Select 3. : Retrieve an exsisting N(3) order')
+    print('Select 4. : Take Me Home')
+    print('Select 5. : Exit the N(3)Orthotics order portal\n')
+    startover = input('Your Selection: ')
+    order_no = order_data[3]
+    for i in startover:
+        if i == '1':
+            clear_screen()
+            print(f'Order No. {order_no}\n')
+            verify_change_feature_of_order()
+        elif i == '2':
+            clear_screen()
+            print('Starting a new N3D insole order...')
+            yes_no_user()
+        elif i == '3':
+            clear_screen()
+            print('Retrieve an Exsisting Order...\n')
+            display_order()
+        elif i == '4':
+            print('Taking you to home page...\n')
+            clear_screen()
+            start()
+            select_option()
+        elif i == '5':
+            print('Exiting this n3orthotics session...\n')
+            clear_screen()
+            exit()
+        else:
+            print(
+                f'The number you have provided "{startover}" is not available.'
+                '\nPlease select again\n'
+                )
+            email_print_update_startover()
+
+
+def summary_user_data():
+    """
+    Produces a readable summary of the current user_data list
+    """
+    print(f'Full Name : {user_data[0]} {user_data[1]}\nEmail : {user_data[2]}')

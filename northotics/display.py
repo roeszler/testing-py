@@ -1,17 +1,20 @@
 """
 Imports modules used to interact with various operating systems
 """
+import os
 from northotics.store import SHEET, user_data, order_data, update_order
 from northotics.retrieve import retrieve_order
-from northotics.manipulation import (
-    flatten_nested_list, combine_data_for_export, generate_utc_time
+from northotics.utilities import (
+    flatten_nested_list, combine_data_for_export
     )
-from northotics.system import clear_screen
+# from northotics.system import clear_screen
 from northotics.submit import (
-    submit_order, yes_no_user, update_to_canceled_status
+    submit_order, yes_no_user, update_to_canceled_status,
+    email_print_update_startover
     )
-from northotics.validation import verify_change_feature_of_order
-from northotics.__init__ import start, select_option
+from northotics.utilities import verify_change_feature_of_order
+from northotics.landing import start
+from northotics.dates import generate_utc_time
 
 
 def display_order():
@@ -97,47 +100,47 @@ def update_status():
     update_order[1] = iso_format_timezone
 
 
-def email_print_update_startover():
-    """
-    User descision tree to navigate following a successful submission,
-    fetaure change, save or change of status
-    """
-    print('\nWhat would you like to do next?')
-    print('Select 1. : Change the features of this Order')
-    print('Select 2. : Place a new N3D insole order')
-    print('Select 3. : Retrieve an exsisting N(3) order')
-    print('Select 4. : Take Me Home')
-    print('Select 5. : Exit the N(3)Orthotics order portal\n')
-    startover = input('Your Selection: ')
-    order_no = order_data[3]
-    for i in startover:
-        if i == '1':
-            clear_screen()
-            print(f'Order No. {order_no}\n')
-            verify_change_feature_of_order()
-        elif i == '2':
-            clear_screen()
-            print('Starting a new N3D insole order...')
-            yes_no_user()
-        elif i == '3':
-            clear_screen()
-            print('Retrieve an Exsisting Order...\n')
-            display_order()
-        elif i == '4':
-            print('Taking you to home page...\n')
-            clear_screen()
-            start()
-            select_option()
-        elif i == '5':
-            print('Exiting this n3orthotics session...\n')
-            clear_screen()
-            exit()
-        else:
-            print(
-                f'The number you have provided "{startover}" is not available.'
-                '\nPlease select again\n'
-                )
-            email_print_update_startover()
+# def email_print_update_startover():
+#     """
+#     User descision tree to navigate following a successful submission,
+#     fetaure change, save or change of status
+#     """
+#     print('\nWhat would you like to do next?')
+#     print('Select 1. : Change the features of this Order')
+#     print('Select 2. : Place a new N3D insole order')
+#     print('Select 3. : Retrieve an exsisting N(3) order')
+#     print('Select 4. : Take Me Home')
+#     print('Select 5. : Exit the N(3)Orthotics order portal\n')
+#     startover = input('Your Selection: ')
+#     order_no = order_data[3]
+#     for i in startover:
+#         if i == '1':
+#             clear_screen()
+#             print(f'Order No. {order_no}\n')
+#             verify_change_feature_of_order()
+#         elif i == '2':
+#             clear_screen()
+#             print('Starting a new N3D insole order...')
+#             yes_no_user()
+#         elif i == '3':
+#             clear_screen()
+#             print('Retrieve an Exsisting Order...\n')
+#             display_order()
+#         elif i == '4':
+#             print('Taking you to home page...\n')
+#             clear_screen()
+#             start()
+#             select_option()
+#         elif i == '5':
+#             print('Exiting this n3orthotics session...\n')
+#             clear_screen()
+#             exit()
+#         else:
+#             print(
+#                 f'The number you have provided "{startover}" is not available.'
+#                 '\nPlease select again\n'
+#                 )
+#             email_print_update_startover()
 
 
 def summary_user_data():
@@ -147,19 +150,19 @@ def summary_user_data():
     print(f'Full Name : {user_data[0]} {user_data[1]}\nEmail : {user_data[2]}')
 
 
-def summary_order_data():
-    """
-    Produces a summary of the current order data stored locally
-    """
-    size_eu = order_data[0]
-    height = order_data[1]
-    width = order_data[2]
+# def summary_order_data():
+#     """
+#     Produces a summary of the current order data stored locally
+#     """
+#     size_eu = order_data[0]
+#     height = order_data[1]
+#     width = order_data[2]
 
-    print('\nYour order details are as follows:')
-    summary_user_data()
-    print(f'Shoe Size : EU {size_eu}')
-    print(f'Arch Height : {height}')
-    print(f'Insole Width : {width}')
+#     print('\nYour order details are as follows:')
+#     summary_user_data()
+#     print(f'Shoe Size : EU {size_eu}')
+#     print(f'Arch Height : {height}')
+#     print(f'Insole Width : {width}')
 
 
 def instruct_user_data():
@@ -173,3 +176,14 @@ def instruct_user_data():
     print('For example:\n')
     print('First Name: Rob\nLast Name: Bertoe')
     print('Email: rubbertoes@yourdomain.com\n')
+
+
+def clear_screen():
+    """
+    Checks if Operating System is Mac and Linux or Windows and
+    clears the screen
+    """
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        _ = os.system('cls')
