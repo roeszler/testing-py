@@ -668,11 +668,44 @@ def retrieve_order():
         print(f'Order number {search_input} not found?!\n')
         retrieve_order()
     else:
-        for i in range(len(order_nos)):
-            if search_input == order_nos[i]:
-                search_match_row = i+1
-                print(f'\nOrder found in database row no. {search_match_row}')
-                return search_match_row
+        row_location = [
+            i for i, order_no in enumerate(order_nos, 1)
+            if order_no == search_input
+            ]
+        search_match_row = row_location[0]
+        # print(f'\nOrder found in database row no. {search_match_row}')
+        return search_match_row
+
+
+# def test():
+#     """
+#     Searches worksheet coloum 'order_no' for a match to user input and
+#     returns row information to local user_data, oder_data and export_data lists
+#     """
+#     search_input = str(input_order_no())
+#     order_nos_import = SHEET.worksheet('orders').get_values('G:G')
+#     order_nos = flatten_nested_list(order_nos_import)
+#     order_match = [
+#         i for i in range(len(order_nos)) if order_nos[i] == search_input
+#         ]
+#     if order_match == []:
+#         print(f'Order number {search_input} not found?!\n')
+#         retrieve_order()
+#     else:
+#         row_location = [i for i, order_no in enumerate(order_nos, 1) if order_no == search_input]
+#         search_match_row = row_location[0]
+#         print(search_match_row)
+#         print(type(search_match_row))
+#         print(f'\nOrder found in database row no. {search_match_row}')
+#         return search_match_row
+
+#         # for i in range(len(order_nos)):
+#         #     if search_input == order_nos[i]:
+#         #         search_match_row = i+1
+#         #         print(search_match_row)
+#         #         print(type(search_match_row))
+#         #         print(f'\nOrder found in database row no. {search_match_row}')
+#         #         return search_match_row
 
 
 def display_order():
@@ -1184,7 +1217,7 @@ main()
 # test_email() # not yet working
 # export_to_printer()
 # update_status()
-# retrieve_order()
+retrieve_order()
 # display_order()
 # input_order_no()
 # update_to_pending_status()
@@ -1192,3 +1225,4 @@ main()
 # cancel_confirm()
 # validate_change_feature_of_order()
 # generate_row_no()
+# test()
