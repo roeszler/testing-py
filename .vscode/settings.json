@@ -21,6 +21,6 @@
       "**/CVS": true
    },
    "files.autoSave": "off",
-   "workbench.colorTheme": "Starfall Ocean",
+   "workbench.colorTheme": "Default Dark+",
    "editor.defaultFormatter": "HookyQR.beautify"
 }
